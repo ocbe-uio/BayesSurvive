@@ -13,7 +13,7 @@ Install the latest development version from GitHub
 
 ```r
 #install.packages("remotes")
-remotes::install_github("ocbe-uio/BayesSurv")
+remotes::install_github("ocbe-uio/BayesSurvive")
 ```
 
 ## Examples
@@ -47,7 +47,7 @@ hyperparPooled = list(
 
 ## run Bayesian Cox with graph-structured priors
 fit <- BayesSurvive(survObj = dataset, model.type = "Pooled", MRF.G = TRUE, 
-                     hyperpar = hyperparPooled, initial = initial, nIter = 100)
+                    hyperpar = hyperparPooled, initial = initial, nIter = 100)
 
 ## show posterior mean of coefficients and 95% credible intervals
 library("GGally")
@@ -110,8 +110,8 @@ predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 
 ```r
 hyperparPooled <- append(hyperparPooled, list("lambda" = 3, "nu0" = 0.05, "nu1" = 5))
-fit2 = BayesSurvive(survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
-                hyperpar = hyperparPooled, initial = initial, nIter = 10)
+fit2 <- BayesSurvive(survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
+                     hyperpar = hyperparPooled, initial = initial, nIter = 10)
 ```
 
 ### Run a Bayesian Cox model with subgroups using fixed graph 
@@ -122,18 +122,18 @@ hyperparPooled$G <- Matrix::bdiag(simData$G, simData$G)
 dataset2 <- simData[1:2]
 dataset2 <- lapply(dataset2, setNames, c("X", "t", "di", "X.unsc", "trueB"))
 fit3 <- BayesSurvive(survObj = dataset2, 
-                 hyperpar = hyperparPooled, initial = initial, 
-                 model.type="CoxBVSSL", MRF.G = TRUE, 
-                 nIter = 10, burnin = 5)
+                     hyperpar = hyperparPooled, initial = initial, 
+                     model.type="CoxBVSSL", MRF.G = TRUE, 
+                     nIter = 10, burnin = 5)
 ```
 
 ### Run a Bayesian Cox model with subgroups using graphical learning
 
 ```r
 fit4 <- BayesSurvive(survObj = dataset2, 
-                 hyperpar = hyperparPooled, initial = initial, 
-                 model.type="CoxBVSSL", MRF.G = FALSE, 
-                 nIter = 3, burnin = 0)
+                     hyperpar = hyperparPooled, initial = initial, 
+                     model.type="CoxBVSSL", MRF.G = FALSE, 
+                     nIter = 3, burnin = 0)
 ```
 
 ## References
