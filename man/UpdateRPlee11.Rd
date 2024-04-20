@@ -2,7 +2,7 @@
 % Please edit documentation in R/UpdateRPlee11.R
 \name{UpdateRPlee11}
 \alias{UpdateRPlee11}
-\title{Update coefficients of the Bayesian Cox Lasso Model}
+\title{Update coefficients of Bayesian Cox Models}
 \usage{
 UpdateRPlee11(sobj, hyperpar, ini, S, method, MRF_G)
 }
@@ -27,9 +27,6 @@ An object of ...
 }
 \description{
 This an internal function to update coefficients of the Bayesian Cox Lasso Model
-}
-\details{
-BayesSurvive
 }
 \examples{
 

@@ -31,9 +31,6 @@ An object of ...
 This contains subfunctions to update parameters gammas, betas, baseline
 hazard and graph learning parameters
 }
-\details{
-BayesSurvive
-}
 \examples{
 
 # Load the example dataset

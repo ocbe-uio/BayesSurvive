@@ -76,9 +76,6 @@ An object of class \code{BayesSurvive} is saved as
 This is the main function to fit a Bayesian Cox model with graph-structured
 selection priors for sparse identification of high-dimensional covariates.
 }
-\details{
-BayesSurvive
-}
 \examples{
 
 library("BayesSurvive")

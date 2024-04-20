@@ -1,5 +1,3 @@
-#' BayesSurvive
-#' 
 #' @title Create a plot of estimated coefficients
 #' @description
 #' Plot point estimates of regression coefficients and 95\% credible intervals

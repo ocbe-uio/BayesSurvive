@@ -1,4 +1,3 @@
-#' BayesSurvive
 #' @title Subfunctions to update parameters
 #'
 #' @description
@@ -6,6 +5,8 @@
 #' hazard and graph learning parameters
 #'
 #' @name UpdateGamma
+#' 
+#' @importFrom mvtnorm dmvnorm
 #'
 #' @param sobj a list containing observed data
 #' @param hyperpar a list containing prior parameter values
