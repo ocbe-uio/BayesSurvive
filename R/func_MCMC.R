@@ -1,4 +1,3 @@
-#' BayesSurvive
 #' @title Function to run MCMC sampling
 #'
 #' @description

@@ -1,4 +1,3 @@
-#' BayesSurvive
 #' @title Function to learn MRF graph
 #'
 #' @description

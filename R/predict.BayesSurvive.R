@@ -1,5 +1,3 @@
-#' BayesSurvive
-#'
 #' @title Predict survival risk
 #'
 #' @description

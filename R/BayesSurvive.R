@@ -1,4 +1,3 @@
-#' BayesSurvive
 #' @title Fit Bayesian Cox Models
 #'
 #' @description
@@ -8,6 +7,7 @@
 #' @name BayesSurvive
 #' 
 #' @importFrom Rcpp evalCpp
+#' @importFrom survival survreg
 #' @importFrom stats runif
 #'
 #' @param survObj a list containing observed data from \code{n} subjects with

@@ -29,9 +29,6 @@ Default value is 1}
 \description{
 Predict time-dependent Brier scores based on Cox regression models
 }
-\details{
-BayesSurvive
-}
 \examples{
 
 library("BayesSurvive")

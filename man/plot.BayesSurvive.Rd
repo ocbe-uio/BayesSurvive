@@ -26,9 +26,6 @@ ggplot object
 \description{
 Plot point estimates of regression coefficients and 95\% credible intervals
 }
-\details{
-BayesSurvive
-}
 \examples{
 
 library("BayesSurvive")

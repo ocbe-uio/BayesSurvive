@@ -1,5 +1,3 @@
-#' BayesSurvive
-#'
 #' @title Time-dependent Brier scores
 #'
 #' @description

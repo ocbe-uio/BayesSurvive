@@ -1,5 +1,4 @@
-#' BayesSurvive
-#' @title Update coefficients of the Bayesian Cox Lasso Model
+#' @title Update coefficients of Bayesian Cox Models
 #'
 #' @description
 #' This an internal function to update coefficients of the Bayesian Cox Lasso Model

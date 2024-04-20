@@ -40,9 +40,6 @@ Default value is 1}
 \description{
 Predict survival probability, (cumulative) hazard or (integrated) Brier scores based on Cox regression models
 }
-\details{
-BayesSurvive
-}
 \examples{
 
 library("BayesSurvive")

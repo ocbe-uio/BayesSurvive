@@ -3,9 +3,17 @@
 \docType{package}
 \name{BayesSurvive-package}
 \alias{BayesSurvive-package}
-\title{BayesSurvive: Bayesian survival models for high-dimensional data}
+\title{BayesSurvive: Bayesian Survival Models for High-Dimensional Data}
 \description{
 An implementation of Bayesian survival models with graph-structured selection priors for sparse identification of omics features predictive of survival (Madjar et al., 2021 \doi{10.1186/s12859-021-04483-z}) and its extension to use a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of omics features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes database.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ocbe-uio/BayesSurvive}
+  \item Report bugs at \url{https://github.com/ocbe-uio/BayesSurvive/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Zhi Zhao \email{zhi.zhao@medisin.uio.no}

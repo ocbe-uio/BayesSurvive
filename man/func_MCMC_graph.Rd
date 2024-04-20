@@ -27,6 +27,3 @@ A list object
 \description{
 This an internal function for MCMC sampling
 }
-\details{
-BayesSurvive
-}
