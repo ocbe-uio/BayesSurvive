@@ -23,13 +23,9 @@ is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
 use graphical model for leanring the MRF graph}
 }
 \value{
-An object of ...
+A list object with component 'beta.ini' for the updated coefficients
+and component 'acceptlee' for the MCMC acceptance rate
 }
 \description{
 This an internal function to update coefficients of the Bayesian Cox Lasso Model
-}
-\examples{
-
-# Load the example dataset
-
 }

@@ -16,7 +16,10 @@
 #' \code{c("Pooled", "CoxBVSSL", "Sub-struct")}
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
 #'
-#' @return A list object
+#' @return A list object with components "Sig" the updated covariance matrices, 
+#' "G.ini" the updated graph, "V.ini" the updated variances for precision 
+#' matrices in all subgroups, "C.ini" the updated precision matrices omega for 
+#' each subgroup
 #'
 #'
 #' @export

@@ -15,7 +15,8 @@ BayesSurvive(
   nIter = 1,
   burnin = 0,
   thin = 1,
-  output_graph_para = FALSE
+  output_graph_para = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -57,6 +58,8 @@ Default is 0}
 \item{output_graph_para}{allow (\code{TRUE}) or suppress (\code{FALSE}) the
 output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF.G = FALSE}}
+
+\item{verbose}{logical value to display the progess of MCMC}
 }
 \value{
 An object of class \code{BayesSurvive} is saved as

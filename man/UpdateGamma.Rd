@@ -25,14 +25,10 @@ use graphical model for leanring the MRF graph}
 \item{MRF_2b}{two different b in MRF prior for subgraphs G_ss and G_rs}
 }
 \value{
-An object of ...
+A list object with two components for the latent variable selection 
+indicators gamma with either independent Bernoulli prior
 }
 \description{
 This contains subfunctions to update parameters gammas, betas, baseline
 hazard and graph learning parameters
-}
-\examples{
-
-# Load the example dataset
-
 }

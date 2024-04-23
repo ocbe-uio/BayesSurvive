@@ -1,29 +1,21 @@
 Package: BayesSurvive
 Title: Bayesian Survival Models for High-Dimensional Data
 Version: 0.0.1
-Date: 2024-04-20
-URL: https://github.com/ocbe-uio/BayesSurvive
-BugReports: https://github.com/ocbe-uio/BayesSurvive/issues
+Date: 2024-04-22
 Authors@R: c(person("Zhi", "Zhao", role=c("aut","cre"), email = "zhi.zhao@medisin.uio.no"),
              person("Katrin", "Madjar", role=c("aut")),
              person("Tobias", "Østmo Hermansen", role=c("aut")),
              person("Manuela", "Zucknick", role=c("ctb")),
              person("Jörg", "Rahnenführer", role=c("ctb")))
 Description: An implementation of Bayesian survival models with graph-structured selection priors for sparse identification of omics features predictive of survival (Madjar et al., 2021 <doi:10.1186/s12859-021-04483-z>) and its extension to use a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of omics features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes database.
+URL: https://github.com/ocbe-uio/BayesSurvive
+BugReports: https://github.com/ocbe-uio/BayesSurvive/issues
 License: GPL-3
 Depends: R (>= 4.0)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 LinkingTo: Rcpp, RcppArmadillo (>= 0.9.000)
-Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
-        utils, stats
+Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression, utils, stats
 Suggests: knitr
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2024-04-19 23:47:36 UTC; zhiz
-Author: Zhi Zhao [aut, cre],
-  Katrin Madjar [aut],
-  Tobias Østmo Hermansen [aut],
-  Manuela Zucknick [ctb],
-  Jörg Rahnenführer [ctb]
-Maintainer: Zhi Zhao <zhi.zhao@medisin.uio.no>
