@@ -1,7 +1,8 @@
 #' @title Predict survival risk
 #'
 #' @description
-#' Predict survival probability, (cumulative) hazard or (integrated) Brier scores based on Cox regression models
+#' Predict survival probability, (cumulative) hazard or (integrated) Brier
+#' scores based on Cox regression models
 #'
 #' @name predict.BayesSurvive
 #'
@@ -26,11 +27,11 @@
 #' Cox model
 #' @param \dots not used
 #'
-#' @return A list object including seven components with the first compoment as 
-#' the specified argument \code{type}. The other components of the list are 
-#' "se", "band", "type", "diag", "baseline" and "times", see function 
+#' @return A list object including seven components with the first compoment as
+#' the specified argument \code{type}. The other components of the list are
+#' "se", "band", "type", "diag", "baseline" and "times", see function
 #' \code{riskRegression::predictCox} for details
-#' 
+#'
 #' @examples
 #'
 #' library("BayesSurvive")
@@ -70,8 +71,8 @@
 #'
 #' @export
 predict.BayesSurvive <- function(object, survObj.new, type = "brier",
-                              method = "mean", times = NULL, subgroup = 1,
-                              verbose = TRUE, ...) {
+                                 method = "mean", times = NULL, subgroup = 1,
+                                 verbose = TRUE, ...) {
   if (!inherits(object, "BayesSurvive")) {
     stop("Use only with 'BayesSurvive' object!")
   }
@@ -264,12 +265,15 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
       # extract IBS for Null model and the Bayesian Cox model
       ibs[1, ] <- Brier$IBS[c(length(times), length(times) * 2)]
     }
-    #rownames(ibs) <- "IBS"
-    if(verbose) cat("IBS:\n", "  Null model: ", 
-                 ibs[1, 1], "\n  Bayesian Cox model: ", 
-                 ibs[1, 2], "\n", sep = "")
+    # rownames(ibs) <- "IBS"
+    if (verbose) {
+      cat("                      IBS\n",
+        "  Null model          ", ibs[1, 1],
+        "\n  Bayesian Cox model  ", ibs[1, 2], "\n",
+        sep = ""
+      )
+    }
     invisible(Brier)
-    #return(Brier)
+    # return(Brier)
   }
-
 }

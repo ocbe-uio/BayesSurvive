@@ -15,9 +15,9 @@
 #' for prediction or Bayesian model averaging (\code{"BMA"}) for prediction
 #' @param subgroup index of the subgroup in \code{survObj.new} for prediction.
 #' Default value is 1
-#' 
+#'
 #' @return A \code{ggplot2::ggplot} object. See \code{?ggplot2::ggplot} for more
-#' details of the object. 
+#' details of the object.
 #'
 #' @examples
 #'

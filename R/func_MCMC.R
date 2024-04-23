@@ -28,9 +28,9 @@
 #' if \code{MRF_G = FALSE}
 #' @param verbose logical value to display the progess of MCMC
 #'
-#' @return A list object saving the MCMC results with components including 
-#' 'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0', 
-#' 'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like', 
+#' @return A list object saving the MCMC results with components including
+#' 'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0',
+#' 'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like',
 #' 'post.gamma'
 #'
 #'
@@ -42,7 +42,8 @@ func_MCMC <- function(survObj, hyperpar, initial,
   # prior parameters for grouped data likelihood of Cox model
   if (method == "Pooled" && MRF_G) { # method = "Pooled"
     hyperpar$s <- sort(survObj$t[survObj$di == 1])
-    hyperpar$s <- unique(c(hyperpar$s, 2 * max(survObj$t) - max(survObj$t[-which(survObj$t == max(survObj$t))])))
+    hyperpar$s <- unique(c(hyperpar$s, 2 * max(survObj$t) -
+      max(survObj$t[-which(survObj$t == max(survObj$t))])))
     hyperpar$J <- length(hyperpar$s)
 
     # intv              = setting.interval(survObj$t, survObj$di, hyperpar$s, hyperpar$J)
@@ -65,7 +66,10 @@ func_MCMC <- function(survObj, hyperpar, initial,
     for (g in 1:S) {
       sg <- sort((survObj$t[[g]])[survObj$di[[g]] == 1])
       # s[[g]]    = unique(c(sg, 2 * max(survObj$t[[g]]) - max( (survObj$t[[g]])[-which(survObj$t[[g]] == max(survObj$t[[g]]))])))
-      s[[g]] <- unique(c(sg, 2 * max(survObj$t[[g]]) - max((survObj$t[[g]])[-which(survObj$t[[g]] == max(survObj$t[[g]]))])))
+      s[[g]] <- unique(c(sg, 2 * max(survObj$t[[g]]) -
+        max((survObj$t[[g]])[-which(
+          survObj$t[[g]] == max(survObj$t[[g]])
+        )])))
 
       J[[g]] <- length(s[[g]])
       # intv[[g]] = setting.interval(survObj$t[[g]], survObj$di[[g]], s[[g]], J[[g]])
@@ -254,10 +258,22 @@ func_MCMC <- function(survObj, hyperpar, initial,
       } else {
         for (g in 1:S) {
           # browser()
-          mcmcOutcome$gamma.p[[g]] <- rbind(mcmcOutcome$gamma.p[[g]], (gamma.ini)[[g]], deparse.level = 0)
-          mcmcOutcome$post.gamma[[g]] <- rbind(mcmcOutcome$post.gamma[[g]], sampleGam$post.gamma[[g]], deparse.level = 0)
-          mcmcOutcome$beta.p[[g]] <- rbind(mcmcOutcome$beta.p[[g]], (beta.ini)[[g]], deparse.level = 0)
-          mcmcOutcome$h.p[[g]] <- rbind(mcmcOutcome$h.p[[g]], (h)[[g]], deparse.level = 0)
+          mcmcOutcome$gamma.p[[g]] <- rbind(mcmcOutcome$gamma.p[[g]],
+            (gamma.ini)[[g]],
+            deparse.level = 0
+          )
+          mcmcOutcome$post.gamma[[g]] <- rbind(mcmcOutcome$post.gamma[[g]],
+            sampleGam$post.gamma[[g]],
+            deparse.level = 0
+          )
+          mcmcOutcome$beta.p[[g]] <- rbind(mcmcOutcome$beta.p[[g]],
+            (beta.ini)[[g]],
+            deparse.level = 0
+          )
+          mcmcOutcome$h.p[[g]] <- rbind(mcmcOutcome$h.p[[g]],
+            (h)[[g]],
+            deparse.level = 0
+          )
         }
       }
     }

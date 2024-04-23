@@ -1,7 +1,7 @@
 Package: BayesSurvive
 Title: Bayesian Survival Models for High-Dimensional Data
-Version: 0.0.1
-Date: 2024-04-22
+Version: 0.0.2
+Date: 2024-04-23
 Authors@R: c(person("Zhi", "Zhao", role=c("aut","cre"), email = "zhi.zhao@medisin.uio.no"),
              person("Katrin", "Madjar", role=c("aut")),
              person("Tobias", "Østmo Hermansen", role=c("aut")),
@@ -11,6 +11,7 @@ Description: An implementation of Bayesian survival models with graph-structured
 URL: https://github.com/ocbe-uio/BayesSurvive
 BugReports: https://github.com/ocbe-uio/BayesSurvive/issues
 License: GPL-3
+VignetteBuilder: knitr
 Depends: R (>= 4.0)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
