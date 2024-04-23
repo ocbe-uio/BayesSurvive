@@ -16,7 +16,15 @@ Depends: R (>= 4.0)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 LinkingTo: Rcpp, RcppArmadillo (>= 0.9.000)
-Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression, utils, stats
+Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
+        utils, stats
 Suggests: knitr
 LazyData: true
 NeedsCompilation: yes
+Packaged: 2024-04-23 21:08:42 UTC; zhiz
+Author: Zhi Zhao [aut, cre],
+  Katrin Madjar [aut],
+  Tobias Østmo Hermansen [aut],
+  Manuela Zucknick [ctb],
+  Jörg Rahnenführer [ctb]
+Maintainer: Zhi Zhao <zhi.zhao@medisin.uio.no>
