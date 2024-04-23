@@ -90,9 +90,9 @@ The integrated Brier score (IBS) can be obtained by the function `BayesSurvive::
 predict(fit, survObj.new = dataset)
 ```
 ```{ .text .no-copy }
-IBS:
-  Null model: 0.09147208
-  Bayesian Cox model: 0.03433363
+##                     IBS
+## Null model          0.09147208
+## Bayesian Cox model  0.03433363
 ```
 
 ### Predict survival probabilities and cumulative hazards
@@ -103,19 +103,19 @@ The function `BayesSurvive::predict()` can estimate the survival probabilities a
 predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 ```
 ```{ .text .no-copy }
-       observation times cumhazard survival
-             <int> <num>     <num>    <num>
-    1:           1   3.3  2.11e-04 1.00e+00
-    2:           2   3.3  3.29e-01 7.20e-01
-    3:           3   3.3  2.06e-06 1.00e+00
-    4:           4   3.3  1.19e-02 9.88e-01
-    5:           5   3.3  5.36e-04 9.99e-01
-   ---                                     
- 9996:          96   9.5  2.67e+01 2.57e-12
- 9997:          97   9.5  1.08e+03 0.00e+00
- 9998:          98   9.5  2.23e+00 1.08e-01
- 9999:          99   9.5  3.72e+00 2.42e-02
-10000:         100   9.5  3.37e+01 2.38e-15
+##        observation times cumhazard survival
+##              <int> <num>     <num>    <num>
+##     1:           1   3.3  2.11e-04 1.00e+00
+##     2:           2   3.3  3.29e-01 7.20e-01
+##     3:           3   3.3  2.06e-06 1.00e+00
+##     4:           4   3.3  1.19e-02 9.88e-01
+##     5:           5   3.3  5.36e-04 9.99e-01
+##   ---                                     
+##  9996:          96   9.5  2.67e+01 2.57e-12
+##  9997:          97   9.5  1.08e+03 0.00e+00
+##  9998:          98   9.5  2.23e+00 1.08e-01
+##  9999:          99   9.5  3.72e+00 2.42e-02
+## 10000:         100   9.5  3.37e+01 2.38e-15
 ```
 
 ### Run a 'Pooled' Bayesian Cox model with graphical learning
