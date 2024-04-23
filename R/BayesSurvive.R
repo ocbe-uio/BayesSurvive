@@ -38,6 +38,7 @@
 #' @param output_graph_para allow (\code{TRUE}) or suppress (\code{FALSE}) the
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF.G = FALSE}
+#' @param verbose logical value to display the progess of MCMC
 #'
 #'
 #' @return An object of class \code{BayesSurvive} is saved as
@@ -106,7 +107,8 @@ BayesSurvive <- function(survObj,
                       nIter = 1,
                       burnin = 0,
                       thin = 1,
-                      output_graph_para = FALSE) {
+                      output_graph_para = FALSE,
+                      verbose = TRUE) {
   p <- ifelse(is.list(survObj[[1]]), NCOL(survObj[[1]]$X), NCOL(survObj$X)) # same number of covariates p in all subgroups
   Beta.ini <- numeric(p)
   gamma.ini <- initial$gamma.ini
@@ -300,7 +302,8 @@ BayesSurvive <- function(survObj,
     method = model.type,
     MRF_2b = MRF2b,
     MRF_G = MRF.G,
-    output_graph_para
+    output_graph_para,
+    verbose
   )
 
   if (S == 1 && MRF.G) {

@@ -26,15 +26,19 @@
 #' @param output_graph_para allow (\code{TRUE}) or suppress (\code{FALSE}) the
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF_G = FALSE}
+#' @param verbose logical value to display the progess of MCMC
 #'
-#' @return A list object
+#' @return A list object saving the MCMC results with components including 
+#' 'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0', 
+#' 'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like', 
+#' 'post.gamma'
 #'
 #'
 #' @export
 func_MCMC <- function(survObj, hyperpar, initial,
                       nIter, thin, burnin,
                       S, method, MRF_2b, MRF_G,
-                      output_graph_para) {
+                      output_graph_para, verbose) {
   # prior parameters for grouped data likelihood of Cox model
   if (method == "Pooled" && MRF_G) { # method = "Pooled"
     hyperpar$s <- sort(survObj$t[survObj$di == 1])
@@ -147,7 +151,7 @@ func_MCMC <- function(survObj, hyperpar, initial,
   # MCMC sampling
 
   # Initializes the progress bar
-  cat("  Running MCMC iterations ...\n")
+  if (verbose) cat("  Running MCMC iterations ...\n")
   pb <- txtProgressBar(min = 0, max = nIter, style = 3, width = 50, char = "=")
 
   for (M in 1:nIter) {

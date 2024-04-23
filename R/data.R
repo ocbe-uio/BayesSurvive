@@ -6,5 +6,6 @@
 #' event status \code{"status"}. The R code for generating the simulated data
 #' is given in the Examples.
 #'
+#'
 #' @family datasets
 "simData"

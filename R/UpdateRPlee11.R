@@ -15,11 +15,8 @@
 #' is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
 #' use graphical model for leanring the MRF graph
 #'
-#' @return An object of ...
-#'
-#' @examples
-#'
-#' # Load the example dataset
+#' @return A list object with component 'beta.ini' for the updated coefficients
+#' and component 'acceptlee' for the MCMC acceptance rate 
 #'
 #' @export
 UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
@@ -66,4 +63,4 @@ UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
   }
   return(list(beta.ini = beta.ini, acceptlee = acceptlee))
 }
-# the end of "UpdateRP.lee11" function
+

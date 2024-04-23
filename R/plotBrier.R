@@ -15,8 +15,10 @@
 #' for prediction or Bayesian model averaging (\code{"BMA"}) for prediction
 #' @param subgroup index of the subgroup in \code{survObj.new} for prediction.
 #' Default value is 1
+#' 
+#' @return A \code{ggplot2::ggplot} object. See \code{?ggplot2::ggplot} for more
+#' details of the object. 
 #'
-#' @keywords survival
 #' @examples
 #'
 #' library("BayesSurvive")
@@ -51,7 +53,6 @@
 #'   initial = initial, nIter = 100
 #' )
 #' # predict survival probabilities of the train data
-#' library("GGally")
 #' plotBrier(fit, survObj.new = dataset)
 #' }
 #'

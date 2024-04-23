@@ -15,7 +15,8 @@ func_MCMC(
   method,
   MRF_2b,
   MRF_G,
-  output_graph_para
+  output_graph_para,
+  verbose
 )
 }
 \arguments{
@@ -47,9 +48,14 @@ use graphical model for leanring the MRF graph}
 \item{output_graph_para}{allow (\code{TRUE}) or suppress (\code{FALSE}) the
 output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF_G = FALSE}}
+
+\item{verbose}{logical value to display the progess of MCMC}
 }
 \value{
-A list object
+A list object saving the MCMC results with components including 
+'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0', 
+'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like', 
+'post.gamma'
 }
 \description{
 This an internal function for MCMC sampling

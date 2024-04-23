@@ -22,9 +22,15 @@
 #' for prediction or Bayesian model averaging (\code{"BMA"}) for prediction
 #' @param subgroup index of the subgroup in \code{survObj.new} for prediction.
 #' Default value is 1
+#' @param verbose logical value to print IBS of the NULL model and the Bayesian
+#' Cox model
 #' @param \dots not used
 #'
-#' @keywords survival
+#' @return A list object including seven components with the first compoment as 
+#' the specified argument \code{type}. The other components of the list are 
+#' "se", "band", "type", "diag", "baseline" and "times", see function 
+#' \code{riskRegression::predictCox} for details
+#' 
 #' @examples
 #'
 #' library("BayesSurvive")
@@ -65,13 +71,13 @@
 #' @export
 predict.BayesSurvive <- function(object, survObj.new, type = "brier",
                               method = "mean", times = NULL, subgroup = 1,
-                              ...) {
+                              verbose = TRUE, ...) {
   if (!inherits(object, "BayesSurvive")) {
     stop("Use only with 'BayesSurvive' object!")
   }
 
-  if (any(!type %in% c("brier", "hazard", "cumhazard", "survival"))) {
-    stop("Argument 'type' has to be among 'brier', 'hazard', 'cumhazard'' or 'survival'!")
+  if (any(!type %in% c("brier", "hazard", "cumhazard", "survival")) && length(type) == 1) {
+    stop("Argument 'type' has to be one of 'brier', 'hazard', 'cumhazard'' or 'survival'!")
   }
 
   if (!method %in% c("mean", "BMA")) {
@@ -177,7 +183,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
         "var.lp", "var.strata"
       )] <- NULL
     }
-    fit
+    return(fit)
   } else {
     if (method == "mean") {
       # beta_m <- colMeans(betas)
@@ -258,10 +264,12 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
       # extract IBS for Null model and the Bayesian Cox model
       ibs[1, ] <- Brier$IBS[c(length(times), length(times) * 2)]
     }
-    rownames(ibs) <- "IBS"
-    print(ibs)
+    #rownames(ibs) <- "IBS"
+    if(verbose) cat("IBS:\n", "  Null model: ", 
+                 ibs[1, 1], "\n  Bayesian Cox model: ", 
+                 ibs[1, 2], "\n", sep = "")
     invisible(Brier)
+    #return(Brier)
   }
 
-  # invisible(fit)
 }

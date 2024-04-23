@@ -26,6 +26,10 @@ for prediction or Bayesian model averaging (\code{"BMA"}) for prediction}
 \item{subgroup}{index of the subgroup in \code{survObj.new} for prediction.
 Default value is 1}
 }
+\value{
+A \code{ggplot2::ggplot} object. See \code{?ggplot2::ggplot} for more
+details of the object.
+}
 \description{
 Predict time-dependent Brier scores based on Cox regression models
 }
@@ -63,9 +67,7 @@ fit <- BayesSurvive(
   initial = initial, nIter = 100
 )
 # predict survival probabilities of the train data
-library("GGally")
 plotBrier(fit, survObj.new = dataset)
 }
 
 }
-\keyword{survival}

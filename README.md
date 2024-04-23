@@ -1,3 +1,5 @@
+[![CRAN](http://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-project.org/package=BayesSurvive)
+[![r-universe](https://ocbe-uio.r-universe.dev/badges/BayesSurvive)](https://ocbe-uio.r-universe.dev/BayesSurvive)
 [![R-CMD-check](https://github.com/ocbe-uio/BayesSurvive/workflows/R-CMD-check/badge.svg)](https://github.com/ocbe-uio/BayesSurv/actions)
 [![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
@@ -5,15 +7,14 @@
 # BayesSurvive
 
 
-This is an R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://doi.org/10.1186/s12859‐021‐04483‐z)) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
+This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
 
 ## Installation
 
-Install the latest development version from GitHub
+Install the latest version from CRAN
 
 ```r
-#install.packages("remotes")
-remotes::install_github("ocbe-uio/BayesSurvive")
+install.packages("BayesSurvive")
 ```
 
 ## Examples
@@ -140,4 +141,4 @@ fit4 <- BayesSurvive(survObj = dataset2,
 
 > Katrin Madjar, Manuela Zucknick, Katja Ickstadt, Jörg Rahnenführer (2021).
 > Combining heterogeneous subgroups with graph‐structured variable selection priors for Cox regression.
-> _BMC Bioinformatics_, 22(1):586. DOI:[10.1186/s12859-021-04483-z](https://doi.org/10.1186/s12859-021-04483-z).
+> _BMC Bioinformatics_, 22(1):586. DOI:[10.1186/s12859-021-04483-z](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z).
