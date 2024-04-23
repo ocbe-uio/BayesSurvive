@@ -5,7 +5,7 @@
 #' selection priors for sparse identification of high-dimensional covariates.
 #'
 #' @name BayesSurvive
-#' 
+#'
 #' @importFrom Rcpp evalCpp
 #' @importFrom survival survreg
 #' @importFrom stats runif
@@ -98,18 +98,19 @@
 #'
 #' @export
 BayesSurvive <- function(survObj,
-                      model.type = "Pooled",
-                      MRF2b = FALSE,
-                      MRF.G = TRUE,
-                      g.ini = 0,
-                      hyperpar = NULL,
-                      initial = NULL,
-                      nIter = 1,
-                      burnin = 0,
-                      thin = 1,
-                      output_graph_para = FALSE,
-                      verbose = TRUE) {
-  p <- ifelse(is.list(survObj[[1]]), NCOL(survObj[[1]]$X), NCOL(survObj$X)) # same number of covariates p in all subgroups
+                         model.type = "Pooled",
+                         MRF2b = FALSE,
+                         MRF.G = TRUE,
+                         g.ini = 0,
+                         hyperpar = NULL,
+                         initial = NULL,
+                         nIter = 1,
+                         burnin = 0,
+                         thin = 1,
+                         output_graph_para = FALSE,
+                         verbose = TRUE) {
+  # same number of covariates p in all subgroups
+  p <- ifelse(is.list(survObj[[1]]), NCOL(survObj[[1]]$X), NCOL(survObj$X))
   Beta.ini <- numeric(p)
   gamma.ini <- initial$gamma.ini
   if (sum(gamma.ini) != 0) {
@@ -128,7 +129,9 @@ BayesSurvive <- function(survObj,
     survObj$n <- length(survObj$t)
     survObj$p <- p <- NCOL(survObj$X)
 
-    fit <- survreg(Surv(survObj$t, survObj$di, type = c("right")) ~ 1, dist = "weibull", x = TRUE, y = TRUE)
+    fit <- survreg(Surv(survObj$t, survObj$di, type = c("right")) ~ 1,
+      dist = "weibull", x = TRUE, y = TRUE
+    )
     kappa0 <- 1 / exp(fit$icoef["Log(scale)"])
     eta0 <- exp(fit$coefficients)^(-kappa0)
     # Initial value: null model without covariates
@@ -148,7 +151,7 @@ BayesSurvive <- function(survObj,
     kappa0 <- lapply(fit, function(x) {
       1 / exp(x$icoef["Log(scale)"])
     })
-    eta0 <- lapply(1:length(fit), function(g) {
+    eta0 <- lapply(seq_along(fit), function(g) {
       exp(fit[[g]]$coefficients)^(-kappa0[[g]])
     })
 
@@ -181,10 +184,10 @@ BayesSurvive <- function(survObj,
     # b02 = 0
     hyperpar$b <- hyperpar$b[1]
   }
-  if (MRF2b) {
-    # b0 = c(b01, b02)
-    b0 <- hyperpar$b
-  }
+  # if (MRF2b) {
+  #   # b0 = c(b01, b02)
+  #   b0 <- hyperpar$b
+  # }
 
   # defining parameters for the main MCMC simulation function
 
@@ -209,7 +212,7 @@ BayesSurvive <- function(survObj,
       hyperpar$be.prop.sd.scale <- rep(list(2.4), S)
     }
   }
-  
+
   initial <- list("gamma.ini" = gamma.ini, "beta.ini" = beta.ini, "log.like.ini" = log.like)
 
   # if(model.type %in% c("CoxBVSSL", "Sub-struct") || (model.type == "Pooled" && !MRF.G)){

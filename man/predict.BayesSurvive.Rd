@@ -42,13 +42,14 @@ Cox model}
 \item{\dots}{not used}
 }
 \value{
-A list object including seven components with the first compoment as 
-the specified argument \code{type}. The other components of the list are 
-"se", "band", "type", "diag", "baseline" and "times", see function 
+A list object including seven components with the first compoment as
+the specified argument \code{type}. The other components of the list are
+"se", "band", "type", "diag", "baseline" and "times", see function
 \code{riskRegression::predictCox} for details
 }
 \description{
-Predict survival probability, (cumulative) hazard or (integrated) Brier scores based on Cox regression models
+Predict survival probability, (cumulative) hazard or (integrated) Brier
+scores based on Cox regression models
 }
 \examples{
 

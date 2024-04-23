@@ -63,56 +63,56 @@ p <- length(truePara$beta)
 sim.surv <- function(X, beta, surv.e, surv.c, n) {
   # simulate event times from Weibull distribution
   dt <- (-log(runif(n)) * (1 / surv.e$scale) * exp(-X %*% beta))^(1 / surv.e$shape)
-  
+
   # simulate censoring times from Weibull distribution
   cens <- rweibull(n, shape = surv.c$shape, scale = ((surv.c$scale)^(-1 / surv.c$shape)))
-  
+
   # observed time and status for each observation
   status <- ifelse(dt <= cens, 1, 0)
   time <- pmin(dt, cens)
-  
+
   return(list(as.numeric(status), as.numeric(time)))
 }
 
 sim.data.fun <- function(n, p, surv.e, surv.c, beta1.p, beta2.p, cov_matrix) {
   p.e <- length(beta1.p) # Number of prognostic variables
-  
+
   # True effects in each subgroup
   beta1 <- c(beta1.p, rep(0, p - p.e))
   beta2 <- c(beta2.p, rep(0, p - p.e))
-  
+
   # Covariance matrix in both subgroups
   # sigma = diag(p)
   # block = matrix(rep(.5,9), nrow=3); diag(block) = 1
   # sigma[1:3, 1:3] = sigma[4:6, 4:6] = sigma[7:9, 7:9] = block
-  
+
   sigma <- cov_matrix
-  
+
   # Sample gene expression data from multivariate normal distribution
   X1 <- MASS::mvrnorm(n, rep(0, p), sigma)
   X2 <- MASS::mvrnorm(n, rep(0, p), sigma)
-  
+
   # Simulate survival data for both subgroups
   surv1 <- sim.surv(X1, beta1, surv.e[[1]], surv.c[[1]], n)
   surv2 <- sim.surv(X2, beta2, surv.e[[2]], surv.c[[2]], n)
-  
+
   # Combine training and test data of both subgroups
   data1 <- list("X" = X1, "time" = surv1[[2]], "status" = surv1[[1]])
   data2 <- list("X" = X2, "time" = surv2[[2]], "status" = surv2[[1]])
   Data <- list("subgroup1" = data1, "subgroup2" = data2)
-  
+
   # Scale covariates using parameters of training data
   sd.X <- lapply(Data, function(xx) apply(xx$X, 2, sd))
   for (g in 1:length(Data)) {
     Data[[g]]$X <- scale(Data[[g]]$X, scale = sd.X[[g]])
   }
-  
+
   # Unscaled covariates (for Pooled model):
   Data[[1]]$X.unsc <- X1
   Data[[2]]$X.unsc <- X2
   Data[[1]]$trueB <- beta1
   Data[[2]]$trueB <- beta2
-  
+
   return(Data)
 }
 

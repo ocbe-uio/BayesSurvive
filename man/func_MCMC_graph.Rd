@@ -22,9 +22,9 @@ func_MCMC_graph(sobj, hyperpar, ini, S, method, MRF_2b)
 \item{MRF_2b}{two different b in MRF prior for subgraphs G_ss and G_rs}
 }
 \value{
-A list object with components "Sig" the updated covariance matrices, 
-"G.ini" the updated graph, "V.ini" the updated variances for precision 
-matrices in all subgroups, "C.ini" the updated precision matrices omega for 
+A list object with components "Sig" the updated covariance matrices,
+"G.ini" the updated graph, "V.ini" the updated variances for precision
+matrices in all subgroups, "C.ini" the updated precision matrices omega for
 each subgroup
 }
 \description{

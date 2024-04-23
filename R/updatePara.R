@@ -5,7 +5,7 @@
 #' hazard and graph learning parameters
 #'
 #' @name UpdateGamma
-#' 
+#'
 #' @importFrom mvtnorm dmvnorm
 #'
 #' @param sobj a list containing observed data
@@ -19,7 +19,7 @@
 #' use graphical model for leanring the MRF graph
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
 #'
-#' @return A list object with two components for the latent variable selection 
+#' @return A list object with two components for the latent variable selection
 #' indicators gamma with either independent Bernoulli prior
 # (standard approaches) or with MRF prior
 #'
@@ -51,11 +51,14 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
   # two different b in MRF prior for subgraphs G_ss and G_rs
   if (MRF_2b && !MRF_G) {
     for (g in 1:S) { # b1*G_ss
-      G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <- b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
+      G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <-
+        b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
     }
     for (g in 1:(S - 1)) { # b2*G_rs
       for (r in g:(S - 1)) {
-        G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <- G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <- b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
+        G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <-
+          G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <-
+          b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
       }
     }
   } else {
@@ -87,8 +90,10 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
       ga.prop1 <- unlist(ga.prop1)
       ga.prop0 <- unlist(ga.prop0)
 
-      wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) + dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
-      wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) + dnorm(beta, mean = 0, sd = tau, log = TRUE)
+      wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
+        dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
+      wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
+        dnorm(beta, mean = 0, sd = tau, log = TRUE)
 
       w_max <- max(wa, wb)
       pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
@@ -124,8 +129,10 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
           ga.prop1 <- unlist(ga.prop1)
           ga.prop0 <- unlist(ga.prop0)
 
-          wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) + dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
-          wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) + dnorm(beta, mean = 0, sd = tau, log = TRUE)
+          wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
+            dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
+          wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
+            dnorm(beta, mean = 0, sd = tau, log = TRUE)
 
           w_max <- max(wa, wb)
           pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
@@ -184,7 +191,8 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
     logpriorGamma <- sum(gamma.ini * log(pi.ga)) + sum((1 - gamma.ini) * log(1 - pi.ga))
     logjpost <- loglike + logpriorGamma + logpriorBeta + logpriorH
   } else {
-    loglike <- logpriorBeta <- logpriorH <- logpriorGamma <- logjpost <- logpriorOmega <- logpriorX <- numeric()
+    loglike <- logpriorBeta <- logpriorH <- logpriorGamma <-
+      logjpost <- logpriorOmega <- logpriorX <- numeric()
 
     for (g in 1:S) {
       n <- sobj$n[[g]]
@@ -207,7 +215,8 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
 
       # if (method == "Subgroup") {
       if (MRF_G) {
-        logpriorGamma[g] <- sum(gamma.ini * log(pi.ga)) + sum((1 - gamma.ini) * log(1 - pi.ga))
+        logpriorGamma[g] <- sum(gamma.ini * log(pi.ga)) +
+          sum((1 - gamma.ini) * log(1 - pi.ga))
         logjpost[g] <- loglike[g] + logpriorGamma[g] + logpriorBeta[g] + logpriorH[g]
       } else { # CoxBVSSL/ Sub-struct model
 
@@ -217,12 +226,18 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
 
         omega.mat <- matrix(0, p, p)
         for (i in 1:p) {
-          omega.mat[i, ] <- dnorm(C.ini[i, ], mean = rep(0, p), sd = sqrt(V.ini[i, ]), log = TRUE)
+          omega.mat[i, ] <- dnorm(C.ini[i, ],
+            mean = rep(0, p),
+            sd = sqrt(V.ini[i, ]), log = TRUE
+          )
         }
         diag(omega.mat) <- dexp(diag(C.ini), rate = lambda / 2, log = TRUE)
 
         logpriorOmega[g] <- sum(omega.mat[upper.tri(omega.mat, diag = TRUE)])
-        logpriorX[g] <- sum(dmvnorm(X, mean = rep(0, p), sigma = Sig.ini, log = TRUE))
+        logpriorX[g] <- sum(dmvnorm(X,
+          mean = rep(0, p),
+          sigma = Sig.ini, log = TRUE
+        ))
       }
     }
   }
@@ -233,7 +248,9 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
 
     # id.mat is "full" graph (with all possible edges set to 1)
     if (method == "CoxBVSSL") {
-      id.mat <- do.call("cbind", rep(list(do.call("rbind", rep(list(diag(1, p, p)), S))), S))
+      id.mat <- do.call("cbind", rep(list(
+        do.call("rbind", rep(list(diag(1, p, p)), S))
+      ), S))
     } else {
       id.mat <- matrix(0, p * S, p * S)
     }
@@ -250,18 +267,22 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
 
     if (MRF_2b) {
       for (g in 1:S) { # b1 * G_ss
-        G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <- b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
+        G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <-
+          b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
       }
       for (g in 1:(S - 1)) { # b2 * G_rs
         for (r in g:(S - 1)) {
-          G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <- G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <- b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
+          G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <-
+            G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <-
+            b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
         }
       }
       b <- 1
     }
     logpriorGamma <- (a * sum(gamma.vec) + b * t(gamma.vec) %*% G.ini %*% gamma.vec)
 
-    logjpost <- sum(loglike) + sum(logpriorBeta) + sum(logpriorH) + logpriorGamma + sum(logpriorOmega) + sum(logpriorX) + logpriorGraph
+    logjpost <- sum(loglike) + sum(logpriorBeta) + sum(logpriorH) +
+      logpriorGamma + sum(logpriorOmega) + sum(logpriorX) + logpriorGraph
   }
   return(list(loglike = loglike, logjpost = logjpost))
 }

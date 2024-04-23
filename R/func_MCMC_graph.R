@@ -16,9 +16,9 @@
 #' \code{c("Pooled", "CoxBVSSL", "Sub-struct")}
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
 #'
-#' @return A list object with components "Sig" the updated covariance matrices, 
-#' "G.ini" the updated graph, "V.ini" the updated variances for precision 
-#' matrices in all subgroups, "C.ini" the updated precision matrices omega for 
+#' @return A list object with components "Sig" the updated covariance matrices,
+#' "G.ini" the updated graph, "V.ini" the updated variances for precision
+#' matrices in all subgroups, "C.ini" the updated precision matrices omega for
 #' each subgroup
 #'
 #'
@@ -47,11 +47,14 @@ func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
   # two different values for b in MRF prior for subgraphs G_ss and G_rs
   if (MRF_2b) {
     for (g in 1:S) { # b1 * G_ss
-      G.MRF[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <- b[1] * G.MRF[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
+      G.MRF[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <-
+        b[1] * G.MRF[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
     }
     for (g in 1:(S - 1)) { # b2 * G_rs
       for (r in g:(S - 1)) {
-        G.MRF[(g - 1) * p + (1:p), r * p + (1:p)] <- G.MRF[r * p + (1:p), (g - 1) * p + (1:p)] <- b[2] * G.MRF[r * p + (1:p), (g - 1) * p + (1:p)]
+        G.MRF[(g - 1) * p + (1:p), r * p + (1:p)] <-
+          G.MRF[r * p + (1:p), (g - 1) * p + (1:p)] <-
+          b[2] * G.MRF[r * p + (1:p), (g - 1) * p + (1:p)]
       }
     }
   } else { # one value for b in MRF prior for all subgraphs
@@ -115,8 +118,10 @@ func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
         for (j in (i + 1):p) {
           # G where g_ss,ij=1 or 0:
           G.prop1 <- G.prop0 <- G.MRF
-          G.prop1[(g - 1) * p + j, (g - 1) * p + i] <- G.prop1[(g - 1) * p + i, (g - 1) * p + j] <- b[1] # 1
-          G.prop0[(g - 1) * p + j, (g - 1) * p + i] <- G.prop0[(g - 1) * p + i, (g - 1) * p + j] <- 0
+          G.prop1[(g - 1) * p + j, (g - 1) * p + i] <-
+            G.prop1[(g - 1) * p + i, (g - 1) * p + j] <- b[1] # 1
+          G.prop0[(g - 1) * p + j, (g - 1) * p + i] <-
+            G.prop0[(g - 1) * p + i, (g - 1) * p + j] <- 0
 
           v0 <- V0[j, i]
           v1 <- V1[j, i]
@@ -172,7 +177,8 @@ func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
 
           G_rs[i, i] <- as.numeric(runif(1) < pg) # acceptance/ rejection of proposal
         }
-        G[(g - 1) * p + (1:p), r * p + (1:p)] <- G[r * p + (1:p), (g - 1) * p + (1:p)] <- G_rs # update of subgraph
+        G[(g - 1) * p + (1:p), r * p + (1:p)] <-
+          G[r * p + (1:p), (g - 1) * p + (1:p)] <- G_rs # update of subgraph
       }
     }
   }

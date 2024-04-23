@@ -62,7 +62,7 @@
 #'
 #' @export
 plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
-                           subgroup = 1, ...) {
+                              subgroup = 1, ...) {
   if (!(inherits(x, "BayesSurvive") || is.matrix(x))) {
     stop("Use only with 'BayesSurvive' object or a matrix!")
   }

@@ -16,7 +16,7 @@
 #' use graphical model for leanring the MRF graph
 #'
 #' @return A list object with component 'beta.ini' for the updated coefficients
-#' and component 'acceptlee' for the MCMC acceptance rate 
+#' and component 'acceptlee' for the MCMC acceptance rate
 #'
 #' @export
 UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
@@ -36,7 +36,10 @@ UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
     h <- ini$h
 
     # erg = UpdateRP.lee11.helper(n, p, x, J, ind.r, ind.d, ind.r_d, be.ini, ga.ini, h, tau, cb)
-    erg <- updateRP_genomic_cpp(p, x, J, ind.r, ind.d, ind.r_d, be.ini, be.prop.sd.scale, ga.ini, h, tau, cb)
+    erg <- updateRP_genomic_cpp(
+      p, x, J, ind.r, ind.d, ind.r_d,
+      be.ini, be.prop.sd.scale, ga.ini, h, tau, cb
+    )
 
     beta.ini <- as.vector(erg$be.ini)
     acceptlee <- erg$acceptl
@@ -55,7 +58,10 @@ UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
       h <- ini$h[[g]]
 
       # erg = UpdateRP.lee11.helper(n, p, x, J, ind.r, ind.d, ind.r_d, be.ini, ga.ini, h, tau, cb)
-      erg <- updateRP_genomic_cpp(p, x, J, ind.r, ind.d, ind.r_d, be.ini, be.prop.sd.scale, ga.ini, h, tau, cb)
+      erg <- updateRP_genomic_cpp(
+        p, x, J, ind.r, ind.d, ind.r_d,
+        be.ini, be.prop.sd.scale, ga.ini, h, tau, cb
+      )
 
       beta.ini[[g]] <- as.vector(erg$be.ini)
       acceptlee[[g]] <- erg$acceptl
@@ -63,4 +69,3 @@ UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
   }
   return(list(beta.ini = beta.ini, acceptlee = acceptlee))
 }
-

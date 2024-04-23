@@ -25,7 +25,7 @@ use graphical model for leanring the MRF graph}
 \item{MRF_2b}{two different b in MRF prior for subgraphs G_ss and G_rs}
 }
 \value{
-A list object with two components for the latent variable selection 
+A list object with two components for the latent variable selection
 indicators gamma with either independent Bernoulli prior
 }
 \description{

@@ -52,9 +52,9 @@ if \code{MRF_G = FALSE}}
 \item{verbose}{logical value to display the progess of MCMC}
 }
 \value{
-A list object saving the MCMC results with components including 
-'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0', 
-'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like', 
+A list object saving the MCMC results with components including
+'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0',
+'kappa0', 'c0', 'pi.ga', 'tau', 'cb', 'accept.RW', 'log.jpost', 'log.like',
 'post.gamma'
 }
 \description{
