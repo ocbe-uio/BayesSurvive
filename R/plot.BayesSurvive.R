@@ -79,17 +79,12 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
     stop("Argument 'interval' must be a logical value!")
   }
 
-  if (x$input$S > 1 || !x$input$MRF.G) {
-    x$output$beta.p <- x$output$beta.p[[subgroup]]
-  }
-
   if (inherits(x, "BayesSurvive")) {
-    if (is.null(colnames(x$output$beta.p))) {
-      x_names <- paste0("x", seq_len(ncol(x$output$beta.p)))
-    } else {
-      x_names <- colnames(x$output$beta.p)
-    }
-    beta_p <- x$output$beta.p[-(1:(x$input$burnin / x$input$thin + 1)), ]
+    tbl <- coef.BayesSurvive(x,
+      type = type, CI = 95,
+      subgroup = subgroup
+    )
+    names(tbl)[2] <- "estimate"
   } else {
     if (is.null(colnames(x))) {
       x_names <- paste0("x", seq_len(ncol(x)))
@@ -97,17 +92,22 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
       x_names <- colnames(x)
     }
     beta_p <- x
+
+    beta_est <- apply(beta_p, 2, type)
+    beta_L <- apply(beta_p, 2, quantile, 0.025)
+    beta_U <- apply(beta_p, 2, quantile, 0.975)
+    tbl <- data.frame(
+      term = x_names, estimate = beta_est,
+      conf.lower = beta_L, conf.upper = beta_U
+    )
+    tbl$term <- factor(tbl$term, levels = tbl$term)
   }
 
   # pdf("psbcBeta.pdf", height = 5, width = 3.5)
-  beta_est <- apply(beta_p, 2, type)
-  beta_L <- apply(beta_p, 2, quantile, 0.025)
-  beta_U <- apply(beta_p, 2, quantile, 0.975)
-  tbl <- data.frame(term = x_names, estimate = beta_est, conf.low = beta_L, conf.high = beta_U)
-  tbl$term <- factor(tbl$term, levels = tbl$term)
 
   # Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")
   pCoef <- ggcoef(tbl, ...) + xlab(expression(Posterior ~ ~beta)) + ylab("")
   pCoef
   # dev.off()
+  
 }
