@@ -276,4 +276,5 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
     invisible(Brier)
     # return(Brier)
   }
+  
 }
