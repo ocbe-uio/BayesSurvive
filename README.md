@@ -1,4 +1,3 @@
-
 # BayesSurvive
 
 [![CRAN](http://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-project.org/package=BayesSurvive)
