@@ -1,11 +1,9 @@
+# BayesSurvive
+
 [![CRAN](http://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-project.org/package=BayesSurvive)
 [![r-universe](https://ocbe-uio.r-universe.dev/badges/BayesSurvive)](https://ocbe-uio.r-universe.dev/BayesSurvive)
 [![R-CMD-check](https://github.com/ocbe-uio/BayesSurvive/workflows/R-CMD-check/badge.svg)](https://github.com/ocbe-uio/BayesSurvive/actions)
 [![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
-
-
-# BayesSurvive
-
 
 
 This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
@@ -56,43 +54,48 @@ hyperparPooled = list(
 )   
 
 ## run Bayesian Cox with graph-structured priors
+set.seed(123)
 fit <- BayesSurvive(survObj = dataset, model.type = "Pooled", MRF.G = TRUE, 
-                    hyperpar = hyperparPooled, initial = initial, nIter = 100)
+                    hyperpar = hyperparPooled, initial = initial, 
+                    nIter = 200, burnin = 100)
 
 ## show posterior mean of coefficients and 95% credible intervals
 library("GGally")
 plot(fit) + 
   coord_flip() + 
   theme(axis.text.x = element_text(angle = 90, size = 7))
-
-#plot(fit$output$beta.p[,1], type="l")
-#fit$output$beta.margin
-#fit$output$gamma.margin
-#simData[[1]]$trueB
 ```
 
-<img src="man/figures/README_plot_beta.png" width="100%" />
+<img src="man/figures/README_plot_beta.png" width="130%" />
 
+Show the index of selected variables by controlling Bayesian false discovery rate (FDR) at the level $\alpha = 0.05$
+
+```r
+which( VS(fit, method = "FDR", threshold = 0.05) )
+```
+```
+#[1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 194
+```
 
 ### Plot time-dependent Brier scores
 
 The function `BayesSurvive::plotBrier()` can show the time-dependent Brier scores based on posterior mean of coefficients or Bayesian model averaging.
 
 ```r
-plotBrier(fit, , survObj.new = dataset)
+plotBrier(fit, survObj.new = dataset)
 ```
 
 <img src="man/figures/README_plot_brier.png" width="50%" />
 
-The integrated Brier score (IBS) can be obtained by the function `BayesSurvive::predict()`.
+We can also use the function `BayesSurvive::predict()` to obtain the Brier score at time 8.5, the integrated Brier score (IBS) from time 0 to 8.5 and the index of prediction accuracy (IPA).
 
 ```r
-predict(fit, survObj.new = dataset)
+predict(fit, survObj.new = dataset, times = 8.5)
 ```
 ```{ .text .no-copy }
-##                     IBS
-## Null model          0.09147208
-## Bayesian Cox model  0.03433363
+##               Brier(t=8.5) IBS(t:0~8.5) IPA(t=8.5)
+## Null.model      0.2290318   0.08185316  0.0000000
+## Bayesian.Cox    0.1013692   0.02823275  0.5574011
 ```
 
 ### Predict survival probabilities and cumulative hazards
@@ -103,19 +106,19 @@ The function `BayesSurvive::predict()` can estimate the survival probabilities a
 predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 ```
 ```{ .text .no-copy }
-##        observation times cumhazard survival
-##              <int> <num>     <num>    <num>
-##     1:           1   3.3  2.11e-04 1.00e+00
-##     2:           2   3.3  3.29e-01 7.20e-01
-##     3:           3   3.3  2.06e-06 1.00e+00
-##     4:           4   3.3  1.19e-02 9.88e-01
-##     5:           5   3.3  5.36e-04 9.99e-01
-##   ---                                     
-##  9996:          96   9.5  2.67e+01 2.57e-12
-##  9997:          97   9.5  1.08e+03 0.00e+00
-##  9998:          98   9.5  2.23e+00 1.08e-01
-##  9999:          99   9.5  3.72e+00 2.42e-02
-## 10000:         100   9.5  3.37e+01 2.38e-15
+#        observation times cumhazard  survival
+##              <int> <num>     <num>     <num>
+##     1:           1   3.3  7.41e-05  1.00e+00
+##     2:           2   3.3  2.51e-01  7.78e-01
+##     3:           3   3.3  9.97e-07  1.00e+00
+##     4:           4   3.3  1.84e-03  9.98e-01
+##     5:           5   3.3  3.15e-04  1.00e+00
+##    ---                                      
+##  9996:          96   9.5  7.15e+00  7.88e-04
+##  9997:          97   9.5  3.92e+02 7.59e-171
+##  9998:          98   9.5  2.81e+00  6.02e-02
+##  9999:          99   9.5  3.12e+00  4.42e-02
+## 10000:         100   9.5  1.97e+01  2.79e-09
 ```
 
 ### Run a 'Pooled' Bayesian Cox model with graphical learning

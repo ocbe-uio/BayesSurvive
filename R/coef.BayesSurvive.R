@@ -89,7 +89,7 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
       object$output$beta.p <- object$output$beta.p[[subgroup]]
     }
     if (is.null(colnames(object$output$beta.p))) {
-      x_names <- paste0("object", seq_len(ncol(object$output$beta.p)))
+      x_names <- paste0("x", seq_len(ncol(object$output$beta.p)))
     } else {
       x_names <- colnames(object$output$beta.p)
     }
@@ -105,7 +105,7 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
     )
     names(tbl)[2] <- type
     if (SD) tbl <- data.frame(tbl, SD = apply(beta_p, 2, sd))
-    tbl$term <- factor(tbl$term, levels = tbl$term)
+    #tbl$term <- factor(tbl$term, levels = tbl$term)
   } else {
     # MPM coefficients
     if (object$input$S > 1 || !object$input$MRF.G) {
@@ -113,7 +113,7 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
       object$output$gamma.margin <- object$output$gamma.margin[[subgroup]]
     }
     if (is.null(names(object$output$beta.margin))) {
-      x_names <- paste0("object", seq_len(length(object$output$beta.margin)))
+      x_names <- paste0("x", seq_len(length(object$output$beta.margin)))
     } else {
       x_names <- names(object$output$beta.margin)
     }
