@@ -84,7 +84,8 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
       type = type, CI = 95,
       subgroup = subgroup
     )
-    names(tbl)[2] <- "estimate"
+    names(tbl)[2:4] <- c("estimate", "conf.low", "conf.high")
+    tbl$term <- factor(tbl$term, levels = tbl$term)
   } else {
     if (is.null(colnames(x))) {
       x_names <- paste0("x", seq_len(ncol(x)))
@@ -98,7 +99,7 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
     beta_U <- apply(beta_p, 2, quantile, 0.975)
     tbl <- data.frame(
       term = x_names, estimate = beta_est,
-      conf.lower = beta_L, conf.upper = beta_U
+      conf.low = beta_L, conf.high = beta_U
     )
     tbl$term <- factor(tbl$term, levels = tbl$term)
   }
@@ -106,7 +107,8 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
   # pdf("psbcBeta.pdf", height = 5, width = 3.5)
 
   # Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")
-  pCoef <- ggcoef(tbl, ...) + xlab(expression(Posterior ~ ~beta)) + ylab("")
+  pCoef <- ggcoef(tbl, conf.int = interval, ...) + 
+    xlab(expression(Posterior ~ ~beta)) + ylab("")
   pCoef
   # dev.off()
   

@@ -1,3 +1,7 @@
+# BayesSurvive 0.0.3
+
+* Add IPA in function `predict.BayesSurvive()`
+
 # BayesSurvive 0.0.2
 
 * Add vignette
