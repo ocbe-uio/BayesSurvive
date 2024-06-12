@@ -39,6 +39,7 @@
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF.G = FALSE}
 #' @param verbose logical value to display the progess of MCMC
+#' @param cpp logical, whether to use C++ code for faster computation
 #'
 #'
 #' @return An object of class \code{BayesSurvive} is saved as
@@ -108,7 +109,8 @@ BayesSurvive <- function(survObj,
                          burnin = 0,
                          thin = 1,
                          output_graph_para = FALSE,
-                         verbose = TRUE) {
+                         verbose = TRUE,
+                         cpp = FALSE) {
   # same number of covariates p in all subgroups
   p <- ifelse(is.list(survObj[[1]]), NCOL(survObj[[1]]$X), NCOL(survObj$X))
   Beta.ini <- numeric(p)
@@ -306,7 +308,8 @@ BayesSurvive <- function(survObj,
     MRF_2b = MRF2b,
     MRF_G = MRF.G,
     output_graph_para,
-    verbose
+    verbose,
+    cpp
   )
 
   if (S == 1 && MRF.G) {

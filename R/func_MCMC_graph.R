@@ -15,6 +15,7 @@
 #' @param method a method option from
 #' \code{c("Pooled", "CoxBVSSL", "Sub-struct")}
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
+#' @inheritParams func_MCMC
 #'
 #' @return A list object with components "Sig" the updated covariance matrices,
 #' "G.ini" the updated graph, "V.ini" the updated variances for precision
@@ -23,7 +24,11 @@
 #'
 #'
 #' @export
-func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
+func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b, cpp = FALSE) {
+  if (cpp) {
+    warning("This is not yet fully implemented. Please use cpp = FALSE for production")
+    return(func_MCMC_graph_cpp(sobj, hyperpar, ini, S, method, MRF_2b))
+  }
   n <- sobj$n
   p <- sobj$p
   SSig <- sobj$SSig
