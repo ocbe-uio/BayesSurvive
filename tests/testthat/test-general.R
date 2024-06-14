@@ -1,6 +1,4 @@
-library("BayesSurvive")
 # Load the example dataset
-data("simData", package = "BayesSurvive")
 dataset <- list(
   "X" = simData[[1]]$X,
   "t" = simData[[1]]$time,
@@ -11,6 +9,7 @@ dataset <- list(
 
 ## Initial value: null model without covariates
 initial <- list("gamma.ini" = rep(0, ncol(dataset$X)))
+
 # Prior parameters
 hyperparPooled <- list(
   "c0"     = 2, # prior of baseline hazard
@@ -30,35 +29,29 @@ fit <- BayesSurvive(
   nIter = 200, burnin = 100
 )
 
-## show posterior mean of coefficients and 95% credible intervals
-library("GGally")
-plot(fit) +
-  coord_flip() +
-  theme(axis.text.x = element_text(angle = 90, size = 7))
+test_that("fit has properly class and length", {
+  expect_s3_class(fit, "BayesSurvive")
+  expect_length(fit, 3L)
+  expect_length(fit$input, 9L)
+  expect_length(fit$input$hyperpar, 10L)
+  expect_length(fit$output, 17L)
+  expect_length(fit$output$survObj, 4L)
+})
 
-# Show the index of selected variables by controlling Bayesian false discovery rate (FDR) at the level $\alpha = 0.05$
-
-which(VS(fit, method = "FDR", threshold = 0.05))
-# [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 194
-
-### Plot time-dependent Brier scores
-
-# The function `BayesSurvive::plotBrier()` can show the time-dependent Brier scores based on posterior mean of coefficients or Bayesian model averaging.
-
-plotBrier(fit, survObj.new = dataset)
-
-# <img src="man/figures/README_plot_brier.png" width="50%" />
-
-# We can also use the function `BayesSurvive::predict()` to obtain the Brier score at time 8.5, the integrated Brier score (IBS) from time 0 to 8.5 and the index of prediction accuracy (IPA).
-
-predict(fit, survObj.new = dataset, times = 8.5)
-##               Brier(t=8.5) IBS(t:0~8.5) IPA(t=8.5)
-## Null.model      0.2290318   0.08185316  0.0000000
-## Bayesian.Cox    0.1013692   0.02823275  0.5574011
-
-### Predict survival probabilities and cumulative hazards
-
-# The function `BayesSurvive::predict()` can estimate the survival probabilities and cumulative hazards.
+test_that("fit has expected values", {
+  tol <- 1e-3
+  with(fit$output, {
+    expect_equal(eta0, c("(Intercept)" = 1.74e-5), tolerance = tol)
+    expect_equal(head(s, 4), c(3.2969, 3.3217, 4.0938, 4.4107), tolerance = tol)
+    expect_equal(head(survObj$t, 4), c(8.53, 4.09, 8.82, 6.09), tolerance = tol)
+  })
+  expect_equal(which(VS(fit, method = "FDR", threshold = 0.05)), 1:15)
+  expect_equal(
+    head(predict(fit, survObj.new = dataset, times = 8.5)$times),
+    c(0.00000000, 0.08585859, 0.17171717, 0.25757576, 0.34343434, 0.42929293),
+    tolerance = tol
+  )
+})
 
 predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 #        observation times cumhazard  survival
