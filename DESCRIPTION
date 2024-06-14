@@ -18,7 +18,9 @@ RoxygenNote: 7.3.1
 LinkingTo: Rcpp, RcppArmadillo (>= 0.9.000)
 Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
         utils, stats
-Suggests: knitr
+Suggests: 
+    knitr,
+    testthat (>= 3.0.0)
 LazyData: true
 NeedsCompilation: yes
 Packaged: 2024-06-05 07:00:29 UTC; zhiz
@@ -28,3 +30,4 @@ Author: Zhi Zhao [aut, cre],
   Manuela Zucknick [ctb],
   Jörg Rahnenführer [ctb]
 Maintainer: Zhi Zhao <zhi.zhao@medisin.uio.no>
+Config/testthat/edition: 3
