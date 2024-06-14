@@ -1,30 +1,34 @@
 library("BayesSurvive")
 # Load the example dataset
 data("simData", package = "BayesSurvive")
-dataset = list("X" = simData[[1]]$X,
-               "t" = simData[[1]]$time,
-               "di" = simData[[1]]$status)
+dataset <- list(
+  "X" = simData[[1]]$X,
+  "t" = simData[[1]]$time,
+  "di" = simData[[1]]$status
+)
 
 ### Run a Bayesian Cox model
 
 ## Initial value: null model without covariates
-initial = list("gamma.ini" = rep(0, ncol(dataset$X)))
+initial <- list("gamma.ini" = rep(0, ncol(dataset$X)))
 # Prior parameters
-hyperparPooled = list(
-  "c0"     = 2,                      # prior of baseline hazard
-  "tau"    = 0.0375,                 # sd (spike) for coefficient prior
-  "cb"     = 20,                     # sd (slab) for coefficient prior
-  "pi.ga"  = 0.02,                   # prior variable selection probability for standard Cox models
-  "a"      = -4,                     # hyperparameter in MRF prior
-  "b"      = 0.1,                    # hyperparameter in MRF prior
-  "G"      = simData$G               # hyperparameter in MRF prior
+hyperparPooled <- list(
+  "c0"     = 2, # prior of baseline hazard
+  "tau"    = 0.0375, # sd (spike) for coefficient prior
+  "cb"     = 20, # sd (slab) for coefficient prior
+  "pi.ga"  = 0.02, # prior variable selection probability for standard Cox models
+  "a"      = -4, # hyperparameter in MRF prior
+  "b"      = 0.1, # hyperparameter in MRF prior
+  "G"      = simData$G # hyperparameter in MRF prior
 )
 
 ## run Bayesian Cox with graph-structured priors
 set.seed(123)
-fit <- BayesSurvive(survObj = dataset, model.type = "Pooled", MRF.G = TRUE,
-                    hyperpar = hyperparPooled, initial = initial,
-                    nIter = 200, burnin = 100)
+fit <- BayesSurvive(
+  survObj = dataset, model.type = "Pooled", MRF.G = TRUE,
+  hyperpar = hyperparPooled, initial = initial,
+  nIter = 200, burnin = 100
+)
 
 ## show posterior mean of coefficients and 95% credible intervals
 library("GGally")
@@ -34,8 +38,8 @@ plot(fit) +
 
 # Show the index of selected variables by controlling Bayesian false discovery rate (FDR) at the level $\alpha = 0.05$
 
-which( VS(fit, method = "FDR", threshold = 0.05) )
-#[1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 194
+which(VS(fit, method = "FDR", threshold = 0.05))
+# [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 194
 
 ### Plot time-dependent Brier scores
 
@@ -74,8 +78,10 @@ predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 ### Run a 'Pooled' Bayesian Cox model with graphical learning
 
 hyperparPooled <- append(hyperparPooled, list("lambda" = 3, "nu0" = 0.05, "nu1" = 5))
-fit2 <- BayesSurvive(survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
-                     hyperpar = hyperparPooled, initial = initial, nIter = 10)
+fit2 <- BayesSurvive(
+  survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
+  hyperpar = hyperparPooled, initial = initial, nIter = 10
+)
 
 ### Run a Bayesian Cox model with subgroups using fixed graph
 
@@ -83,14 +89,18 @@ fit2 <- BayesSurvive(survObj = list(dataset), model.type = "Pooled", MRF.G = FAL
 hyperparPooled$G <- Matrix::bdiag(simData$G, simData$G)
 dataset2 <- simData[1:2]
 dataset2 <- lapply(dataset2, setNames, c("X", "t", "di", "X.unsc", "trueB"))
-fit3 <- BayesSurvive(survObj = dataset2,
-                     hyperpar = hyperparPooled, initial = initial,
-                     model.type="CoxBVSSL", MRF.G = TRUE,
-                     nIter = 10, burnin = 5)
+fit3 <- BayesSurvive(
+  survObj = dataset2,
+  hyperpar = hyperparPooled, initial = initial,
+  model.type = "CoxBVSSL", MRF.G = TRUE,
+  nIter = 10, burnin = 5
+)
 
 ### Run a Bayesian Cox model with subgroups using graphical learning
 
-fit4 <- BayesSurvive(survObj = dataset2,
-                     hyperpar = hyperparPooled, initial = initial,
-                     model.type="CoxBVSSL", MRF.G = FALSE,
-                     nIter = 3, burnin = 0)
+fit4 <- BayesSurvive(
+  survObj = dataset2,
+  hyperpar = hyperparPooled, initial = initial,
+  model.type = "CoxBVSSL", MRF.G = FALSE,
+  nIter = 3, burnin = 0
+)
