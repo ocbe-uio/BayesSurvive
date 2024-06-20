@@ -26,8 +26,10 @@ set.seed(123)
 fit <- BayesSurvive(
   survObj = dataset, model.type = "Pooled", MRF.G = TRUE,
   hyperpar = hyperparPooled, initial = initial,
-  nIter = 200, burnin = 100
+  nIter = 200, burnin = 100 # TODO: speed up once all tests are written
 )
+pred_1 <- predict(fit, survObj.new = dataset, times = 8.5)
+pred_2 <- predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 
 test_that("fit has properly class and length", {
   expect_s3_class(fit, "BayesSurvive")
@@ -46,54 +48,32 @@ test_that("fit has expected values", {
     expect_equal(head(survObj$t, 4), c(8.53, 4.09, 8.82, 6.09), tolerance = tol)
   })
   expect_equal(which(VS(fit, method = "FDR", threshold = 0.05)), 1:15)
+})
+
+test_that("predictions have expected values", {
+  tol <- 1e-3
   expect_equal(
-    head(predict(fit, survObj.new = dataset, times = 8.5)$times),
+    head(pred_1$times),
     c(0.00000000, 0.08585859, 0.17171717, 0.25757576, 0.34343434, 0.42929293),
     tolerance = tol
   )
+  expect_equal(
+    head(pred_2$cumhazard[, 1], 5L),
+    c(1.985202e-04, 2.517030e-01, 2.841766e-06, 5.613921e-03, 5.896195e-04),
+    tolerance = tol
+  )
+  expect_equal(
+    head(pred_2$survival[, 1]),
+    c(0.9998015, 0.7774756, 0.9999972, 0.9944018, 0.9994106, 0.9960499),
+    tolerance = tol
+  )
+  expect_equal(
+    head(pred_2$times),
+    c(3.296921, 3.321787, 3.899565, 4.093849, 4.410782, 4.932070),
+    tolerance = tol
+  )
+  expect_false(pred_2$se)
+  expect_false(pred_2$band)
+  expect_false(pred_2$diag)
+  expect_false(pred_2$baseline)
 })
-
-predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
-#        observation times cumhazard  survival
-##              <int> <num>     <num>     <num>
-##     1:           1   3.3  7.41e-05  1.00e+00
-##     2:           2   3.3  2.51e-01  7.78e-01
-##     3:           3   3.3  9.97e-07  1.00e+00
-##     4:           4   3.3  1.84e-03  9.98e-01
-##     5:           5   3.3  3.15e-04  1.00e+00
-##    ---
-##  9996:          96   9.5  7.15e+00  7.88e-04
-##  9997:          97   9.5  3.92e+02 7.59e-171
-##  9998:          98   9.5  2.81e+00  6.02e-02
-##  9999:          99   9.5  3.12e+00  4.42e-02
-## 10000:         100   9.5  1.97e+01  2.79e-09
-
-### Run a 'Pooled' Bayesian Cox model with graphical learning
-
-hyperparPooled <- append(hyperparPooled, list("lambda" = 3, "nu0" = 0.05, "nu1" = 5))
-fit2 <- BayesSurvive(
-  survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
-  hyperpar = hyperparPooled, initial = initial, nIter = 10
-)
-
-### Run a Bayesian Cox model with subgroups using fixed graph
-
-# specify a fixed joint graph between two subgroups
-hyperparPooled$G <- Matrix::bdiag(simData$G, simData$G)
-dataset2 <- simData[1:2]
-dataset2 <- lapply(dataset2, setNames, c("X", "t", "di", "X.unsc", "trueB"))
-fit3 <- BayesSurvive(
-  survObj = dataset2,
-  hyperpar = hyperparPooled, initial = initial,
-  model.type = "CoxBVSSL", MRF.G = TRUE,
-  nIter = 10, burnin = 5
-)
-
-### Run a Bayesian Cox model with subgroups using graphical learning
-
-fit4 <- BayesSurvive(
-  survObj = dataset2,
-  hyperpar = hyperparPooled, initial = initial,
-  model.type = "CoxBVSSL", MRF.G = FALSE,
-  nIter = 3, burnin = 0
-)
