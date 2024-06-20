@@ -78,3 +78,11 @@ test_that("predictions have expected values", {
   expect_false(pred_2$diag)
   expect_false(pred_2$baseline)
 })
+
+### Run a 'Pooled' Bayesian Cox model with graphical learning
+
+hyperparPooled <- append(hyperparPooled, list("lambda" = 3, "nu0" = 0.05, "nu1" = 5))
+system.time({fit2 <- BayesSurvive(
+  survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
+  hyperpar = hyperparPooled, initial = initial, nIter = 5
+)}) # TODO: reduce compute time (PB: 84 s; target: 20 s)
