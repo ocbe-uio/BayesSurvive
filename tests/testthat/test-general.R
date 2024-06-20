@@ -26,10 +26,10 @@ set.seed(123)
 fit <- BayesSurvive(
   survObj = dataset, model.type = "Pooled", MRF.G = TRUE,
   hyperpar = hyperparPooled, initial = initial,
-  nIter = 50, burnin = 0, # TODO: speed up once all tests are written
+  nIter = 50, burnin = 0,
   verbose = FALSE
 )
-pred_1 <- predict(fit, survObj.new = dataset, times = 8.5)
+pred_1 <- predict(fit, survObj.new = dataset, times = 8.5, verbose = FALSE)
 pred_2 <- predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
 
 test_that("fit has properly class and length", {
