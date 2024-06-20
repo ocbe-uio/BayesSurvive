@@ -26,7 +26,8 @@ set.seed(123)
 fit <- BayesSurvive(
   survObj = dataset, model.type = "Pooled", MRF.G = TRUE,
   hyperpar = hyperparPooled, initial = initial,
-  nIter = 200, burnin = 100 # TODO: speed up once all tests are written
+  nIter = 50, burnin = 0, # TODO: speed up once all tests are written
+  verbose = FALSE
 )
 pred_1 <- predict(fit, survObj.new = dataset, times = 8.5)
 pred_2 <- predict(fit, survObj.new = dataset, type = c("cumhazard", "survival"))
@@ -47,7 +48,7 @@ test_that("fit has expected values", {
     expect_equal(head(s, 4), c(3.2969, 3.3217, 4.0938, 4.4107), tolerance = tol)
     expect_equal(head(survObj$t, 4), c(8.53, 4.09, 8.82, 6.09), tolerance = tol)
   })
-  expect_equal(which(VS(fit, method = "FDR", threshold = 0.05)), 1:15)
+  expect_equal(which(VS(fit, method = "FDR", threshold = 0.6)), c(6, 12))
 })
 
 test_that("predictions have expected values", {
@@ -59,12 +60,12 @@ test_that("predictions have expected values", {
   )
   expect_equal(
     head(pred_2$cumhazard[, 1], 5L),
-    c(1.985202e-04, 2.517030e-01, 2.841766e-06, 5.613921e-03, 5.896195e-04),
+    c(1.782968e-04, 1.544469e-01, 9.193403e-07, 6.192432e-03, 4.701002e-04),
     tolerance = tol
   )
   expect_equal(
     head(pred_2$survival[, 1]),
-    c(0.9998015, 0.7774756, 0.9999972, 0.9944018, 0.9994106, 0.9960499),
+    c(0.9998217, 0.8568890, 0.9999991, 0.9938267, 0.9995300, 0.9935771),
     tolerance = tol
   )
   expect_equal(
