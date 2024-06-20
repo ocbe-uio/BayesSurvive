@@ -13,6 +13,7 @@ BayesSurv/src/Makevars
 BayesSurv/BayesSurv.Rcheck/*
 BayesSurv.Rcheck/*
 *.gcno
+inst/doc
 
 BayesSurv/autom4te.cache
 BayesSurv/build
