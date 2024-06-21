@@ -1,15 +1,33 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
+
 // [[Rcpp::export]]
 Rcpp::List func_MCMC_graph_cpp(
-  Rcpp::List sobj,
-  Rcpp::List hyperpar,
-  Rcpp::List ini,
-  uint S,
-  std::string method,
-  bool MRF_2b
+  const Rcpp::List sobj,
+  const Rcpp::List hyperpar,
+  const Rcpp::List ini,
+  const uint S,
+  const std::string method,
+  const bool MRF_2b
 ) {
-  Rcpp::List out = Rcpp::List::create();
+  // Extracting data
+  int n = Rcpp::as<int>(sobj["n"]);
+  int p = Rcpp::as<int>(sobj["p"]);
+  Rcpp::List SSig = sobj["SSig"];
+
+  // Assembling output
+  Rcpp::List Sig = Rcpp::List::create(); // TEMP: placeholder
+  arma::mat G = arma::zeros<arma::mat>(p, p); // TEMP: placeholder
+  Rcpp::List V = Rcpp::List::create(); // TEMP: placeholder
+  Rcpp::List C = Rcpp::List::create(); // TEMP: placeholder
+
+  Rcpp::Rcout << "yo" << std::endl; // TEMP
+  Rcpp::List out = Rcpp::List::create(
+    Rcpp::Named("Sig.ini") = Sig,
+    Rcpp::Named("G.ini") = G,
+    Rcpp::Named("V.ini") = V,
+    Rcpp::Named("C.ini") = C
+  );
   return out;
 }

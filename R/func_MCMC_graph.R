@@ -187,6 +187,5 @@ func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b, cpp = FALSE)
       }
     }
   }
-
   return(list(Sig.ini = Sig, G.ini = G, V.ini = V, C.ini = C))
 }
