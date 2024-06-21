@@ -82,7 +82,17 @@ test_that("predictions have expected values", {
 ### Run a 'Pooled' Bayesian Cox model with graphical learning
 
 hyperparPooled <- append(hyperparPooled, list("lambda" = 3, "nu0" = 0.05, "nu1" = 5))
-system.time({fit2 <- BayesSurvive(
+set.seed(3346141)
+fit2 <- BayesSurvive(
   survObj = list(dataset), model.type = "Pooled", MRF.G = FALSE,
-  hyperpar = hyperparPooled, initial = initial, nIter = 5
-)}) # TODO: reduce compute time (PB: 84 s; target: 20 s)
+  hyperpar = hyperparPooled, initial = initial, nIter = 3, verbose = FALSE
+)
+test_that("fit2 has expected values", {
+  tol <- 1e-3
+  with(fit2$output, {
+    expect_equal(eta0[[1]], c("(Intercept)" = 1.74e-5), tolerance = tol)
+    expect_equal(head(s[[1]], 3), c(3.2969, 3.3217, 4.0938), tolerance = tol)
+    expect_equal(head(survObj[[1]]$t, 3), c(8.53, 4.09, 8.82), tolerance = tol)
+  })
+  expect_equal(which(VS(fit2, method = "FDR", threshold = 0.8)), c(81, 182))
+})
