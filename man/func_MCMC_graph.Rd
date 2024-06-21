@@ -4,7 +4,7 @@
 \alias{func_MCMC_graph}
 \title{Function to learn MRF graph}
 \usage{
-func_MCMC_graph(sobj, hyperpar, ini, S, method, MRF_2b)
+func_MCMC_graph(sobj, hyperpar, ini, S, method, MRF_2b, cpp = FALSE)
 }
 \arguments{
 \item{sobj}{a list containing observed data from \code{n} subjects;
@@ -20,6 +20,8 @@ func_MCMC_graph(sobj, hyperpar, ini, S, method, MRF_2b)
 \code{c("Pooled", "CoxBVSSL", "Sub-struct")}}
 
 \item{MRF_2b}{two different b in MRF prior for subgraphs G_ss and G_rs}
+
+\item{cpp}{logical, whether to use C++ code for faster computation}
 }
 \value{
 A list object with components "Sig" the updated covariance matrices,

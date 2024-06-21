@@ -16,7 +16,8 @@ BayesSurvive(
   burnin = 0,
   thin = 1,
   output_graph_para = FALSE,
-  verbose = TRUE
+  verbose = TRUE,
+  cpp = FALSE
 )
 }
 \arguments{
@@ -60,6 +61,8 @@ output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF.G = FALSE}}
 
 \item{verbose}{logical value to display the progess of MCMC}
+
+\item{cpp}{logical, whether to use C++ code for faster computation}
 }
 \value{
 An object of class \code{BayesSurvive} is saved as
