@@ -27,7 +27,7 @@
 func_MCMC_graph <- function(sobj, hyperpar, ini, S, method, MRF_2b, cpp = FALSE) {
   if (cpp) {
     warning("This is not yet fully implemented. Please use cpp = FALSE for production")
-    return(func_MCMC_graph_cpp(sobj, hyperpar, ini, S, method, MRF_2b))
+    return(func_MCMC_graph_cpp(sobj, hyperpar, ini, S, method, MRF_2b)) # FIXME: function not properly exported
   }
   n <- sobj$n
   p <- sobj$p
