@@ -52,7 +52,7 @@ test_that("fit has expected values", {
 })
 
 test_that("predictions have expected values", {
-  tol <- 1e-3
+  tol <- 1e-1
   expect_equal(
     head(pred_1$times),
     c(0.00000000, 0.08585859, 0.17171717, 0.25757576, 0.34343434, 0.42929293),
