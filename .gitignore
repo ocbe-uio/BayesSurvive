@@ -4,20 +4,18 @@
 .Rhistory
 .DS_Store
 
-BVS_Reg
-BayesSurv/src/*.o
-BayesSurv/src/*.so
-BayesSurv/src/*.dll
-BayesSurv/src/symbols.rds
-BayesSurv/src/Makevars
-BayesSurv/BayesSurv.Rcheck/*
-BayesSurv.Rcheck/*
+BayesSurvive/src/*.o
+BayesSurvive/src/*.so
+BayesSurvive/src/*.dll
+BayesSurvive/src/symbols.rds
+BayesSurvive/src/Makevars
+BayesSurvive/BayesSurvive.Rcheck/*
+BayesSurvive.Rcheck/*
 *.gcno
-inst/doc
 
-BayesSurv/autom4te.cache
-BayesSurv/build
-BayesSurv/hyperpar.xml
+BayesSurvive/autom4te.cache
+BayesSurvive/build
+BayesSurvive/hyperpar.xml
 
 *.tar.gz
 *.log
