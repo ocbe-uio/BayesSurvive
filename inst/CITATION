@@ -1,0 +1,16 @@
+bibentry("Manual",
+  title = "{BayesSurvive}: {B}ayesian Survival Models for High-Dimensional Data",
+  author = c(person(given = "Zhi",
+                          family = "Zhao",
+                          email = "zhi.zhao@medisin.uio.no"),
+                   person(given = "Waldir",
+                          family = "Leoncio"),
+                   person(given = "Katrin",
+                          family = "Madjar"),
+                   person(given = "Tobias",
+                          family = "Østmo Hermansen")),
+  year = 2024,
+  note = " R package version 0.0.2",
+  doi = "10.32614/CRAN.package.BayesSurvive",
+  header       = "To cite BayesSurvive in publications use:"
+)
