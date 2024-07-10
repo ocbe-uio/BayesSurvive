@@ -20,6 +20,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Waldir Leoncio
   \item Katrin Madjar
   \item Tobias Østmo Hermansen
 }

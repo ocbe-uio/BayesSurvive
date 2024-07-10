@@ -1,3 +1,8 @@
+# BayesSurvive 0.0.4
+
+* Add units tests
+* Rename the output of MPM coefficients in function `coef.BayesSurvive()`
+
 # BayesSurvive 0.0.3
 
 * Add IPA in function `predict.BayesSurvive()`

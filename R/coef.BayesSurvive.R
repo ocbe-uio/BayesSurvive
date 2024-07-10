@@ -119,11 +119,10 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
     }
     tbl <- data.frame(
       term = x_names,
-      beta_MPM = object$output$beta.margin,
-      gamma = object$output$gamma.margin
+      estimate = object$output$beta.margin
     )
-    tbl$estimate <- (object$output$gamma.margin >= 0.5) *
-      object$output$beta.margin / object$output$gamma.margin
+    tbl$estimate <- tbl$estimate / object$output$gamma.margin * 
+      (object$output$gamma.margin >= 0.5)
     tbl$estimate[is.na(tbl$estimate)] <- 0
   }
 

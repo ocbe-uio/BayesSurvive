@@ -1,8 +1,9 @@
 Package: BayesSurvive
 Title: Bayesian Survival Models for High-Dimensional Data
-Version: 0.0.3
-Date: 2024-06-05
+Version: 0.0.4
+Date: 2024-07-10
 Authors@R: c(person("Zhi", "Zhao", role=c("aut","cre"), email = "zhi.zhao@medisin.uio.no"),
+             person("Waldir", "Leoncio", role=c("aut")),
              person("Katrin", "Madjar", role=c("aut")),
              person("Tobias", "Østmo Hermansen", role=c("aut")),
              person("Manuela", "Zucknick", role=c("ctb")),
@@ -15,19 +16,17 @@ VignetteBuilder: knitr
 Depends: R (>= 4.0)
 Encoding: UTF-8
 RoxygenNote: 7.3.1
-LinkingTo: Rcpp, RcppArmadillo (>= 0.9.000)
+LinkingTo: Rcpp, RcppArmadillo, testthat
 Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
         utils, stats
-Suggests: 
-    knitr,
-    testthat (>= 3.0.0)
+Suggests: knitr, testthat
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2024-06-05 07:00:29 UTC; zhiz
+Packaged: 2024-07-10 08:34:27 UTC; zhiz
 Author: Zhi Zhao [aut, cre],
+  Waldir Leoncio [aut],
   Katrin Madjar [aut],
   Tobias Østmo Hermansen [aut],
   Manuela Zucknick [ctb],
   Jörg Rahnenführer [ctb]
 Maintainer: Zhi Zhao <zhi.zhao@medisin.uio.no>
-Config/testthat/edition: 3
