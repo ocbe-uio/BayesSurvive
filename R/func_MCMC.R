@@ -156,10 +156,8 @@ func_MCMC <- function(survObj, hyperpar, initial,
   # MCMC sampling
 
   # Initializes the progress bar
-  if (verbose) {
-    cat("  Running MCMC iterations ...\n")
-    pb <- txtProgressBar(min = 0, max = nIter, style = 3, width = 50, char = "=")
-  }
+  if (verbose) cat("  Running MCMC iterations ...\n")
+  pb <- txtProgressBar(min = 0, max = nIter, style = 3, width = 50, char = "=")
 
   for (M in 1:nIter) {
     # if (method %in% c("CoxBVSSL", "Sub-struct") ||
@@ -286,9 +284,9 @@ func_MCMC <- function(survObj, hyperpar, initial,
     # }
 
     # Sets the progress bar to the current state
-    if (verbose) setTxtProgressBar(pb, M)
+    setTxtProgressBar(pb, M)
   } # the end of MCMC sampling
-  if (verbose) close(pb) # Close the connection of progress bar
+  close(pb) # Close the connection of progress bar
 
   if (S == 1 && MRF_G) {
     mcmcOutcome$gamma.margin <- mcmcOutcome$gamma.margin / (nIter - burnin)
