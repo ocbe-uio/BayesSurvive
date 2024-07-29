@@ -1,7 +1,6 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-
 // [[Rcpp::export]]
 Rcpp::List func_MCMC_graph_cpp(
   const Rcpp::List sobj,
@@ -12,7 +11,8 @@ Rcpp::List func_MCMC_graph_cpp(
   const bool MRF_2b
 ) {
   // Extracting data
-  int n = Rcpp::as<int>(sobj["n"]);
+  Rcpp::List sobj_n = sobj["n"];
+  int n = Rcpp::as<int>(sobj_n[0]);
   int p = Rcpp::as<int>(sobj["p"]);
   Rcpp::List SSig = sobj["SSig"];
 
@@ -22,7 +22,6 @@ Rcpp::List func_MCMC_graph_cpp(
   Rcpp::List V = Rcpp::List::create(); // TEMP: placeholder
   Rcpp::List C = Rcpp::List::create(); // TEMP: placeholder
 
-  Rcpp::Rcout << "yo" << std::endl; // TEMP
   Rcpp::List out = Rcpp::List::create(
     Rcpp::Named("Sig.ini") = Sig,
     Rcpp::Named("G.ini") = G,
