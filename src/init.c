@@ -16,6 +16,7 @@ extern SEXP _BayesSurvive_updateBH_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP)
 extern SEXP _BayesSurvive_updateBH_list_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _BayesSurvive_updateRP_genomic_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _BayesSurvive_func_MCMC_graph_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
+extern SEXP _BayesSurvive_UpdateGamma_cpp(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
   {"_BayesSurvive_calJpost_helper_cpp",  (DL_FUNC) &_BayesSurvive_calJpost_helper_cpp,   9},
@@ -26,6 +27,7 @@ static const R_CallMethodDef CallEntries[] = {
   {"_BayesSurvive_updateBH_list_cpp",    (DL_FUNC) &_BayesSurvive_updateBH_list_cpp,     7},
   {"_BayesSurvive_updateRP_genomic_cpp", (DL_FUNC) &_BayesSurvive_updateRP_genomic_cpp, 12},
   {"_BayesSurvive_func_MCMC_graph_cpp",  (DL_FUNC) &_BayesSurvive_func_MCMC_graph_cpp,   6},
+  {"_BayesSurvive_UpdateGamma_cpp",      (DL_FUNC) &_BayesSurvive_UpdateGamma_cpp,       7},
   {NULL, NULL, 0}
 };
 

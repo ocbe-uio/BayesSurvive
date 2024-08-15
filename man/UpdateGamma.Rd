@@ -4,7 +4,7 @@
 \alias{UpdateGamma}
 \title{Subfunctions to update parameters}
 \usage{
-UpdateGamma(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b)
+UpdateGamma(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FALSE)
 }
 \arguments{
 \item{sobj}{a list containing observed data}
@@ -23,6 +23,8 @@ is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
 use graphical model for leanring the MRF graph}
 
 \item{MRF_2b}{two different b in MRF prior for subgraphs G_ss and G_rs}
+
+\item{cpp}{logical, whether to use C++ code for faster computation}
 }
 \value{
 A list object with two components for the latent variable selection
