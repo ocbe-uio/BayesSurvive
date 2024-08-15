@@ -38,3 +38,11 @@ BayesSurvive_wrap <- function(use_cpp = FALSE) {
 }
 fit_R <- BayesSurvive_wrap(use_cpp = FALSE)
 fit_C <- BayesSurvive_wrap(use_cpp = TRUE)
+
+test_that("R and C++ objects are similar", {
+  expect_equal(fit_R$call, fit_C$call)
+  expect_equal(fit_R$input, fit_C$input)
+  for (obj in names(fit_R$output)[2]) {
+    expect_equal(fit_R$output[[obj]], fit_C$output[[obj]], tolerance = 1)
+  }
+})
