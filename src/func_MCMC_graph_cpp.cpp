@@ -84,7 +84,75 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::mat Sig_g = Sig[g];
 
     // TODO: code i loop through genes
+    for (arma::uword i = 0; i < p; i++) {
+      // ind_noi <- setdiff(1:p, i)
+      // v_temp <- V_g[ind_noi, i]
 
+      // Sig11 <- Sig_g[ind_noi, ind_noi]
+      // Sig12 <- Sig_g[ind_noi, i]
+
+      // invC11 <- Sig11 - Sig12 %*% t(Sig12) / Sig_g[i, i] # Omega_11^(-1)
+
+      // Ci <- (S_g[i, i] + lambda) * invC11 + diag(1 / v_temp) # C^(-1)
+
+      // Ci <- (Ci + t(Ci)) / 2
+      // Ci_chol <- chol(Ci)
+
+      // mu_i <- -solve(Ci_chol, solve(t(Ci_chol), S_g[ind_noi, i]))
+      // beta <- mu_i + solve(Ci_chol, rnorm(p - 1))
+
+      // # Update of last column in Omega_gg
+      // C_g[ind_noi, i] <- C_g[i, ind_noi] <- beta # omega_12
+
+      // a_gam <- 0.5 * n_g + 1
+      // b_gam <- (S_g[i, i] + lambda) * 0.5
+      // gam <- rgamma(1, shape = a_gam, scale = 1 / b_gam)
+
+      // c <- t(beta) %*% invC11 %*% beta
+      // C_g[i, i] <- gam + c # omega_22
+
+      // # Below updating covariance matrix according to one-column change of precision matrix
+      // invC11beta <- invC11 %*% beta
+
+      // Sig_g[ind_noi, ind_noi] <- invC11 + invC11beta %*% t(invC11beta) / gam
+      // Sig_g[ind_noi, i] <- Sig_g[i, ind_noi] <- -invC11beta / gam
+      // Sig_g[i, i] <- 1 / gam
+
+      // # Update of variance matrix V_g and subgraph G_g
+
+      // if (i < p) {
+        // beta2 <- numeric(p)
+        // beta2[ind_noi] <- beta
+
+        // for (j in (i + 1):p) {
+          // # G where g_ss,ij=1 or 0:
+          // G.prop1 <- G.prop0 <- G.MRF
+          // G.prop1[(g - 1) * p + j, (g - 1) * p + i] <-
+          //   G.prop1[(g - 1) * p + i, (g - 1) * p + j] <- b[1] # 1
+          // G.prop0[(g - 1) * p + j, (g - 1) * p + i] <-
+          //   G.prop0[(g - 1) * p + i, (g - 1) * p + j] <- 0
+
+          // v0 <- V0[j, i]
+          // v1 <- V1[j, i]
+
+          // w1 <- -0.5 * log(v1) - 0.5 * beta2[j]^2 / v1 + log(pii)
+          // w2 <- -0.5 * log(v0) - 0.5 * beta2[j]^2 / v0 + log(1 - pii)
+
+          // wa <- w1 + (a * sum(gamma.ini) + t(gamma.ini) %*% G.prop1 %*% gamma.ini)
+          // wb <- w2 + (a * sum(gamma.ini) + t(gamma.ini) %*% G.prop0 %*% gamma.ini)
+
+          // w_max <- max(wa, wb)
+
+          // w <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
+
+          // z <- (runif(1) < as.numeric(w)) # acceptance/ rejection of proposal
+          // v <- ifelse(z, v1, v0)
+          // V_g[j, i] <- V_g[i, j] <- v
+
+          // G_g[j, i] <- G_g[i, j] <- as.numeric(z)
+        // }
+      // }
+    }
     V[g] = V_g;
     C[g] = C_g;
     G.submat(idx, idx) = G_g;
