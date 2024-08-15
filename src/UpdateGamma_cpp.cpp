@@ -13,20 +13,15 @@ Rcpp::List UpdateGamma_cpp(
   // Update latent variable selection indicators gamma with either independent
   // Bernoulli prior (standard approaches) or with MRF prior.
 
-  // p <- sobj$p
   uint p = Rcpp::as<uint>(sobj["p"]);
-  // tau <- hyperpar$tau
-  // cb <- hyperpar$cb
-  // pi <- hyperpar$pi.ga
-  // a <- hyperpar$a
-  // b <- hyperpar$b
+  double tau = Rcpp::as<double>(hyperpar["tau"]);
+  double cb = Rcpp::as<double>(hyperpar["cb"]);
+  double pi = Rcpp::as<double>(hyperpar["pi.ga"]);
+  double a = Rcpp::as<double>(hyperpar["a"]);
+  double b = Rcpp::as<double>(hyperpar["b"]);
 
-  // beta.ini <- ini$beta.ini
-  // Rcpp::List beta_ini_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
-  // arma::vec beta_ini = Rcpp::as<arma::vec>(beta_ini_list[0]);
-  // gamma.ini <- ini$gamma.ini
+  arma::vec beta_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
   arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
-  // arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]);
 
   // if (method %in% c("Pooled") && MRF_G) {
     // G.ini <- hyperpar$G
@@ -56,7 +51,6 @@ Rcpp::List UpdateGamma_cpp(
   // }
 
   // if (method == "Pooled" && MRF_G) {
-    // post.gamma <- rep(0, p)
     arma::vec post_gamma = arma::zeros<arma::vec>(p);
 
     // for (j in 1:p) {
