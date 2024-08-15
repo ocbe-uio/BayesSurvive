@@ -1,3 +1,4 @@
+#include <thread>
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -72,8 +73,8 @@ Rcpp::List func_MCMC_graph_cpp(
   // (analogous to SSSL algorithm for concentration (precision) graph models in
   // function 'BayesGGM_SSVS_FixedV0V1' (Wang, 2015))
   for (uint g = 0; g < S; g++) { // loop through subgroups
-    arma::vec V_g = V[g];
-    arma::vec C_g = C[g];
+    arma::mat V_g = V[g];
+    arma::mat C_g = C[g];
 
     arma::uvec p_seq = arma::regspace<arma::uvec>(0, p - 1);
     arma::uvec g_seq(p, arma::fill::value(g * p));
@@ -85,73 +86,85 @@ Rcpp::List func_MCMC_graph_cpp(
 
     // TODO: code i loop through genes
     for (arma::uword i = 0; i < p; i++) {
-      // ind_noi <- setdiff(1:p, i)
-      // v_temp <- V_g[ind_noi, i]
+      arma::uvec ind_noi = arma::regspace<arma::uvec>(0, p - 1);
+      ind_noi.shed_row(i);
+      arma::vec v_temp = V_g.submat(ind_noi, arma::uvec({i}));
 
-      // Sig11 <- Sig_g[ind_noi, ind_noi]
-      // Sig12 <- Sig_g[ind_noi, i]
+      arma::mat Sig11 = Sig_g.submat(ind_noi, ind_noi);
+      arma::vec Sig12 = Sig_g.submat(ind_noi, arma::uvec({i}));
 
-      // invC11 <- Sig11 - Sig12 %*% t(Sig12) / Sig_g[i, i] # Omega_11^(-1)
+      // Omega_11^(-1)
+      arma::mat invC11 = Sig11 - Sig12 * Sig12.t() / Sig_g(i, i);
 
-      // Ci <- (S_g[i, i] + lambda) * invC11 + diag(1 / v_temp) # C^(-1)
+      // C^(-1)
+      arma::mat Ci = (S_g(i, i) + lambda) * invC11 + arma::diagmat(1 / v_temp);
 
-      // Ci <- (Ci + t(Ci)) / 2
-      // Ci_chol <- chol(Ci)
+      Ci = 0.5 * (Ci + Ci.t());
+      arma::mat Ci_chol = arma::chol(Ci);
 
-      // mu_i <- -solve(Ci_chol, solve(t(Ci_chol), S_g[ind_noi, i]))
-      // beta <- mu_i + solve(Ci_chol, rnorm(p - 1))
+      arma::mat mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
+      arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
 
-      // # Update of last column in Omega_gg
-      // C_g[ind_noi, i] <- C_g[i, ind_noi] <- beta # omega_12
+      // Update of last column in Omega_gg
+      C_g.submat(ind_noi, arma::uvec({i})) = beta;
+      C_g.submat(arma::uvec({i}), ind_noi) = beta.t();
 
-      // a_gam <- 0.5 * n_g + 1
-      // b_gam <- (S_g[i, i] + lambda) * 0.5
-      // gam <- rgamma(1, shape = a_gam, scale = 1 / b_gam)
+      double a_gam = 0.5 * n_g + 1;
+      double b_gam = (S_g(i, i) + lambda) * 0.5;
+      double gam = arma::as_scalar(arma::randg(1, arma::distr_param(a_gam, 1 / b_gam)));
 
-      // c <- t(beta) %*% invC11 %*% beta
-      // C_g[i, i] <- gam + c # omega_22
+      double c = arma::as_scalar(beta.t() * invC11 * beta);
+      C_g(i, i) = gam + c;
 
-      // # Below updating covariance matrix according to one-column change of precision matrix
+      // Below updating covariance matrix according to one-column change of precision matrix
       // invC11beta <- invC11 %*% beta
 
-      // Sig_g[ind_noi, ind_noi] <- invC11 + invC11beta %*% t(invC11beta) / gam
-      // Sig_g[ind_noi, i] <- Sig_g[i, ind_noi] <- -invC11beta / gam
-      // Sig_g[i, i] <- 1 / gam
+      arma::mat invC11beta = invC11 * beta;
 
-      // # Update of variance matrix V_g and subgraph G_g
+      Sig_g.submat(ind_noi, ind_noi) = invC11 + invC11beta * invC11beta.t() / gam;
+      Sig_g.submat(ind_noi, arma::uvec({i})) = -invC11beta / gam;
+      Sig_g.submat(arma::uvec({i}), ind_noi) = arma::trans(-invC11beta / gam);
+      Sig_g(i, i) = 1 / gam;
 
-      // if (i < p) {
-        // beta2 <- numeric(p)
-        // beta2[ind_noi] <- beta
+      // Update of variance matrix V_g and subgraph G_g
 
-        // for (j in (i + 1):p) {
-          // # G where g_ss,ij=1 or 0:
-          // G.prop1 <- G.prop0 <- G.MRF
-          // G.prop1[(g - 1) * p + j, (g - 1) * p + i] <-
-          //   G.prop1[(g - 1) * p + i, (g - 1) * p + j] <- b[1] # 1
-          // G.prop0[(g - 1) * p + j, (g - 1) * p + i] <-
-          //   G.prop0[(g - 1) * p + i, (g - 1) * p + j] <- 0
+      if (i < p) {
+        arma::vec beta2(p);
+        beta2.elem(ind_noi) = beta;
 
-          // v0 <- V0[j, i]
-          // v1 <- V1[j, i]
+        for (arma::uword j = i + 1; j < p; j++) {
+          // G where g_ss,ij=1 or 0:
+          arma::mat G_prop1 = G_MRF;
+          arma::mat G_prop0 = G_MRF;
+          arma::uword gpj = g * p + j;
+          arma::uword gpi = g * p + i;
+          G_prop1(gpj, gpi) = b(0);
+          G_prop1(gpi, gpj) = b(0);
+          G_prop0(gpj, gpi) = 0;
+          G_prop0(gpi, gpj) = 0;
 
-          // w1 <- -0.5 * log(v1) - 0.5 * beta2[j]^2 / v1 + log(pii)
-          // w2 <- -0.5 * log(v0) - 0.5 * beta2[j]^2 / v0 + log(1 - pii)
+          double v0 = V0(j, i);
+          double v1 = V1(j, i);
 
-          // wa <- w1 + (a * sum(gamma.ini) + t(gamma.ini) %*% G.prop1 %*% gamma.ini)
-          // wb <- w2 + (a * sum(gamma.ini) + t(gamma.ini) %*% G.prop0 %*% gamma.ini)
+          double w1 = -0.5 * log(v1) - 0.5 * std::pow(beta2(j), 2) / v1 + log(pii);
+          double w2 = -0.5 * log(v0) - 0.5 * std::pow(beta2(j), 2) / v0 + log(1 - pii);
 
-          // w_max <- max(wa, wb)
+          double wa = arma::as_scalar(w1 + (a * arma::sum(gamma_ini) + gamma_ini.t() * G_prop1 * gamma_ini));
+          double wb = arma::as_scalar(w2 + (a * arma::sum(gamma_ini) + gamma_ini.t() * G_prop0 * gamma_ini));
 
-          // w <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
+          double w_max = std::max(wa, wb);
 
-          // z <- (runif(1) < as.numeric(w)) # acceptance/ rejection of proposal
-          // v <- ifelse(z, v1, v0)
-          // V_g[j, i] <- V_g[i, j] <- v
+          double w = exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max));
 
-          // G_g[j, i] <- G_g[i, j] <- as.numeric(z)
-        // }
-      // }
+          bool z = Rcpp::runif(1)[0] < w;
+          double v = z ? v1 : v0;
+          V_g(j, i) = v;
+          V_g(i, j) = v;
+
+          G_g(j, i) = static_cast<double>(z);
+          G_g(i, j) = static_cast<double>(z);
+        }
+      }
     }
     V[g] = V_g;
     C[g] = C_g;
