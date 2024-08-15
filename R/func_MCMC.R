@@ -177,7 +177,7 @@ func_MCMC <- function(survObj, hyperpar, initial,
 
     # update gamma (latent indicators of variable selection)
     # browser()
-    sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b)
+    sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
     gamma.ini <- ini$gamma.ini <- sampleGam$gamma.ini
 
     # update beta (regression parameters)
