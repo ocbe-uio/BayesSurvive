@@ -14,6 +14,7 @@ Rcpp::List UpdateGamma_cpp(
   // Bernoulli prior (standard approaches) or with MRF prior.
 
   // p <- sobj$p
+  uint p = Rcpp::as<uint>(sobj["p"]);
   // tau <- hyperpar$tau
   // cb <- hyperpar$cb
   // pi <- hyperpar$pi.ga
@@ -21,7 +22,11 @@ Rcpp::List UpdateGamma_cpp(
   // b <- hyperpar$b
 
   // beta.ini <- ini$beta.ini
+  // Rcpp::List beta_ini_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
+  // arma::vec beta_ini = Rcpp::as<arma::vec>(beta_ini_list[0]);
   // gamma.ini <- ini$gamma.ini
+  arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
+  // arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]);
 
   // if (method %in% c("Pooled") && MRF_G) {
     // G.ini <- hyperpar$G
@@ -52,6 +57,7 @@ Rcpp::List UpdateGamma_cpp(
 
   // if (method == "Pooled" && MRF_G) {
     // post.gamma <- rep(0, p)
+    arma::vec post_gamma = arma::zeros<arma::vec>(p);
 
     // for (j in 1:p) {
       // beta <- beta.ini[j]
@@ -115,8 +121,8 @@ Rcpp::List UpdateGamma_cpp(
   // }
 
   Rcpp::List out = Rcpp::List::create(
-    Rcpp::Named("gamma_ini") = Rcpp::List::create(),
-    Rcpp::Named("post_gamma") = Rcpp::List::create()
+    Rcpp::Named("gamma.ini") = gamma_ini,
+    Rcpp::Named("post.gamma") = post_gamma
   );
   return out;
 }

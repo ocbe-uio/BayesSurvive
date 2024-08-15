@@ -25,13 +25,13 @@ hyperparPooled = list(
 
 set.seed(715074)
 BayesSurvive_wrap <- function(use_cpp = FALSE) {
-  # suppressWarnings(
+  suppressWarnings(
     BayesSurvive(
       survObj = dataset, model.type = "Pooled", MRF.G = TRUE, verbose = TRUE,
       hyperpar = hyperparPooled, initial = initial, nIter = 100, burnin = 100,
       cpp = use_cpp
     )
-  # )
+  )
 }
 fit_R <- BayesSurvive_wrap(use_cpp = FALSE)
 fit_C <- BayesSurvive_wrap(use_cpp = TRUE)
