@@ -10,127 +10,110 @@ Rcpp::List UpdateGamma_cpp(
   const bool MRF_G,
   const bool MRF_2b
   ){
-  //UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
-  //  # Update latent variable selection indicators gamma with either independent Bernoulli prior
-  //  # (standard approaches) or with MRF prior.
+  // Update latent variable selection indicators gamma with either independent
+  // Bernoulli prior (standard approaches) or with MRF prior.
 
-  //  p <- sobj$p
-  //  tau <- hyperpar$tau
-  //  cb <- hyperpar$cb
-  //  pi <- hyperpar$pi.ga
-  //  a <- hyperpar$a
-  //  b <- hyperpar$b
+  // p <- sobj$p
+  // tau <- hyperpar$tau
+  // cb <- hyperpar$cb
+  // pi <- hyperpar$pi.ga
+  // a <- hyperpar$a
+  // b <- hyperpar$b
 
-  //  beta.ini <- ini$beta.ini
-  //  gamma.ini <- ini$gamma.ini
+  // beta.ini <- ini$beta.ini
+  // gamma.ini <- ini$gamma.ini
 
-  //  if (method %in% c("Pooled") && MRF_G) {
-  //    G.ini <- hyperpar$G
-  //  }
+  // if (method %in% c("Pooled") && MRF_G) {
+    // G.ini <- hyperpar$G
+  // }
 
-  //  # if (method %in% c("CoxBVSSL", "Sub-struct") ||
-  //  #     (method == "Pooled" && !MRF_G)) {
-  //  if (!MRF_G) {
-  //    G.ini <- ini$G.ini
-  //  }
+  // if (!MRF_G) {
+    // G.ini <- ini$G.ini
+  // }
 
-  //  # two different b in MRF prior for subgraphs G_ss and G_rs
-  //  if (MRF_2b && !MRF_G) {
-  //    for (g in 1:S) { # b1*G_ss
-  //      G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <-
-  //        b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
-  //    }
-  //    for (g in 1:(S - 1)) { # b2*G_rs
-  //      for (r in g:(S - 1)) {
-  //        G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <-
-  //          G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <-
-  //          b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
-  //      }
-  //    }
-  //  } else {
-  //    # if (method %in% c("CoxBVSSL", "Sub-struct") ||
-  //    #     (method == "Pooled" && !MRF_G)) {
-  //    if (!MRF_G) {
-  //      G.ini <- G.ini * b
-  //    }
-  //  }
+  // two different b in MRF prior for subgraphs G_ss and G_rs
+  // if (MRF_2b && !MRF_G) {
+    // for (g in 1:S) { # b1*G_ss
+      // G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <-
+        // b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
+    // }
+    // for (g in 1:(S - 1)) { # b2*G_rs
+      // for (r in g:(S - 1)) {
+        // G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <-
+          // G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <-
+          // b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
+      // }
+    // }
+  // } else {
+    // if (!MRF_G) {
+      // G.ini <- G.ini * b
+    // }
+  // }
 
-  //  if (method == "Pooled" && MRF_G) {
-  //    post.gamma <- rep(0, p)
+  // if (method == "Pooled" && MRF_G) {
+    // post.gamma <- rep(0, p)
 
-  //    for (j in 1:p) {
-  //      # wa   = dnorm(beta.ini[j], mean = 0, sd = cb*tau) * pi
-  //      # wb   = dnorm(beta.ini[j], mean = 0, sd = tau) * (1 - pi)
-  //      # pgam = wa/(wa + wb)
-  //      # u = runif(1)
-  //      # gamma.ini[j]  = ifelse(u < pgam, 1, 0)
-  //      # post.gamma[j] = pgam
+    // for (j in 1:p) {
+      // beta <- beta.ini[j]
 
+      // ga.prop1 <- ga.prop0 <- gamma.ini # gamma with gamma_g,j=1 or 0
+      // ga.prop1[j] <- 1
+      // ga.prop0[j] <- 0
+      // ga.prop1 <- unlist(ga.prop1)
+      // ga.prop0 <- unlist(ga.prop0)
 
+      // wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
+        // dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
+      // wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
+        // dnorm(beta, mean = 0, sd = tau, log = TRUE)
 
-  //      beta <- beta.ini[j]
+      // w_max <- max(wa, wb)
+      // pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
 
-  //      ga.prop1 <- ga.prop0 <- gamma.ini # gamma with gamma_g,j=1 or 0
-  //      ga.prop1[j] <- 1
-  //      ga.prop0[j] <- 0
-  //      ga.prop1 <- unlist(ga.prop1)
-  //      ga.prop0 <- unlist(ga.prop0)
+      // gamma.ini[j] <- as.numeric(runif(1) < pg)
+      // post.gamma[j] <- pg
+    // }
+  // } else {
+    // post.gamma <- rep(list(rep(0, p)), S)
 
-  //      wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
-  //        dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
-  //      wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
-  //        dnorm(beta, mean = 0, sd = tau, log = TRUE)
+    // if (MRF_G) {
+      // for (g in 1:S) { # loop through subgroups
+        // for (j in 1:p) {
+          // wa <- dnorm((beta.ini[[g]])[j], mean = 0, sd = cb * tau) * pi
+          // wb <- dnorm((beta.ini[[g]])[j], mean = 0, sd = tau) * (1 - pi)
+          // pgam <- wa / (wa + wb)
+          // u <- runif(1)
+          // gamma.ini[[g]][j] <- ifelse(u < pgam, 1, 0)
+          // post.gamma[[g]][j] <- pgam
+        // }
+      // }
+    // } else { # CoxBVS-SL or Sub-struct model
 
-  //      w_max <- max(wa, wb)
-  //      pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
+      // for (g in 1:S) { # loop through subgroups
+        // for (j in 1:p) {
+          // beta <- (beta.ini[[g]])[j]
 
-  //      gamma.ini[j] <- as.numeric(runif(1) < pg)
-  //      post.gamma[j] <- pg
-  //    }
-  //  } else {
-  //    post.gamma <- rep(list(rep(0, p)), S)
+          // ga.prop1 <- ga.prop0 <- gamma.ini # gamma with gamma_g,j=1 or 0
+          // ga.prop1[[g]][j] <- 1
+          // ga.prop0[[g]][j] <- 0
+          // ga.prop1 <- unlist(ga.prop1)
+          // ga.prop0 <- unlist(ga.prop0)
 
-  //    ## ? "Subgroup" might be not needed
-  //    # if (method == "Subgroup") {
-  //    if (MRF_G) {
-  //      for (g in 1:S) { # loop through subgroups
-  //        for (j in 1:p) {
-  //          wa <- dnorm((beta.ini[[g]])[j], mean = 0, sd = cb * tau) * pi
-  //          wb <- dnorm((beta.ini[[g]])[j], mean = 0, sd = tau) * (1 - pi)
-  //          pgam <- wa / (wa + wb)
-  //          u <- runif(1)
-  //          gamma.ini[[g]][j] <- ifelse(u < pgam, 1, 0)
-  //          post.gamma[[g]][j] <- pgam
-  //        }
-  //      }
-  //    } else { # CoxBVS-SL or Sub-struct model
+          // wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
+            // dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
+          // wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
+            // dnorm(beta, mean = 0, sd = tau, log = TRUE)
 
-  //      for (g in 1:S) { # loop through subgroups
-  //        for (j in 1:p) {
-  //          beta <- (beta.ini[[g]])[j]
+          // w_max <- max(wa, wb)
+          // pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
 
-  //          ga.prop1 <- ga.prop0 <- gamma.ini # gamma with gamma_g,j=1 or 0
-  //          ga.prop1[[g]][j] <- 1
-  //          ga.prop0[[g]][j] <- 0
-  //          ga.prop1 <- unlist(ga.prop1)
-  //          ga.prop0 <- unlist(ga.prop0)
+          // gamma.ini[[g]][j] <- as.numeric(runif(1) < pg)
+          // post.gamma[[g]][j] <- pg
+        // }
+      // }
+    // }
+  // }
 
-  //          wa <- (a * sum(ga.prop1) + t(ga.prop1) %*% G.ini %*% ga.prop1) +
-  //            dnorm(beta, mean = 0, sd = tau * cb, log = TRUE)
-  //          wb <- (a * sum(ga.prop0) + t(ga.prop0) %*% G.ini %*% ga.prop0) +
-  //            dnorm(beta, mean = 0, sd = tau, log = TRUE)
-
-  //          w_max <- max(wa, wb)
-  //          pg <- exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max))
-
-  //          gamma.ini[[g]][j] <- as.numeric(runif(1) < pg)
-  //          post.gamma[[g]][j] <- pg
-  //        }
-  //      }
-  //    }
-  //  }
-
-  //  return(list(gamma.ini = gamma.ini, post.gamma = post.gamma))
   Rcpp::List out = Rcpp::List::create(
     Rcpp::Named("gamma_ini") = Rcpp::List::create(),
     Rcpp::Named("post_gamma") = Rcpp::List::create()
