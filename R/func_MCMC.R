@@ -166,7 +166,7 @@ func_MCMC <- function(survObj, hyperpar, initial,
     #     (method == "Pooled" && !MRF_G)) {
     if (!MRF_G) {
       # update graph and precision matrix
-      network <- func_MCMC_graph_cpp(survObj, hyperpar, ini, S, method, MRF_2b, cpp)
+      network <- func_MCMC_graph(survObj, hyperpar, ini, S, method, MRF_2b, cpp)
 
       Sig.ini <- ini$Sig.ini <- network$Sig.ini # precision matrix?
       C.ini <- ini$C.ini <- network$C.ini
