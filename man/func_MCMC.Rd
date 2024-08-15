@@ -16,7 +16,8 @@ func_MCMC(
   MRF_2b,
   MRF_G,
   output_graph_para,
-  verbose
+  verbose,
+  cpp = FALSE
 )
 }
 \arguments{
@@ -50,6 +51,8 @@ output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF_G = FALSE}}
 
 \item{verbose}{logical value to display the progess of MCMC}
+
+\item{cpp}{logical, whether to use C++ code for faster computation}
 }
 \value{
 A list object saving the MCMC results with components including

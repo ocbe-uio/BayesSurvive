@@ -2,6 +2,7 @@
 
 * Add units tests
 * Rename the output of MPM coefficients in function `coef.BayesSurvive()`
+* Added `cpp` argument to `BayesSurvive()` to allow for faster computation using `Rcpp`
 
 # BayesSurvive 0.0.3
 

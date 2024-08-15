@@ -27,6 +27,7 @@
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF_G = FALSE}
 #' @param verbose logical value to display the progess of MCMC
+#' @inheritParams BayesSurvive
 #'
 #' @return A list object saving the MCMC results with components including
 #' 'gamma.p', 'beta.p', 'h.p', 'gamma.margin', 'beta.margin', 's', 'eta0',
@@ -38,7 +39,7 @@
 func_MCMC <- function(survObj, hyperpar, initial,
                       nIter, thin, burnin,
                       S, method, MRF_2b, MRF_G,
-                      output_graph_para, verbose) {
+                      output_graph_para, verbose, cpp = FALSE) {
   # prior parameters for grouped data likelihood of Cox model
   if (method == "Pooled" && MRF_G) { # method = "Pooled"
     hyperpar$s <- sort(survObj$t[survObj$di == 1])
@@ -155,15 +156,17 @@ func_MCMC <- function(survObj, hyperpar, initial,
   # MCMC sampling
 
   # Initializes the progress bar
-  if (verbose) cat("  Running MCMC iterations ...\n")
-  pb <- txtProgressBar(min = 0, max = nIter, style = 3, width = 50, char = "=")
+  if (verbose) {
+    cat("  Running MCMC iterations ...\n")
+    pb <- txtProgressBar(min = 0, max = nIter, style = 3, width = 50, char = "=")
+  }
 
   for (M in 1:nIter) {
     # if (method %in% c("CoxBVSSL", "Sub-struct") ||
     #     (method == "Pooled" && !MRF_G)) {
     if (!MRF_G) {
       # update graph and precision matrix
-      network <- func_MCMC_graph(survObj, hyperpar, ini, S, method, MRF_2b)
+      network <- func_MCMC_graph(survObj, hyperpar, ini, S, method, MRF_2b, cpp)
 
       Sig.ini <- ini$Sig.ini <- network$Sig.ini # precision matrix?
       C.ini <- ini$C.ini <- network$C.ini
@@ -283,9 +286,9 @@ func_MCMC <- function(survObj, hyperpar, initial,
     # }
 
     # Sets the progress bar to the current state
-    setTxtProgressBar(pb, M)
+    if (verbose) setTxtProgressBar(pb, M)
   } # the end of MCMC sampling
-  close(pb) # Close the connection of progress bar
+  if (verbose) close(pb) # Close the connection of progress bar
 
   if (S == 1 && MRF_G) {
     mcmcOutcome$gamma.margin <- mcmcOutcome$gamma.margin / (nIter - burnin)
