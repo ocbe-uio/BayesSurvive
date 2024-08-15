@@ -1,4 +1,3 @@
-#include <thread>
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -84,7 +83,6 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::mat S_g = SSig[g];
     arma::mat Sig_g = Sig[g];
 
-    // TODO: code i loop through genes
     for (arma::uword i = 0; i < p; i++) {
       arma::uvec ind_noi = arma::regspace<arma::uvec>(0, p - 1);
       ind_noi.shed_row(i);
@@ -117,7 +115,6 @@ Rcpp::List func_MCMC_graph_cpp(
       C_g(i, i) = gam + c;
 
       // Below updating covariance matrix according to one-column change of precision matrix
-      // invC11beta <- invC11 %*% beta
 
       arma::mat invC11beta = invC11 * beta;
 
