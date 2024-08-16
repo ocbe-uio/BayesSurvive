@@ -30,7 +30,7 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FAL
   # (standard approaches) or with MRF prior.
   if (cpp && method == "Pooled" && MRF_G) {
     warning("This is not yet fully implemented. Please use cpp = FALSE for production")
-    return(UpdateGamma_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b)) # FIXME: breaks func_MCMC_graph_cpp() test
+    return(UpdateGamma_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b))
   }
   p <- sobj$p
   tau <- hyperpar$tau
