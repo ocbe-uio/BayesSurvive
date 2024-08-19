@@ -111,6 +111,9 @@ BayesSurvive <- function(survObj,
                          output_graph_para = FALSE,
                          verbose = TRUE,
                          cpp = FALSE) {
+  # Validation
+  stopifnot(burnin < nIter)
+
   # same number of covariates p in all subgroups
   p <- ifelse(is.list(survObj[[1]]), NCOL(survObj[[1]]$X), NCOL(survObj$X))
   Beta.ini <- numeric(p)
