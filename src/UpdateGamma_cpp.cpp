@@ -1,6 +1,19 @@
 #include <RcppArmadillo.h>
 #include "misc.h"
 // [[Rcpp::depends(RcppArmadillo)]]
+
+double calc_wa_wb(
+  const arma::vec& ga,
+  const arma::mat& G_ini,
+  const double beta,
+  const double a,
+  const double stdev
+) {
+  double product = arma::as_scalar(a * arma::sum(ga) + ga.t() * G_ini * ga);
+  double jitter = R::dnorm(beta, 0, stdev, true);
+  return product + jitter;
+}
+
 // [[Rcpp::export]]
 Rcpp::List UpdateGamma_cpp(
   const Rcpp::List sobj,
@@ -60,8 +73,8 @@ Rcpp::List UpdateGamma_cpp(
       ga_prop1(j) = 1;
       ga_prop0(j) = 0;
 
-      double wa = arma::as_scalar((a * arma::sum(ga_prop1) + ga_prop1.t() * G_ini * ga_prop1) + R::dnorm(beta, 0, tau * cb, true));
-      double wb = arma::as_scalar((a * arma::sum(ga_prop0) + ga_prop0.t() * G_ini * ga_prop0) + R::dnorm(beta, 0, tau, true));
+      double wa = calc_wa_wb(ga_prop1, G_ini, beta, a, tau * cb);
+      double wb = calc_wa_wb(ga_prop0, G_ini, beta, a, tau);
 
       double w_max = std::max(wa, wb);
       double pg = std::exp(wa - w_max) / (std::exp(wa - w_max) + std::exp(wb - w_max));
