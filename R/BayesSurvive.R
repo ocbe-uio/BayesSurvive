@@ -9,6 +9,7 @@
 #' @importFrom Rcpp evalCpp
 #' @importFrom survival survreg
 #' @importFrom stats runif
+#' @importFrom methods is
 #'
 #' @param survObj a list containing observed data from \code{n} subjects with
 #' components \code{t}, \code{di}, \code{X}. For graphical learning of the

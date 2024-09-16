@@ -18,7 +18,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.2
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
-        utils, stats
+        utils, stats, methods
 Suggests: knitr, testthat
 LazyData: true
 NeedsCompilation: yes
