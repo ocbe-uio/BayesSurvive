@@ -21,15 +21,8 @@ Rcpp::List UpdateGamma_cpp(
   double a = Rcpp::as<double>(hyperpar["a"]);
   arma::vec b = Rcpp::as<arma::vec>(hyperpar["b"]);
 
-  arma::vec beta_ini(p);
-  arma::vec gamma_ini(p);
-  if (MRF_G) { // TODO: move this inside some other MRF_G loop?
-    arma::vec beta_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
-    arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
-  } else {
-    Rcpp::List beta_ini = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
-    Rcpp::List gamma_ini = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
-  }
+  arma::mat beta_ini = list_to_matrix(ini["beta.ini"]);
+  arma::mat gamma_ini = list_to_matrix(ini["gamma.ini"]);
 
   arma::mat G_ini = arma::zeros<arma::mat>(p, p);
   if (method == "Pooled" && MRF_G) {
@@ -62,8 +55,8 @@ Rcpp::List UpdateGamma_cpp(
     for (arma::uword j = 0; j < p; j++) {
       double beta = beta_ini(j);
 
-      arma::vec ga_prop1 = gamma_ini;
-      arma::vec ga_prop0 = gamma_ini;
+      arma::vec ga_prop1 = gamma_ini.t();
+      arma::vec ga_prop0 = gamma_ini.t();
       ga_prop1(j) = 1;
       ga_prop0(j) = 0;
 
