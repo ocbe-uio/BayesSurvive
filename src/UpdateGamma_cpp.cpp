@@ -23,14 +23,12 @@ Rcpp::List UpdateGamma_cpp(
 
   arma::vec beta_ini(p);
   arma::vec gamma_ini(p);
-  if (MRF_G) { // TODO: move this inside loops?
+  if (MRF_G) { // TODO: move this inside some other MRF_G loop?
     arma::vec beta_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
     arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
   } else {
-    Rcpp::List beta_ini_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
-    beta_ini = Rcpp::as<arma::vec>(beta_ini_list[0]); // FIXME: should change with g, not fixed at 0
-    Rcpp::List gamma_ini_list = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
-    gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // FIXME: should change with g, not fixed at 0
+    Rcpp::List beta_ini = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
+    Rcpp::List gamma_ini = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
   }
 
   arma::mat G_ini = arma::zeros<arma::mat>(p, p);
