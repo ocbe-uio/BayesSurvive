@@ -39,6 +39,7 @@ Rcpp::List UpdateGamma_cpp(
 
   arma::mat G_ini = arma::zeros<arma::mat>(p, p);
   if (method == "Pooled" && MRF_G) {
+    // G_ini is not needed if method != "Pooled" and MRF_G
     G_ini = Rcpp::as<arma::mat>(hyperpar["G"]);
   } else if (!MRF_G) {
     G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
@@ -88,20 +89,17 @@ Rcpp::List UpdateGamma_cpp(
     );
     return out;
   } else {
-    Rcpp::List post_gamma = Rcpp::List::create(S);
-    for (arma::uword g = 0; g < S; g++) {
-      post_gamma[g] = arma::zeros<arma::vec>(p);
-    }
+    arma::mat post_gamma(p, S, arma::fill::zeros);
 
     if (MRF_G) {
       for (arma::uword g = 0; g < S; g++) { // loop through subgroups
         for (arma::uword j = 0; j < p; j++) {
-          // wa <- dnorm((beta.ini[[g]])[j], mean = 0, sd = cb * tau) * pi
-          // wb <- dnorm((beta.ini[[g]])[j], mean = 0, sd = tau) * (1 - pi)
-          // pgam <- wa / (wa + wb)
-          // u <- runif(1)
-          // gamma.ini[[g]][j] <- ifelse(u < pgam, 1, 0)
-          // post.gamma[[g]][j] <- pgam
+          double wa = R::dnorm(beta_ini(j, g), 0, tau * cb, true) * pi;
+          double wb = R::dnorm(beta_ini(j, g), 0, tau, true) * (1 - pi);
+          double pgam = wa / (wa + wb);
+          double u = R::runif(0, 1);
+          gamma_ini(j, g) = u < pgam;
+          post_gamma(j, g) = pgam;
         }
       }
     } else { // CoxBVS-SL or Sub-struct model

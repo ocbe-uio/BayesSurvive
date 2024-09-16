@@ -28,7 +28,7 @@
 UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FALSE) {
   # Update latent variable selection indicators gamma with either independent Bernoulli prior
   # (standard approaches) or with MRF prior.
-  if (cpp && method == "Pooled" && MRF_G) {
+  if (cpp && MRF_G) {
     warning("This is not yet fully implemented. Please use cpp = FALSE for production")
     return(UpdateGamma_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b))
   }

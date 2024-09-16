@@ -55,4 +55,9 @@ test_that("R and C++ objects are similar", {
   for (obj in names(fit_R$output)[2]) {
     expect_equal(fit_R$output[[obj]], fit_C$output[[obj]], tolerance = 1)
   }
+  expect_equal(fit_R2S$call, fit_C2S$call)
+  expect_equal(fit_R2S$input, fit_C2S$input)
+  for (obj in names(fit_R2S$output)[2]) {
+    expect_equal(fit_R2S$output[[obj]], fit_C2S$output[[obj]], tolerance = 1)
+  }
 })
