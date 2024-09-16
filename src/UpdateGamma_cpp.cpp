@@ -87,8 +87,10 @@ Rcpp::List UpdateGamma_cpp(
     );
     return out;
   } else {
-    // post.gamma <- rep(list(rep(0, p)), S)
     Rcpp::List post_gamma = Rcpp::List::create(S);
+    for (arma::uword g = 0; g < S; g++) {
+      post_gamma[g] = arma::zeros<arma::vec>(p);
+    }
 
     if (MRF_G) {
       for (arma::uword g = 0; g < S; g++) { // loop through subgroups
