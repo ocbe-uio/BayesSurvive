@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+#include "misc.h"
 // [[Rcpp::depends(RcppArmadillo)]]
 // [[Rcpp::export]]
 Rcpp::List UpdateGamma_cpp(

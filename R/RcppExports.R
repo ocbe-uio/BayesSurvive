@@ -9,6 +9,10 @@ func_MCMC_graph_cpp <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
     .Call(`_BayesSurvive_func_MCMC_graph_cpp`, sobj, hyperpar, ini, S, method, MRF_2b)
 }
 
+list_to_matrix <- function(r_list) {
+    .Call(`_BayesSurvive_list_to_matrix`, r_list)
+}
+
 settingInterval_cpp <- function(y, delta_, s_, J_) {
     .Call(`_BayesSurvive_settingInterval_cpp`, y, delta_, s_, J_)
 }
