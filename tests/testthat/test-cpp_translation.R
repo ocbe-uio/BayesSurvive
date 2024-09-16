@@ -1,11 +1,11 @@
-# Load the example dataset
-dataset <- list(
+# Load the example data
+data <- list(
   "X" = simData[[1]]$X,
   "t" = simData[[1]]$time,
   "di" = simData[[1]]$status
 )
-dataset_2S <- list(
-  dataset,
+data_2S <- list(
+  data,
   list(
     "X" = simData[[2]]$X,
     "t" = simData[[2]]$time,
@@ -15,10 +15,10 @@ dataset_2S <- list(
 # Run a Bayesian Cox model
 
 ## Initial value: null model without covariates
-initial <- list("gamma.ini" = rep(0, ncol(dataset$X)))
+initial <- list("gamma.ini" = rep(0, ncol(data$X)))
 
 # Prior parameters
-hyperparPooled = list(
+hyperPooled = list(
   "c0"     = 2,                      # prior of baseline hazard
   "tau"    = 0.0375,                 # sd (spike) for coefficient prior
   "cb"     = 20,                     # sd (slab) for coefficient prior
@@ -27,8 +27,8 @@ hyperparPooled = list(
   "b"      = 0.1,                    # hyperparameter in MRF prior
   "G"      = simData$G               # hyperparameter in MRF prior
 )
-hyperparPooled_2S = hyperparPooled
-hyperparPooled_2S$G = Matrix::bdiag(simData$G, simData$G)
+hyperPooled_2S <- hyperPooled
+hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 
 # Run a 'Pooled' Bayesian Cox model with graphical learning
 
@@ -44,10 +44,10 @@ BayesSurvive_wrap <- function(
     )
   )
 }
-fit_R <- BayesSurvive_wrap(dataset, initial, hyperparPooled)
-fit_C <- BayesSurvive_wrap(dataset, initial, hyperparPooled, use_cpp = TRUE)
-fit_R2S <- BayesSurvive_wrap(dataset_2S, initial, hyperparPooled_2S, "CoxBVSSL")
-fit_C2S <- BayesSurvive_wrap(dataset_2S, initial, hyperparPooled_2S, "CoxBVSSL", use_cpp = TRUE)
+fit_R <- BayesSurvive_wrap(data, initial, hyperPooled)
+fit_C <- BayesSurvive_wrap(data, initial, hyperPooled, use_cpp = TRUE)
+fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
+fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
 
 test_that("R and C++ objects are similar", {
   expect_equal(fit_R$call, fit_C$call)
