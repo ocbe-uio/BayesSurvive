@@ -69,9 +69,6 @@ Rcpp::List UpdateGamma_cpp(
       ga_prop1(j) = 1;
       ga_prop0(j) = 0;
 
-      // ga.prop1 <- unlist(ga.prop1)
-      // ga.prop0 <- unlist(ga.prop0)
-
       double wa = arma::as_scalar((a * arma::sum(ga_prop1) + ga_prop1.t() * G_ini * ga_prop1) + R::dnorm(beta, 0, tau * cb, true));
       double wb = arma::as_scalar((a * arma::sum(ga_prop0) + ga_prop0.t() * G_ini * ga_prop0) + R::dnorm(beta, 0, tau, true));
 
