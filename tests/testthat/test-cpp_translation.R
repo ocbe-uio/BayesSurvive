@@ -16,10 +16,7 @@ dataset_2S <- list(
 
 ## Initial value: null model without covariates
 initial <- list("gamma.ini" = rep(0, ncol(dataset$X)))
-initial_2S <- list(
-  initial,
-  list("gamma.ini" = rep(0, ncol(dataset_2S[[2]]$X)))
-)
+
 # Prior parameters
 hyperparPooled = list(
   "c0"     = 2,                      # prior of baseline hazard
@@ -49,8 +46,8 @@ BayesSurvive_wrap <- function(
 }
 fit_R <- BayesSurvive_wrap(dataset, initial, hyperparPooled)
 fit_C <- BayesSurvive_wrap(dataset, initial, hyperparPooled, use_cpp = TRUE)
-fit_R2S <- BayesSurvive_wrap(dataset_2S, initial_2S, hyperparPooled_2S, "CoxBVSSL")
-fit_C2S <- BayesSurvive_wrap(dataset_2S, initial_2S, hyperparPooled_2S, "CoxBVSSL", use_cpp = TRUE)
+fit_R2S <- BayesSurvive_wrap(dataset_2S, initial, hyperparPooled_2S, "CoxBVSSL")
+fit_C2S <- BayesSurvive_wrap(dataset_2S, initial, hyperparPooled_2S, "CoxBVSSL", use_cpp = TRUE)
 
 test_that("R and C++ objects are similar", {
   expect_equal(fit_R$call, fit_C$call)
