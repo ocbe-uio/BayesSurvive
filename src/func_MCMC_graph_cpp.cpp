@@ -26,7 +26,7 @@ arma::mat construct_G_MRF(arma::mat G, arma::vec b, uint S, int p, bool MRF_2b) 
     }
   } else {
     // one value for b in MRF prior for all subgraphs
-    G_MRF = b[0] * G; // TODO: replace [] with () for bound check
+    G_MRF = b(0) * G;
   }
   return G_MRF;
 }
