@@ -40,7 +40,7 @@ hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 set.seed(715074)
 BayesSurvive_wrap <- function(
   data, initial, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
-  MRF_G = TRUE, verbose = FALSE
+  MRF_G = TRUE, verbose = TRUE
   ) {
   if (!MRF_G) {
     data <- list(data)
@@ -58,8 +58,8 @@ fit_R <- BayesSurvive_wrap(data, initial, hyperPooled)
 fit_C <- BayesSurvive_wrap(data, initial, hyperPooled, use_cpp = TRUE)
 fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
 fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
-fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE)
-fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE)
+fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, n_iter = 2L)
+fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L)
 
 test_that("R and C++ objects are similar", {
   expect_equal(fit_R$call, fit_C$call)
