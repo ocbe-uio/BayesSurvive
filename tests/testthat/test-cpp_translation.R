@@ -29,6 +29,7 @@ hyperPooled = list(
 )
 hyperPooled_2S <- hyperPooled
 hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
+hyperPooled_2S$b <- c(0.1, 0.2)
 
 # Run a 'Pooled' Bayesian Cox model with graphical learning
 
