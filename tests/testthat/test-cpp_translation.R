@@ -16,11 +16,6 @@ data_2S <- list(
 
 ## Initial value: null model without covariates
 initial <- list("gamma.ini" = rep(0, ncol(data$X)))
-initial_2S <- list(
-  initial,
-  list("gamma.ini" = rep(0, ncol(data_2S[[2]]$X)))
-)
-
 
 # Prior parameters
 hyperPooled = list(
@@ -40,17 +35,17 @@ hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 set.seed(715074)
 BayesSurvive_wrap <- function(
   data, initial, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
-  MRF_G = TRUE, verbose = FALSE
+  MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE
   ) {
   if (!MRF_G) {
-    data <- list(data)
+    if (!is.null(names(data))) data <- list(data)
     hyper$lambda <- 3 # TODO: mandatory for !MRG.G? Add validation!
     hyper$nu0 <- 0.05
     hyper$nu1 <- 5
   }
   BayesSurvive(
-    survObj = data, model.type = model, MRF.G = MRF_G, verbose = verbose,
-    hyperpar = hyper, initial = initial, nIter = n_iter,
+    survObj = data, model.type = model, MRF.G = MRF_G, MRF2b = MRF_2b,
+    verbose = verbose, hyperpar = hyper, initial = initial, nIter = n_iter,
     burnin = floor(n_iter / 2), cpp = use_cpp
   )
 }
@@ -60,7 +55,12 @@ fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
 fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
 fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, n_iter = 2L)
 fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L)
+fit_R_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE)
+fit_C_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
+fit_R_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)
+# fit_C_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) // FIXME: broken
 
+# TODO: reorganize tests so that they come right after each fit_R/fit_C pair
 test_that("R and C++ objects are similar", {
   expect_equal(fit_R$call, fit_C$call)
   expect_equal(fit_R$input, fit_C$input)
