@@ -178,9 +178,14 @@ func_MCMC <- function(survObj, hyperpar, initial,
     # update gamma (latent indicators of variable selection)
     # browser()
     sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
-    if (is(sampleGam$gamma.ini, "matrix") && method != "Pooled") {
-      # Workaround because C++ outputs list elements as matrices
-      sampleGam <- lapply(sampleGam, function(x) as.list(as.data.frame(x)))
+    if (is(sampleGam$gamma.ini, "matrix")) {
+      # TEMP Workaround because C++ outputs list elements as matrices and UpdateRPlee11 expects lists (until it's translated)
+      sampleGam <- lapply(sampleGam, function(x) apply(x, 1, list))
+      if (!(method == "Pooled" && MRF_G)) {
+        sampleGam <- lapply(sampleGam, function(x) lapply(x, unlist))
+      } else {
+        sampleGam <- lapply(sampleGam, unlist)
+      }
     }
     gamma.ini <- ini$gamma.ini <- sampleGam$gamma.ini
 
