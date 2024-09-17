@@ -29,7 +29,6 @@ hyperPooled = list(
 )
 hyperPooled_2S <- hyperPooled
 hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
-hyperPooled_2S$b <- c(0.1, 0.2)
 
 # Run a 'Pooled' Bayesian Cox model with graphical learning
 
@@ -39,7 +38,10 @@ BayesSurvive_wrap <- function(
   MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE
   ) {
   if (!MRF_G) {
-    if (!is.null(names(data))) data <- list(data)
+    if (!is.null(names(data))) {
+      data <- list(data)
+      # hyper$b <- c(0.1, 0.2) # TODO: uncomment for !MRF_2b cases
+    }
     hyper$lambda <- 3 # TODO: mandatory for !MRG.G? Add validation!
     hyper$nu0 <- 0.05
     hyper$nu1 <- 5
@@ -59,8 +61,9 @@ fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use
 fit_R_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE)
 fit_C_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
 fit_R_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)
-# fit_C_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) // FIXME: broken
+# fit_C_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: broken
 
+# TODO: reduce. Takes 4 minutes!
 # TODO: reorganize tests so that they come right after each fit_R/fit_C pair
 test_that("R and C++ objects are similar", {
   expect_equal(fit_R$call, fit_C$call)

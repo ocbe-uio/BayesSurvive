@@ -26,7 +26,7 @@ arma::mat construct_G_MRF(arma::mat G, arma::vec b, uint S, int p, bool MRF_2b) 
     }
   } else {
     // one value for b in MRF prior for all subgraphs
-    G_MRF = b[0] * G;
+    G_MRF = b[0] * G; // TODO: replace [] with () for bound check
   }
   return G_MRF;
 }
@@ -58,7 +58,7 @@ Rcpp::List func_MCMC_graph_cpp(
   Rcpp::List C = Rcpp::as<Rcpp::List>(ini["C.ini"]);
 
   Rcpp::List gamma_ini_list = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
-  arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // TODO: Test for S > 1, not sure the results are correct.
+  arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // FIXME: use list_to_matrix() and change with S
 
   if (MRF_2b) {
     // two different values for b in MRF prior for subgraphs G_ss and G_rs
