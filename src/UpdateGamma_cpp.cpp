@@ -50,21 +50,21 @@ Rcpp::List UpdateGamma_cpp(
     // TODO: test this case. Not default!
     for (arma::uword g = 0; g < S; g++) {
       arma::uvec g_seq = arma::regspace<arma::uvec>(g * p, g * p + p - 1); // equivalent to (g - 1) * p + (1:p)
-      G_ini.submat(g_seq, g_seq) *= b[0]; // TODO: replace [] with () for bounds check
+      G_ini.submat(g_seq, g_seq) *= b(0);
     }
     for (arma::uword g = 0; g < S - 1; g++) {
       for (arma::uword r = g; r < S - 1; r++) {
         arma::uvec g_seq = arma::regspace<arma::uvec>(g * p, g * p + p - 1); // equivalent to (g - 1) * p + (1:p)
         arma::uvec r_seq = arma::regspace<arma::uvec>(r * p + p, r * p + 2 * p - 1); // equivalent to r * p + (1:p)
-        G_ini.submat(g_seq, r_seq) = b[1] * G_ini.submat(r_seq, g_seq); // TODO: replace [] with () for bounds check1
-        G_ini.submat(r_seq, g_seq) *= b[1]; // TODO: replace [] with () for bounds check
+        G_ini.submat(g_seq, r_seq) = b(1) * G_ini.submat(r_seq, g_seq);
+        G_ini.submat(r_seq, g_seq) *= b(1);
       }
     }
   } else if (!MRF_G) {
     G_ini *= b(0);
   }
 
-  arma::mat post_gamma(p, S, arma::fill::zeros);
+  arma::mat post_gamma(S, p, arma::fill::zeros);
   if (method == "Pooled" && MRF_G) {
     for (arma::uword j = 0; j < p; j++) {
       // FIXME: why are indices flipped here w.r.t. the other cases?
@@ -82,11 +82,11 @@ Rcpp::List UpdateGamma_cpp(
       double pg = std::exp(wa - w_max) / (std::exp(wa - w_max) + std::exp(wb - w_max));
 
       gamma_ini(0, j) = R::runif(0, 1) < pg;
-      post_gamma(j, 0) = pg;
+      post_gamma(0, j) = pg;
     }
     Rcpp::List out = Rcpp::List::create(
       Rcpp::Named("gamma.ini") = gamma_ini,
-      Rcpp::Named("post.gamma") = arma::trans(post_gamma)
+      Rcpp::Named("post.gamma") = post_gamma
     );
     return out;
   } else {
@@ -98,7 +98,7 @@ Rcpp::List UpdateGamma_cpp(
           double pgam = wa / (wa + wb);
           double u = R::runif(0, 1);
           gamma_ini(j, g) = u < pgam;
-          post_gamma(j, g) = pgam;
+          post_gamma(g, j) = pgam;
         }
       }
     } else { // CoxBVS-SL or Sub-struct model
@@ -107,8 +107,8 @@ Rcpp::List UpdateGamma_cpp(
           double beta = beta_ini(j, g);
 
           // TODO: refactor. same as above
-          arma::colvec ga_prop1 = gamma_ini;
-          arma::colvec ga_prop0 = gamma_ini;
+          arma::vec ga_prop1 = gamma_ini;
+          arma::vec ga_prop0 = gamma_ini;
           ga_prop1(j, g) = 1;
           ga_prop0(j, g) = 0;
 
@@ -119,7 +119,7 @@ Rcpp::List UpdateGamma_cpp(
           double pg = std::exp(wa - w_max) / (std::exp(wa - w_max) + std::exp(wb - w_max));
 
           gamma_ini(j, g) = R::runif(0, 1) < pg;
-          post_gamma(j, g) = pg;
+          post_gamma(g, j) = pg;
         }
       }
     }
