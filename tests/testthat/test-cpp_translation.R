@@ -39,7 +39,7 @@ hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 
 set.seed(715074)
 BayesSurvive_wrap <- function(
-  data, initial, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 10,
+  data, initial, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
   MRF_G = TRUE, verbose = FALSE
   ) {
   if (!MRF_G) {
