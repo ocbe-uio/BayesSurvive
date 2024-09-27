@@ -1,5 +1,9 @@
 # BayesSurvive (development version)
 
+# BayesSurvive 0.0.5
+
+* Allow function `VS()` for an input with a matrix or array or a list consisting of matrices/arrays
+
 # BayesSurvive 0.0.4
 
 * Add units tests

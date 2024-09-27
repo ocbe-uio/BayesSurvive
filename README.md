@@ -155,6 +155,10 @@ fit4 <- BayesSurvive(survObj = dataset2,
 
 ## References
 
+> Zhi Zhao, Katrin Madjar, Tobias Østmo Hermansen (2024).
+> BayesSurvive: Bayesian Survival Models for High-Dimensional Data.
+> _R package version 0.0.2_. DOI: [10.32614/CRAN.package.BayesSurvive](https://doi.org/10.32614/CRAN.package.BayesSurvive).
+
 > Katrin Madjar, Manuela Zucknick, Katja Ickstadt, Jörg Rahnenführer (2021).
 > Combining heterogeneous subgroups with graph‐structured variable selection priors for Cox regression.
 > _BMC Bioinformatics_, 22(1):586. DOI: [10.1186/s12859-021-04483-z](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z).
