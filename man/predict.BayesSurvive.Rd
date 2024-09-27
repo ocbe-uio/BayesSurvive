@@ -43,10 +43,10 @@ Cox model}
 }
 \value{
 A list object with 5 components if \code{type="brier"} including
-"model", "times", "Brier", "IBS" and "IPA" (Index of Prediction Accuracy), 
+"model", "times", "Brier", "IBS" and "IPA" (Index of Prediction Accuracy),
 otherwise  a list of 7 components with the first component as
-the specified argument \code{type} and "se", "band", "type", "diag", 
-"baseline" and "times", see function \code{riskRegression::predictCox} for 
+the specified argument \code{type} and "se", "band", "type", "diag",
+"baseline" and "times", see function \code{riskRegression::predictCox} for
 details
 }
 \description{

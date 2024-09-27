@@ -7,7 +7,8 @@
 VS(x, method = "FDR", threshold = NA, subgroup = 1)
 }
 \arguments{
-\item{x}{fitted object obtained with \code{BayesSurvive}}
+\item{x}{fitted object obtained with \code{BayesSurvive}, or a matrix/array,
+or a list consisting of matrices and arrays}
 
 \item{method}{variable selection method to choose from
 \code{c("CI", "SNC", "MPM", "FDR")}. Default is "FDR"}
