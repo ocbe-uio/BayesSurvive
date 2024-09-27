@@ -8,7 +8,13 @@ status](https://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-proje
 [![DOI](https://img.shields.io/badge/doi-10.32614%2FCRAN.package.BayesSurvive-brightgreen)](https://doi.org/10.32614/CRAN.package.BayesSurvive)
 
 
-This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
+This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) (see the three models of the first column in the table below) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features (see the three models of the second column in the table below), e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
+
+Model        | Infer `MRF_G` | Fix `MRF_G`
+------------:| --------------|---------------
+`Pooled`     |        ✔      |           ✔          
+`CoxBVSSL`   |        ✔      |           ✔          
+`Sub-struct` |        ✔      |           ✔          
 
 ## Installation
 
