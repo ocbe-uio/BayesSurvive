@@ -1,7 +1,7 @@
 # BayesSurvive
 
 [![CRAN
-status](https://www.r-pkg.org/badges/version/BayesSurvive.png)](https://cran.r-project.org/package=BayesSurvive)
+status](https://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-project.org/package=BayesSurvive)
 [![r-universe](https://ocbe-uio.r-universe.dev/badges/BayesSurvive)](https://ocbe-uio.r-universe.dev/BayesSurvive)
 [![R-CMD-check](https://github.com/ocbe-uio/BayesSurvive/workflows/R-CMD-check/badge.svg)](https://github.com/ocbe-uio/BayesSurvive/actions)
 [![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
