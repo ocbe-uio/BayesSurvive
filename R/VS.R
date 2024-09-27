@@ -75,7 +75,9 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       stop("The list input has to consist of matrices and/or arrays!")
     }
     # If the input is a matrix or array, reformat it to be an list
-    x <- list(x)
+    if (!is.list(x)) {
+      x <- list(x)
+    }
   }
   if (!method %in% c("CI", "SNC", "MPM", "FDR")) { # "SNC-BIC",
     stop("'method' should be one of c('CI', 'SNC', 'MPM', 'FDR')!")
