@@ -1,7 +1,7 @@
 Package: BayesSurvive
 Title: Bayesian Survival Models for High-Dimensional Data
 Version: 0.0.5
-Date: 2024-09-27
+Date: 2024-09-30
 Authors@R: c(person("Zhi", "Zhao", role=c("aut","cre"), email = "zhi.zhao@medisin.uio.no"),
              person("Waldir", "Leoncio", role=c("aut")),
              person("Katrin", "Madjar", role=c("aut")),
@@ -22,7 +22,7 @@ Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
 Suggests: knitr, testthat
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2024-09-27 19:57:03 UTC; zhiz
+Packaged: 2024-09-30 12:12:15 UTC; zhiz
 Author: Zhi Zhao [aut, cre],
   Waldir Leoncio [aut],
   Katrin Madjar [aut],

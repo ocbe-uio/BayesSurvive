@@ -13,14 +13,14 @@ or a list consisting of matrices and arrays}
 \item{method}{variable selection method to choose from
 \code{c("CI", "SNC", "MPM", "FDR")}. Default is "FDR"}
 
-\item{threshold}{SNC threshold value (default 0.5) or the Bayesian expected false
-discovery rate threshold (default 0.05)}
+\item{threshold}{SNC threshold value (default 0.5) or the Bayesian expected 
+false discovery rate threshold (default 0.05)}
 
-\item{subgroup}{index of the subgroup for visualizing posterior coefficients}
+\item{subgroup}{index(es) of subgroup(s) for visualizing variable selection}
 }
 \value{
 A boolean vector of selected (= TRUE) and rejected (= FALSE)
-variables
+variables for one group or a list for multiple groups
 }
 \description{
 Perform variable selection using the 95% credible interval (CI), scaled
@@ -59,7 +59,7 @@ hyperparPooled <- list(
 # run Bayesian Cox with graph-structured priors
 fit <- BayesSurvive(
   survObj = dataset, hyperpar = hyperparPooled,
-  initial = initial, nIter = 100
+  initial = initial, nIter = 100, burnin = 50
 )
 # show variable selection
 VS(fit, method = "FDR")
