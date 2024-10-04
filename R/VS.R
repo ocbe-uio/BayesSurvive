@@ -143,11 +143,11 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
         }
       }
     } else {
-      # count the total number of parameters in the list
-      total_num <- 0
-      for (l in seq_len(length(x))) {
-        total_num <- total_num + prod(dim(x[[l]])[-1])
-      }
+      # # count the total number of parameters in the list
+      # total_num <- 0
+      # for (l in seq_len(length(x))) {
+      #   total_num <- total_num + prod(dim(x[[l]])[-1])
+      # }
 
       ret <- rep(list(NULL), length(x))
       for (l in seq_len(length(x))) {
@@ -156,14 +156,14 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
 
         if (is.matrix(x[[l]])) { # for an matrix
           for (j in seq_len(NCOL(x[[l]]))) {
-            if (sum(abs(x[[l]][, j]) > sd(x[[l]][, j])) / total_num > threshold) {
+            if (mean(abs(x[[l]][, j]) > sd(x[[l]][, j])) > threshold) {
               ret[[l]][j] <- TRUE
             }
           }
         } else { # for an array
           for (j in seq_len(dim(x[[l]])[2])) {
             for (k in seq_len(dim(x[[l]])[3])) {
-              if (sum(abs(x[[l]][, j, k]) > sd(x[[l]][, j, k])) / total_num > threshold) {
+              if (mean(abs(x[[l]][, j, k]) > sd(x[[l]][, j, k])) > threshold) {
                 ret[[l]][j, k] <- TRUE
               }
             }
