@@ -5,21 +5,14 @@
 #'
 #' @name UpdateRPlee11
 #'
-#' @param sobj a list containing observed data
-#' @param hyperpar a list containing prior parameter values
-#' @param ini a list containing prior parameters' initial values
-#' @param S the number of subgroups
-#' @param method a method option from
-#' \code{c("Pooled", "CoxBVSSL", "Sub-struct")}
-#' @param MRF_G logical value. \code{MRF_G = TRUE} is to fix the MRF graph which
-#' is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
-#' use graphical model for leanring the MRF graph
+#' @inheritParams BayesSurvive
+#' @inheritParams func_MCMC
 #'
 #' @return A list object with component 'beta.ini' for the updated coefficients
 #' and component 'acceptlee' for the MCMC acceptance rate
 #'
 #' @export
-UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G) {
+UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE) {
   p <- sobj$p
   tau <- hyperpar$tau
   cb <- hyperpar$cb
