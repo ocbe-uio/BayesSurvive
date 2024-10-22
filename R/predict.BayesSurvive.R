@@ -28,10 +28,10 @@
 #' @param \dots not used
 #'
 #' @return A list object with 5 components if \code{type="brier"} including
-#'"model", "times", "Brier", "IBS" and "IPA" (Index of Prediction Accuracy), 
+#' "model", "times", "Brier", "IBS" and "IPA" (Index of Prediction Accuracy),
 #' otherwise  a list of 7 components with the first component as
-#' the specified argument \code{type} and "se", "band", "type", "diag", 
-#' "baseline" and "times", see function \code{riskRegression::predictCox} for 
+#' the specified argument \code{type} and "se", "band", "type", "diag",
+#' "baseline" and "times", see function \code{riskRegression::predictCox} for
 #' details
 #'
 #' @examples
@@ -215,7 +215,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
           metrics = "brier", summary = c("ibs", "ipa"),
           null.model = TRUE, times = times
         )$Brier$score
-        
+
         # Brier <- BrierScore[BrierScore$model != "Null model", ]
         # extract scores for Null model and the Bayesian Cox model
         ibs[1, ] <- Brier$Brier[c(length(times), length(times) * 2)]
@@ -251,7 +251,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
       # Brier scores of NULL.model do not change
       Brier.null <- BrierScore[1:(nrow(BrierScore) / 2), -c(1:2)]
       Brier <- BrierScore[-c(1:(nrow(BrierScore) / 2)), -c(1:2)]
-      
+
       # calculate Brier scores based on other MCMC estimates
       for (i in 2:nrow(betas)) {
         data_train$lp <- survObj$lp.all[, i] # lp_all_train[, i]
@@ -271,18 +271,20 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
         Brier <- Brier + BrierScore[-c(1:(nrow(BrierScore) / 2)), -c(1:2)]
       }
       Brier <- rbind(Brier.null, Brier / nrow(betas))
-      
+
       # extract IBS for Null model and the Bayesian Cox model
       ibs[1, ] <- Brier$Brier[c(length(times), length(times) * 2)]
       ibs[2, ] <- Brier$IBS[c(length(times), length(times) * 2)]
       ibs[3, ] <- Brier$IPA[c(length(times), length(times) * 2)]
     }
-    
-    #ibs <- rbind(rep(max(times), 2), ibs)
+
+    # ibs <- rbind(rep(max(times), 2), ibs)
     t0 <- round(max(times), digits = 1)
-    rownames(ibs) <- c(paste0("Brier(t=", t0, ")"), 
-                       paste0("IBS(t:0~", t0, ")"), 
-                       paste0("IPA(t=", t0, ")"))
+    rownames(ibs) <- c(
+      paste0("Brier(t=", t0, ")"),
+      paste0("IBS(t:0~", t0, ")"),
+      paste0("IPA(t=", t0, ")")
+    )
     if (verbose) {
       # cat("                      IBS\n",
       #   "  Null model          ", ibs[1, 1],
@@ -294,5 +296,4 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
     invisible(Brier)
     # return(Brier)
   }
-  
 }

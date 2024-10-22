@@ -17,14 +17,6 @@ settingInterval_cpp <- function(y, delta_, s_, J_) {
     .Call(`_BayesSurvive_settingInterval_cpp`, y, delta_, s_, J_)
 }
 
-matProdVec <- function(x, y) {
-    .Call(`_BayesSurvive_matProdVec`, x, y)
-}
-
-sumMatProdVec <- function(x, y) {
-    .Call(`_BayesSurvive_sumMatProdVec`, x, y)
-}
-
 updateBH_cpp <- function(x_, beta_, J_, ind_r_d_, hPriorSh_, d_, c0_) {
     .Call(`_BayesSurvive_updateBH_cpp`, x_, beta_, J_, ind_r_d_, hPriorSh_, d_, c0_)
 }

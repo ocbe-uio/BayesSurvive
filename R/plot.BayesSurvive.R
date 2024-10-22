@@ -107,9 +107,8 @@ plot.BayesSurvive <- function(x, type = "mean", interval = TRUE,
   # pdf("psbcBeta.pdf", height = 5, width = 3.5)
 
   # Sys.setenv(`_R_S3_METHOD_REGISTRATION_NOTE_OVERWRITES_` = "false")
-  pCoef <- ggcoef(tbl, conf.int = interval, ...) + 
+  pCoef <- ggcoef(tbl, conf.int = interval, ...) +
     xlab(expression(Posterior ~ ~beta)) + ylab("")
   pCoef
   # dev.off()
-  
 }

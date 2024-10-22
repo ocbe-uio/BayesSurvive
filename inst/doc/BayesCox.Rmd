@@ -1,20 +1,18 @@
-# BayesSurvive
+---
+title: "Bayesian Cox Models with graph-structure priors"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Bayesian Cox Models with graph-structure priors}
+  \usepackage[utf8]{inputenc}
+---
 
-[![CRAN
-status](https://www.r-pkg.org/badges/version/BayesSurvive)](https://cran.r-project.org/package=BayesSurvive)
-[![r-universe](https://ocbe-uio.r-universe.dev/badges/BayesSurvive)](https://ocbe-uio.r-universe.dev/BayesSurvive)
-[![R-CMD-check](https://github.com/ocbe-uio/BayesSurvive/workflows/R-CMD-check/badge.svg)](https://github.com/ocbe-uio/BayesSurvive/actions)
-[![License](https://img.shields.io/badge/License-GPLv3-brightgreen.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![DOI](https://img.shields.io/badge/doi-10.32614%2FCRAN.package.BayesSurvive-brightgreen)](https://doi.org/10.32614/CRAN.package.BayesSurvive)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, eval = FALSE)
+options(rmarkdown.html_vignette.check_title = FALSE)
+```
 
-
-This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) (see the three models of the first column in the table below) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features (see the three models of the second column in the table below), e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
-
-Model        | Infer `MRF_G` | Fix `MRF_G`
-------------:| --------------|---------------
-`Pooled`     |        ✔      |           ✔          
-`CoxBVSSL`   |        ✔      |           ✔          
-`Sub-struct` |        ✔      |           ✔          
+This is a R/Rcpp package **BayesSurvive** for Bayesian survival models with graph-structured selection priors for sparse identification of high-dimensional features predictive of survival ([Madjar et al., 2021](https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z)) and its extensions with the use of a fixed graph via a Markov Random Field (MRF) prior for capturing known structure of high-dimensional features, e.g. disease-specific pathways from the Kyoto Encyclopedia of Genes and Genomes (KEGG) database.
 
 ## Installation
 
@@ -74,16 +72,17 @@ plot(fit) +
   theme(axis.text.x = element_text(angle = 90, size = 7))
 ```
 
-<img src="man/figures/README_plot_beta.png" width="130%" />
+<img src="../man/figures/README_plot_beta.png" width="130%" />
 
 Show the index of selected variables by controlling Bayesian false discovery rate (FDR) at the level $\alpha = 0.05$
 
 ```r
 which( VS(fit, method = "FDR", threshold = 0.05) )
 ```
-```
+```{ .text .no-copy }
 #[1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15 194
 ```
+
 
 ### Plot time-dependent Brier scores
 
@@ -93,7 +92,7 @@ The function `BayesSurvive::plotBrier()` can show the time-dependent Brier score
 plotBrier(fit, survObj.new = dataset)
 ```
 
-<img src="man/figures/README_plot_brier.png" width="50%" />
+<img src="../man/figures/README_plot_brier.png" width="70%" />
 
 We can also use the function `BayesSurvive::predict()` to obtain the Brier score at time 8.5, the integrated Brier score (IBS) from time 0 to 8.5 and the index of prediction accuracy (IPA).
 
@@ -160,10 +159,6 @@ fit4 <- BayesSurvive(survObj = dataset2,
 ```
 
 ## References
-
-> Zhi Zhao, Katrin Madjar, Tobias Østmo Hermansen (2024).
-> BayesSurvive: Bayesian Survival Models for High-Dimensional Data.
-> _R package version 0.0.2_. DOI: [10.32614/CRAN.package.BayesSurvive](https://doi.org/10.32614/CRAN.package.BayesSurvive).
 
 > Katrin Madjar, Manuela Zucknick, Katja Ickstadt, Jörg Rahnenführer (2021).
 > Combining heterogeneous subgroups with graph‐structured variable selection priors for Cox regression.

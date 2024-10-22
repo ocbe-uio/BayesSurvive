@@ -3,7 +3,6 @@
 
 #include "updateRP_genomic_cpp.h"
 
-// [[Rcpp::export]]
 arma::mat matProdVec(const arma::mat x, const arma::vec y)
 {
     // multiply (element-wise) a matrix to a expanded vector
@@ -14,7 +13,6 @@ arma::mat matProdVec(const arma::mat x, const arma::vec y)
     return spanMat;
 }
 
-// [[Rcpp::export]]
 arma::vec sumMatProdVec(const arma::mat x, const arma::vec y)
 {
     // compute "arma::sum( matProdVec( ind_r_d_, exp_xbeta ).t(), 1 );"

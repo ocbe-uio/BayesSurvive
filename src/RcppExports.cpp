@@ -69,30 +69,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// matProdVec
-arma::mat matProdVec(const arma::mat x, const arma::vec y);
-RcppExport SEXP _BayesSurvive_matProdVec(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(matProdVec(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
-// sumMatProdVec
-arma::vec sumMatProdVec(const arma::mat x, const arma::vec y);
-RcppExport SEXP _BayesSurvive_sumMatProdVec(SEXP xSEXP, SEXP ySEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const arma::mat >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const arma::vec >::type y(ySEXP);
-    rcpp_result_gen = Rcpp::wrap(sumMatProdVec(x, y));
-    return rcpp_result_gen;
-END_RCPP
-}
 // updateBH_cpp
 arma::vec updateBH_cpp(const arma::mat x_, const arma::vec beta_, const unsigned int J_, const arma::mat ind_r_d_, const arma::vec hPriorSh_, const arma::vec d_, const double c0_);
 RcppExport SEXP _BayesSurvive_updateBH_cpp(SEXP x_SEXP, SEXP beta_SEXP, SEXP J_SEXP, SEXP ind_r_d_SEXP, SEXP hPriorSh_SEXP, SEXP d_SEXP, SEXP c0_SEXP) {

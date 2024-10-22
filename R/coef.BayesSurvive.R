@@ -105,7 +105,7 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
     )
     names(tbl)[2] <- type
     if (SD) tbl <- data.frame(tbl, SD = apply(beta_p, 2, sd))
-    #tbl$term <- factor(tbl$term, levels = tbl$term)
+    # tbl$term <- factor(tbl$term, levels = tbl$term)
   } else {
     # MPM coefficients
     if (object$input$S > 1 || !object$input$MRF.G) {
@@ -121,11 +121,10 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
       term = x_names,
       estimate = object$output$beta.margin
     )
-    tbl$estimate <- tbl$estimate / object$output$gamma.margin * 
+    tbl$estimate <- tbl$estimate / object$output$gamma.margin *
       (object$output$gamma.margin >= 0.5)
     tbl$estimate[is.na(tbl$estimate)] <- 0
   }
 
   tbl
-  
 }
