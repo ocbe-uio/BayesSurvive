@@ -13,46 +13,67 @@
 
     arma::mat matProdVec(const arma::mat, const arma::vec);
     arma::vec sumMatProdVec(const arma::mat, const arma::vec);
-Rcpp::List updateRP_genomic_cpp(const unsigned int p,
-                                const arma::mat,
-                                const unsigned int,
-                                arma::mat,
-                                arma::mat,
-                                arma::mat,
-                                arma::vec,
-                                const double,
-                                arma::vec,
-                                arma::vec,
-                                const double,
-                                const double);
+    Rcpp::List updateRP_genomic_cpp(const unsigned int p,
+                                    const arma::mat,
+                                    const unsigned int,
+                                    arma::mat,
+                                    arma::mat,
+                                    arma::mat,
+                                    arma::vec,
+                                    const double,
+                                    arma::vec,
+                                    arma::vec,
+                                    const double,
+                                    const double);
 
-    double be_prop_me_ini = 0.;
-    double be_prop_sd_ini = 0.;
-    double D1 = 0.;
-    double D2 = 0.;
-    double D1_prop = 0.;
-    double D2_prop = 0.;
-    double loglh_ini = 0.;
-    double loglh_prop = 0.;
-    double logprior_prop = 0.;
-    double logprior_ini = 0.;
-    double logprop_prop = 0.;
-    double logprop_ini = 0.;
-    double logR = 0.;
+    extern double be_prop_me_ini;
+    extern double be_prop_sd_ini;
+    extern double D1;
+    extern double D2;
+    extern double D1_prop;
+    extern double D2_prop;
+    extern double loglh_ini;
+    extern double loglh_prop;
+    extern double logprior_prop;
+    extern double logprior_ini;
+    extern double logprop_prop;
+    extern double logprop_ini;
+    extern double logR;
 
-    double be_prop_me = 1.;
-    double be_prop_sd = 1.;
+    extern double be_prop_me;
+    extern double be_prop_sd;
 
-    arma::vec be_prop;
-    arma::vec exp_xbeta;
-    arma::mat h_exp_xbeta_mat, h_exp_xbeta_prop_mat;
-    arma::mat exp_h_exp_xbeta_mat, exp_h_exp_xbeta_prop_mat; //, exp_xbeta_mat;
-    arma::vec first_sum, second_sum;
-    arma::vec first_sum_prop, second_sum_prop;
-    arma::vec x_exp_xbeta, xbeta_prop, exp_xbeta_prop, x_exp_xbeta_prop, x_sq_exp_xbeta, x_sq_exp_xbeta_prop;
-    arma::vec D1_1st, D1_2nd, D1_1st_prop, D1_2nd_prop;
-    arma::vec D2_1st, D2_2nd, D2_1st_prop, D2_2nd_prop;
-    arma::mat D1_2nd_den, D1_2nd_num, D1_2nd_den_prop, D1_2nd_num_prop;
-    arma::mat D2_2nd_num, D2_2nd_den, D2_2nd_den_prop, D2_2nd_num_prop;
+    extern arma::vec be_prop;
+    extern arma::vec exp_xbeta;
+    extern arma::mat h_exp_xbeta_mat;
+    extern arma::mat h_exp_xbeta_prop_mat;
+    extern arma::mat exp_h_exp_xbeta_mat;
+    extern arma::mat exp_h_exp_xbeta_prop_mat;
+    extern arma::vec first_sum;
+    extern arma::vec second_sum;
+    extern arma::vec first_sum_prop;
+    extern arma::vec second_sum_prop;
+    extern arma::vec x_exp_xbeta;
+    extern arma::vec xbeta_prop;
+    extern arma::vec exp_xbeta_prop;
+    extern arma::vec x_exp_xbeta_prop;
+    extern arma::vec x_sq_exp_xbeta;
+    extern arma::vec x_sq_exp_xbeta_prop;
+    extern arma::vec D1_1st;
+    extern arma::vec D1_2nd;
+    extern arma::vec D1_1st_prop;
+    extern arma::vec D1_2nd_prop;
+    extern arma::vec D2_1st;
+    extern arma::vec D2_2nd;
+    extern arma::vec D2_1st_prop;
+    extern arma::vec D2_2nd_prop;
+    extern arma::mat D1_2nd_den;
+    extern arma::mat D1_2nd_num;
+    extern arma::mat D1_2nd_den_prop;
+    extern arma::mat D1_2nd_num_prop;
+    extern arma::mat D2_2nd_num;
+    extern arma::mat D2_2nd_den;
+    extern arma::mat D2_2nd_den_prop;
+    extern arma::mat D2_2nd_num_prop;
 
 #endif
