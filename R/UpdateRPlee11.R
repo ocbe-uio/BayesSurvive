@@ -7,12 +7,17 @@
 #'
 #' @inheritParams BayesSurvive
 #' @inheritParams func_MCMC
+#' @inheritParams func_MCMC_graph
 #'
 #' @return A list object with component 'beta.ini' for the updated coefficients
 #' and component 'acceptlee' for the MCMC acceptance rate
 #'
 #' @export
 UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE) {
+  if (cpp) {
+    warning("Cpp not implemented. Rerouting to R implementation.")
+    return(UpdateRPlee11(sobj, hyperpar, ini, S, method, MRF_G))
+  }
   p <- sobj$p
   tau <- hyperpar$tau
   cb <- hyperpar$cb

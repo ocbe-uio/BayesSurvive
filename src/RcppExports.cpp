@@ -28,6 +28,22 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// UpdateRPlee11_cpp
+Rcpp::List UpdateRPlee11_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const uint S, const std::string method, const bool MRF_G);
+RcppExport SEXP _BayesSurvive_UpdateRPlee11_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_GSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type sobj(sobjSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type hyperpar(hyperparSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type ini(iniSEXP);
+    Rcpp::traits::input_parameter< const uint >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< const bool >::type MRF_G(MRF_GSEXP);
+    rcpp_result_gen = Rcpp::wrap(UpdateRPlee11_cpp(sobj, hyperpar, ini, S, method, MRF_G));
+    return rcpp_result_gen;
+END_RCPP
+}
 // func_MCMC_graph_cpp
 Rcpp::List func_MCMC_graph_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const uint S, const std::string method, const bool MRF_2b);
 RcppExport SEXP _BayesSurvive_func_MCMC_graph_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_2bSEXP) {

@@ -5,6 +5,10 @@ UpdateGamma_cpp <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
     .Call(`_BayesSurvive_UpdateGamma_cpp`, sobj, hyperpar, ini, S, method, MRF_G, MRF_2b)
 }
 
+UpdateRPlee11_cpp <- function(sobj, hyperpar, ini, S, method, MRF_G) {
+    .Call(`_BayesSurvive_UpdateRPlee11_cpp`, sobj, hyperpar, ini, S, method, MRF_G)
+}
+
 func_MCMC_graph_cpp <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
     .Call(`_BayesSurvive_func_MCMC_graph_cpp`, sobj, hyperpar, ini, S, method, MRF_2b)
 }
