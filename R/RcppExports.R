@@ -17,6 +17,10 @@ list_to_matrix <- function(r_list) {
     .Call(`_BayesSurvive_list_to_matrix`, r_list)
 }
 
+list_to_cube <- function(r_list) {
+    .Call(`_BayesSurvive_list_to_cube`, r_list)
+}
+
 settingInterval_cpp <- function(y, delta_, s_, J_) {
     .Call(`_BayesSurvive_settingInterval_cpp`, y, delta_, s_, J_)
 }

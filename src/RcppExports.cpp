@@ -71,6 +71,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// list_to_cube
+arma::cube list_to_cube(Rcpp::List r_list);
+RcppExport SEXP _BayesSurvive_list_to_cube(SEXP r_listSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::List >::type r_list(r_listSEXP);
+    rcpp_result_gen = Rcpp::wrap(list_to_cube(r_list));
+    return rcpp_result_gen;
+END_RCPP
+}
 // settingInterval_cpp
 Rcpp::List settingInterval_cpp(const arma::vec y, const arma::vec delta_, const arma::vec s_, const unsigned int J_);
 RcppExport SEXP _BayesSurvive_settingInterval_cpp(SEXP ySEXP, SEXP delta_SEXP, SEXP s_SEXP, SEXP J_SEXP) {
