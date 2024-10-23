@@ -9,3 +9,9 @@ test_that("list_to_cube works", {
   result_cube <- list_to_cube(r_list)
   expect_equal(result_cube, array(1:18, dim = c(3, 2, 3)))
 })
+
+test_that("list_to_vector works", {
+  r_list <- as.list(1:5)
+  result_vector <- list_to_vector(r_list)
+  expect_equal(result_vector, matrix(1:5))
+})

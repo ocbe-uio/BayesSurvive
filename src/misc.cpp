@@ -44,3 +44,21 @@ arma::cube list_to_cube(Rcpp::List r_list) {
 
   return result;
 }
+
+//[[Rcpp::export]]
+arma::vec list_to_vector(Rcpp::List r_list) {
+  // Converts a *list of scalars* into a vector
+
+  // Determine the number of elements (length of the list)
+  int n_elems = r_list.size();
+
+  // Initialize the vector
+  arma::vec result(n_elems);
+
+  // Fill the vector
+  for (int i = 0; i < n_elems; ++i) {
+    result(i) = Rcpp::as<double>(r_list[i]);
+  }
+
+  return result;
+}
