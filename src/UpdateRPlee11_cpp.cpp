@@ -11,34 +11,49 @@ Rcpp::List UpdateRPlee11_cpp(
   const bool MRF_G
 ){
   uint p = Rcpp::as<uint>(sobj["p"]);
+  uint n = Rcpp::as<uint>(sobj["n"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
 
-  arma::vec beta_ini;
-  arma::uvec acceptlee;
+  arma::mat beta_ini(p, S, arma::fill::zeros);
+  arma::umat acceptlee(p, S, arma::fill::zeros);
+  arma::cube x(n, p, S);
+  arma::mat be_ini(p, S);
+  arma::mat ga_ini(p, S);
+  arma::uvec J(S);
+  arma::vec be_prop_sd_scale(S);
+
+  arma::field<arma::mat> ind_r(S);
+  arma::field<arma::mat> ind_d(S);
+  arma::field<arma::mat> ind_r_d(S);
+  arma::field<arma::vec> h(S);
 
   if (method == "Pooled" && MRF_G) {
-    arma::mat x = Rcpp::as<arma::mat>(sobj["X"]);
-    uint J = Rcpp::as<uint>(hyperpar["J"]);
-    arma::mat ind_r = Rcpp::as<arma::mat>(hyperpar["ind.r"]);
-    arma::mat ind_d = Rcpp::as<arma::mat>(hyperpar["ind.d"]);
-    arma::mat ind_r_d = Rcpp::as<arma::mat>(hyperpar["ind.r_d"]);
-    double be_prop_sd_scale = Rcpp::as<double>(hyperpar["be.prop.sd.scale"]);
-    arma::vec be_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
-    arma::vec ga_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
-    arma::vec h = Rcpp::as<arma::vec>(ini["h"]);
+    x.slice(0) = Rcpp::as<arma::mat>(sobj["X"]);
+    be_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
+    ga_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
+
+    J(0) = Rcpp::as<uint>(hyperpar["J"]);
+    ind_r(0) = Rcpp::as<arma::mat>(hyperpar["ind.r"]);
+    ind_d(0) = Rcpp::as<arma::mat>(hyperpar["ind.d"]);
+    ind_r_d(0) = Rcpp::as<arma::mat>(hyperpar["ind.r_d"]);
+    be_prop_sd_scale(0) = Rcpp::as<double>(hyperpar["be.prop.sd.scale"]);
+    double be_prop_sd_scale_value = be_prop_sd_scale(0); // Extract the first element
+    h(0) = Rcpp::as<arma::vec>(ini["h"]);
 
     Rcpp::List erg = updateRP_genomic_cpp(
-      p, x, J, ind_r, ind_d, ind_r_d, be_ini, be_prop_sd_scale, ga_ini, h, tau,
-      cb
+      p, x.slice(0), J(0), ind_r(0), ind_d(0), ind_r_d(0),
+      be_ini.col(0), be_prop_sd_scale_value, ga_ini.col(0),
+      h(0), tau, cb
     );
 
-    beta_ini = Rcpp::as<arma::vec>(erg["be.ini"]);
-    acceptlee = Rcpp::as<arma::uvec>(erg["acceptl"]);
+    beta_ini.col(0) = Rcpp::as<arma::vec>(erg["be.ini"]);
+    acceptlee.col(0) = Rcpp::as<arma::uvec>(erg["acceptl"]);
   } else {
-    beta_ini = arma::zeros<arma::vec>(S);
-    acceptlee = arma::zeros<arma::uvec>(S);
     for (uint g = 0; g < S; ++g) { // loop through subgroups
+      // Basically the same as the above block, but with the g-th element of
+      // each. Everything is a list :()
+
       // x <- sobj$X[[g]]
       // J <- hyperpar$J[[g]]
       // ind.r <- hyperpar$ind.r[[g]]
