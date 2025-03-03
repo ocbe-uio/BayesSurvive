@@ -190,8 +190,12 @@ func_MCMC <- function(survObj, hyperpar, initial,
     gamma.ini <- ini$gamma.ini <- sampleGam$gamma.ini
 
     # update beta (regression parameters)
-    # beta.tmp  = UpdateRP.lee11(survObj, hyperpar, ini, S, method)
     beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G, cpp)
+    if (cpp && S == 1) {
+      # TEMP workaround because C++ outputs list elements as matrices and BayesSurvive_wrap expects something else
+      beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
+    }
+
     beta.ini <- ini$beta.ini <- beta.tmp$beta.ini
 
     # update increments in cumulative hazards
