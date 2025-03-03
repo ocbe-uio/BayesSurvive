@@ -191,9 +191,15 @@ func_MCMC <- function(survObj, hyperpar, initial,
 
     # update beta (regression parameters)
     beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G, cpp)
-    if (cpp && S == 1) {
+    if (cpp) {
       # TEMP workaround because C++ outputs list elements as matrices and BayesSurvive_wrap expects something else
-      beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
+      if (S == 1) {
+        beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
+      } else {
+        beta.tmp$beta.ini <- lapply(
+          seq_len(S), function(x) as.vector(beta.tmp$beta.ini[, x])
+        )
+      }
     }
 
     beta.ini <- ini$beta.ini <- beta.tmp$beta.ini

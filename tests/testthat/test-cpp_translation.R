@@ -55,7 +55,7 @@ BayesSurvive_wrap <- function(
 fit_R <- BayesSurvive_wrap(data, initial, hyperPooled)
 fit_C <- BayesSurvive_wrap(data, initial, hyperPooled, use_cpp = TRUE)
 fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
-fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE) # FIXME: Error: copy into submatrix: incompatible matrix dimensions: 56x1 and 48x1
+fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
 fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, n_iter = 2L)
 fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: Error: dot(): objects must have the same number of elements
 fit_R_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE)
