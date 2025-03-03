@@ -25,11 +25,11 @@ Rcpp::List UpdateRPlee11_cpp(
   arma::field<arma::mat> ind_r(S);
   arma::field<arma::mat> ind_d(S);
   arma::field<arma::mat> ind_r_d(S);
-  arma::field<arma::vec> h(S);
 
   Rcpp::List erg;
 
   if (method == "Pooled" && MRF_G) {
+    arma::field<arma::vec> h(S);
     uint n = Rcpp::as<uint>(sobj["n"]);
     arma::cube x(n, p, S, arma::fill::zeros);
     x.slice(0) = Rcpp::as<arma::mat>(sobj["X"]);
@@ -53,17 +53,26 @@ Rcpp::List UpdateRPlee11_cpp(
     beta_ini.col(0) = Rcpp::as<arma::vec>(erg["be.ini"]);
     acceptlee.col(0) = Rcpp::as<arma::uvec>(erg["acceptl"]);
   } else {
+    Rcpp::List h_list = ini["h"];
+    Rcpp::List ind_r_list = hyperpar["ind.r"];
+    Rcpp::List ind_d_list = hyperpar["ind.d"];
+    Rcpp::List ind_r_d_list = hyperpar["ind.r_d"];
+    arma::field<arma::vec> h(S);
+    arma::field<arma::mat> ind_r(S);
+    arma::field<arma::mat> ind_d(S);
+    arma::field<arma::mat> ind_r_d(S);
     arma::cube x = list_to_cube(sobj["X"]);
+
     J = arma::conv_to<arma::uvec>::from(list_to_vector(hyperpar["J"]));
     be_ini = list_to_matrix(ini["beta.ini"]);
     be_prop_sd_scale = list_to_vector(hyperpar["be.prop.sd.scale"]);
     ga_ini = list_to_matrix(ini["gamma.ini"]);
     for (uint g = 0; g < S; ++g) { // loop through subgroups
       double be_prop_sd_scale_value = be_prop_sd_scale(g);
-      h(g) = list_to_matrix(ini["h"]); // FIXME: wrong dimension! Input is list of vectors, output is matrix (but declared as vectors up there)
-      ind_r(g) = list_to_matrix(hyperpar["ind.r"]);
-      ind_d(g) = list_to_matrix(hyperpar["ind.d"]);
-      ind_r_d(g) = list_to_matrix(hyperpar["ind.r_d"]);
+      h(g) = Rcpp::as<arma::vec>(h_list[g]);
+      ind_r(g) = Rcpp::as<arma::mat>(ind_r_list[g]);
+      ind_d(g) = Rcpp::as<arma::mat>(ind_d_list[g]);
+      ind_r_d(g) = Rcpp::as<arma::mat>(ind_r_d_list[g]);
 
       erg = updateRP_genomic_cpp(
         p, x.slice(g), J(g), ind_r(g), ind_d(g), ind_r_d(g),
