@@ -15,8 +15,7 @@
 #' @export
 UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE) {
   if (cpp) {
-    warning("Cpp not implemented. Rerouting to R implementation.")
-    return(UpdateRPlee11(sobj, hyperpar, ini, S, method, MRF_G))
+    return(UpdateRPlee11_cpp(sobj, hyperpar, ini, S, method, MRF_G))
   }
   p <- sobj$p
   tau <- hyperpar$tau

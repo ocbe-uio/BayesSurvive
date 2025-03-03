@@ -191,7 +191,7 @@ func_MCMC <- function(survObj, hyperpar, initial,
 
     # update beta (regression parameters)
     # beta.tmp  = UpdateRP.lee11(survObj, hyperpar, ini, S, method)
-    beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G)
+    beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G, cpp)
     beta.ini <- ini$beta.ini <- beta.tmp$beta.ini
 
     # update increments in cumulative hazards
