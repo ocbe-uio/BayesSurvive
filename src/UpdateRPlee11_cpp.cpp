@@ -12,13 +12,11 @@ Rcpp::List UpdateRPlee11_cpp(
   const bool MRF_G
 ){
   uint p = Rcpp::as<uint>(sobj["p"]);
-  uint n = Rcpp::as<uint>(sobj["n"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
 
   arma::mat beta_ini(p, S, arma::fill::zeros);
   arma::umat acceptlee(p, S, arma::fill::zeros);
-  arma::cube x(n, p, S);
   arma::mat be_ini(p, S);
   arma::mat ga_ini(p, S);
   arma::uvec J(S);
@@ -32,6 +30,8 @@ Rcpp::List UpdateRPlee11_cpp(
   Rcpp::List erg;
 
   if (method == "Pooled" && MRF_G) {
+    uint n = Rcpp::as<uint>(sobj["n"]);
+    arma::cube x(n, p, S, arma::fill::zeros);
     x.slice(0) = Rcpp::as<arma::mat>(sobj["X"]);
     be_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
     ga_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
@@ -53,7 +53,7 @@ Rcpp::List UpdateRPlee11_cpp(
     beta_ini.col(0) = Rcpp::as<arma::vec>(erg["be.ini"]);
     acceptlee.col(0) = Rcpp::as<arma::uvec>(erg["acceptl"]);
   } else {
-    x = list_to_cube(sobj["X"]);
+    arma::cube x = list_to_cube(sobj["X"]);
     J = arma::conv_to<arma::uvec>::from(list_to_vector(hyperpar["J"]));
     be_ini = list_to_matrix(ini["beta.ini"]);
     be_prop_sd_scale = list_to_vector(hyperpar["be.prop.sd.scale"]);
