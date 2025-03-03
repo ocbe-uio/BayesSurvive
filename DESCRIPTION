@@ -19,7 +19,7 @@ RoxygenNote: 7.3.2
 LinkingTo: Rcpp, RcppArmadillo, testthat
 Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
         utils, stats, methods
-Suggests: knitr, testthat
+Suggests: knitr, testthat, Matrix
 LazyData: true
 NeedsCompilation: yes
 Packaged: 2024-09-30 12:12:15 UTC; zhiz
