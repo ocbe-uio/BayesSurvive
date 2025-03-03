@@ -60,7 +60,7 @@ Rcpp::List UpdateRPlee11_cpp(
     ga_ini = list_to_matrix(ini["gamma.ini"]);
     for (uint g = 0; g < S; ++g) { // loop through subgroups
       double be_prop_sd_scale_value = be_prop_sd_scale(g);
-      h(g) = list_to_vector(ini["h"]);
+      h(g) = list_to_matrix(ini["h"]); // FIXME: wrong dimension! Input is list of vectors, output is matrix (but declared as vectors up there)
       ind_r(g) = list_to_matrix(hyperpar["ind.r"]);
       ind_d(g) = list_to_matrix(hyperpar["ind.d"]);
       ind_r_d(g) = list_to_matrix(hyperpar["ind.r_d"]);
