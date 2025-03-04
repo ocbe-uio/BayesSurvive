@@ -157,7 +157,7 @@ Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
     double first_sum_ini = arma::accu(-h_ % sumMatProdVec(ind_r_d_, exp_xbeta));
 
     arma::mat h_exp_xbeta_mat = -arma::kron(exp_xbeta, h_.t());
-    h_exp_xbeta_mat.elem(arma::find(h_exp_xbeta_mat > -1.0e-7)).fill(be_prop_me_ini-1.0e-7);
+    h_exp_xbeta_mat.elem(arma::find(h_exp_xbeta_mat > -1.0e-7)).fill(-1.0e-7);
     h_exp_xbeta_mat = arma::log(1.0 - arma::exp(h_exp_xbeta_mat));
     // double second_sum_ini = arma::accu(arma::sum((h_exp_xbeta_mat % ind_d_).t(), 1));
     double second_sum_ini = arma::accu(h_exp_xbeta_mat % ind_d_);
