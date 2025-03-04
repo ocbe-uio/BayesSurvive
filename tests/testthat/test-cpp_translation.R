@@ -57,7 +57,7 @@ fit_C <- BayesSurvive_wrap(data, initial, hyperPooled, use_cpp = TRUE)
 fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
 fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
 fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, n_iter = 2L)
-fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: Error: dot(): objects must have the same number of elements
+fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: accept.RW on output wrongly formatted
 fit_R_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE)
 fit_C_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
 fit_R_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)

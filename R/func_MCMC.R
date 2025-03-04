@@ -193,12 +193,13 @@ func_MCMC <- function(survObj, hyperpar, initial,
     beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G, cpp)
     if (cpp) {
       # TEMP workaround because C++ outputs list elements as matrices and BayesSurvive_wrap expects something else
-      if (S == 1) {
-        beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
-      } else {
+      # Converts list elements to vectors if necessary
+      if (any(vapply(hyperpar, function(x) is(x, "list"), logical(1)))) {
         beta.tmp$beta.ini <- lapply(
           seq_len(S), function(x) as.vector(beta.tmp$beta.ini[, x])
         )
+      } else {
+        beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
       }
     }
 
