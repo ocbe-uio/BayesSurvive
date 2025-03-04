@@ -18,16 +18,19 @@
 #' is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
 #' use graphical model for leanring the MRF graph
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
+#' @inheritParams func_MCMC
 #'
 #' @return A list object with two components for the latent variable selection
 #' indicators gamma with either independent Bernoulli prior
 # (standard approaches) or with MRF prior
 #'
 #' @export
-UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
+UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FALSE) {
   # Update latent variable selection indicators gamma with either independent Bernoulli prior
   # (standard approaches) or with MRF prior.
-
+  if (cpp) {
+    return(UpdateGamma_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b))
+  }
   p <- sobj$p
   tau <- hyperpar$tau
   cb <- hyperpar$cb

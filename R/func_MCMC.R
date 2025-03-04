@@ -177,12 +177,32 @@ func_MCMC <- function(survObj, hyperpar, initial,
 
     # update gamma (latent indicators of variable selection)
     # browser()
-    sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b)
+    sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
+    if (is(sampleGam$gamma.ini, "matrix")) {
+      # TEMP Workaround because C++ outputs list elements as matrices and UpdateRPlee11 expects lists (until it's translated)
+      sampleGam <- lapply(sampleGam, function(x) apply(x, 1, list))
+      if (!(method == "Pooled" && MRF_G)) {
+        sampleGam <- lapply(sampleGam, function(x) lapply(x, unlist))
+      } else {
+        sampleGam <- lapply(sampleGam, unlist)
+      }
+    }
     gamma.ini <- ini$gamma.ini <- sampleGam$gamma.ini
 
     # update beta (regression parameters)
-    # beta.tmp  = UpdateRP.lee11(survObj, hyperpar, ini, S, method)
-    beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G)
+    beta.tmp <- UpdateRPlee11(survObj, hyperpar, ini, S, method, MRF_G, cpp)
+    if (cpp) {
+      # TEMP workaround because C++ outputs list elements as matrices and BayesSurvive_wrap expects something else
+      # Converts list elements to vectors if necessary
+      if (any(vapply(hyperpar, function(x) is(x, "list"), logical(1)))) {
+        beta.tmp$beta.ini <- lapply(
+          seq_len(S), function(x) as.vector(beta.tmp$beta.ini[, x])
+        )
+      } else {
+        beta.tmp$beta.ini <- as.vector(beta.tmp$beta.ini)
+      }
+    }
+
     beta.ini <- ini$beta.ini <- beta.tmp$beta.ini
 
     # update increments in cumulative hazards

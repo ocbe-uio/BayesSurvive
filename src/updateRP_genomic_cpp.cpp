@@ -3,10 +3,60 @@
 
 #include "updateRP_genomic_cpp.h"
 
+double be_prop_me_ini = 0.;
+double be_prop_sd_ini = 0.;
+double D1 = 0.;
+double D2 = 0.;
+double D1_prop = 0.;
+double D2_prop = 0.;
+double loglh_ini = 0.;
+double loglh_prop = 0.;
+double logprior_prop = 0.;
+double logprior_ini = 0.;
+double logprop_prop = 0.;
+double logprop_ini = 0.;
+double logR = 0.;
+
+double be_prop_me = 1.;
+double be_prop_sd = 1.;
+
+arma::vec be_prop;
+arma::vec exp_xbeta;
+arma::mat h_exp_xbeta_mat;
+arma::mat h_exp_xbeta_prop_mat;
+arma::mat exp_h_exp_xbeta_mat;
+arma::mat exp_h_exp_xbeta_prop_mat;
+arma::vec first_sum;
+arma::vec second_sum;
+arma::vec first_sum_prop;
+arma::vec second_sum_prop;
+arma::vec x_exp_xbeta;
+arma::vec xbeta_prop;
+arma::vec exp_xbeta_prop;
+arma::vec x_exp_xbeta_prop;
+arma::vec x_sq_exp_xbeta;
+arma::vec x_sq_exp_xbeta_prop;
+arma::vec D1_1st;
+arma::vec D1_2nd;
+arma::vec D1_1st_prop;
+arma::vec D1_2nd_prop;
+arma::vec D2_1st;
+arma::vec D2_2nd;
+arma::vec D2_1st_prop;
+arma::vec D2_2nd_prop;
+arma::mat D1_2nd_den;
+arma::mat D1_2nd_num;
+arma::mat D1_2nd_den_prop;
+arma::mat D1_2nd_num_prop;
+arma::mat D2_2nd_num;
+arma::mat D2_2nd_den;
+arma::mat D2_2nd_den_prop;
+arma::mat D2_2nd_num_prop;
+
 arma::mat matProdVec(const arma::mat x, const arma::vec y)
 {
     // multiply (element-wise) a matrix to a expanded vector
-    
+
     arma::mat mat_y = arma::zeros<arma::mat>(y.n_elem, x.n_cols);
     mat_y.each_col() = y;
     arma::mat spanMat = x % mat_y; // elementwise product
@@ -16,7 +66,7 @@ arma::mat matProdVec(const arma::mat x, const arma::vec y)
 arma::vec sumMatProdVec(const arma::mat x, const arma::vec y)
 {
     // compute "arma::sum( matProdVec( ind_r_d_, exp_xbeta ).t(), 1 );"
-    
+
     arma::vec spanVec = arma::zeros(x.n_cols);
     for (unsigned int i = 0; i < x.n_cols; ++i)
         spanVec(i) = arma::dot(x.col(i), y);
@@ -34,7 +84,7 @@ arma::vec updateBH_cpp(const arma::mat x_,
 {
     // update cumulative baseline harzard
     // update the increment h_j in the cumulative baseline hazard in each interval
-    
+
     arma::vec xbeta_ = x_ * beta_;
     xbeta_.elem(arma::find(xbeta_ > 700)).fill(700.);
     arma::vec h_rate = c0_ + sumMatProdVec(ind_r_d_, arma::exp( xbeta_ ));
@@ -60,19 +110,19 @@ Rcpp::List updateBH_list_cpp(const Rcpp::List x_,
 {
     // update cumulative baseline harzard
     // update the increment h_j in the cumulative baseline hazard in each interval
-    
-    int S = J_.size();
+
+    unsigned int S = J_.size();
     Rcpp::List h_(S);
-    
+
     for (unsigned int g = 0; g < S; ++g)
     {
         arma::mat x_tmp = x_[g];
         arma::vec beta_tmp = beta_[g];
-        int J_tmp = J_[g];
+        unsigned int J_tmp = J_[g];
         arma::mat ind_r_d_tmp = ind_r_d_[g];
         arma::vec hPriorSh_tmp = hPriorSh_[g];
         arma::vec d_tmp = d_[g];
-        
+
         arma::vec xbeta_ = x_tmp * beta_tmp;
         xbeta_.elem(arma::find(xbeta_ > 700)).fill(700.);
         arma::vec h_rate = c0_ + sumMatProdVec(ind_r_d_tmp, arma::exp( xbeta_ ));
@@ -80,10 +130,10 @@ Rcpp::List updateBH_list_cpp(const Rcpp::List x_,
         arma::vec h_tmp = arma::zeros<arma::vec>(J_tmp);
         for (unsigned int j = 0; j < J_tmp; ++j)
             h_tmp(j) = arma::randg(arma::distr_param(hPriorSh_tmp(j) + d_tmp(j), 1. / h_rate(j)));
-        
+
         h_[g] = h_tmp;
     }
-    
+
     return h_;
 }
 
@@ -99,32 +149,32 @@ Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
                                 const arma::mat ind_d_)
 {
     // subfunction to update joint posterior distribution
-    
+
     arma::vec xbeta_ = x_ * beta_;
     xbeta_.elem(arma::find(xbeta_ > 700)).fill(700.);
     arma::vec exp_xbeta = arma::exp(xbeta_);
-    
+
     double first_sum_ini = arma::accu(-h_ % sumMatProdVec(ind_r_d_, exp_xbeta));
-    
+
     arma::mat h_exp_xbeta_mat = -arma::kron(exp_xbeta, h_.t());
     h_exp_xbeta_mat.elem(arma::find(h_exp_xbeta_mat > -1.0e-7)).fill(-1.0e-7);
     h_exp_xbeta_mat = arma::log(1.0 - arma::exp(h_exp_xbeta_mat));
     // double second_sum_ini = arma::accu(arma::sum((h_exp_xbeta_mat % ind_d_).t(), 1));
     double second_sum_ini = arma::accu(h_exp_xbeta_mat % ind_d_);
     double loglike1 = first_sum_ini + second_sum_ini;
-    
+
     double logpriorBeta1 = 0.;
     for (unsigned int j = 0; j < beta_.size(); ++j)
     {
         logpriorBeta1 += arma::log_normpdf( beta_(j), 0.0, cbtau(j) );
     }
-    
+
     double logpriorH1 = 0.;
     for (unsigned int j = 0; j < h_.size(); ++j)
     {
         logpriorH1 += R::dgamma( h_(j), hPriorSh_(j), 1. / c0_, true );
     }
-    
+
     return Rcpp::List::create(
                               Rcpp::Named("loglike1") = loglike1,
                               Rcpp::Named("logpriorBeta1") = logpriorBeta1,
@@ -148,15 +198,15 @@ Rcpp::List updateRP_genomic_cpp(const unsigned int p,
                                 const double cb)
 {
     // update coefficients of genomic variables via a MH sampler
-    
+
     arma::uvec updatej = arma::randperm(p);
-    
+
     arma::vec xbeta_ = x_ * be_;
     arma::vec sd_be_ = arma::ones<arma::vec>(ga_.n_elem);
     sd_be_.elem(arma::find(ga_ == 1.)).fill(cb);
     sd_be_ = sd_be_ * tau;
     arma::uvec sampleRPg_accept_ = arma::zeros<arma::uvec>(p);
-    
+
     unsigned int j = 0;
     for (unsigned int j_id = 0; j_id < p; ++j_id)
     {
@@ -243,7 +293,7 @@ Rcpp::List updateRP_genomic_cpp(const unsigned int p,
             sampleRPg_accept_(j) = sampleRPg_accept_(j) + 1;
         }
     }
-    
+
     return Rcpp::List::create(
         Rcpp::Named("be.ini") = be_,
         Rcpp::Named("acceptl") = sampleRPg_accept_

@@ -1,4 +1,3 @@
-#include <thread>
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -27,7 +26,7 @@ arma::mat construct_G_MRF(arma::mat G, arma::vec b, uint S, int p, bool MRF_2b) 
     }
   } else {
     // one value for b in MRF prior for all subgraphs
-    G_MRF = b[0] * G;
+    G_MRF = b(0) * G;
   }
   return G_MRF;
 }
@@ -59,7 +58,7 @@ Rcpp::List func_MCMC_graph_cpp(
   Rcpp::List C = Rcpp::as<Rcpp::List>(ini["C.ini"]);
 
   Rcpp::List gamma_ini_list = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
-  arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]);
+  arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // FIXME: use list_to_matrix() and change with S
 
   if (MRF_2b) {
     // two different values for b in MRF prior for subgraphs G_ss and G_rs
@@ -84,7 +83,6 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::mat S_g = SSig[g];
     arma::mat Sig_g = Sig[g];
 
-    // TODO: code i loop through genes
     for (arma::uword i = 0; i < p; i++) {
       arma::uvec ind_noi = arma::regspace<arma::uvec>(0, p - 1);
       ind_noi.shed_row(i);
@@ -117,7 +115,6 @@ Rcpp::List func_MCMC_graph_cpp(
       C_g(i, i) = gam + c;
 
       // Below updating covariance matrix according to one-column change of precision matrix
-      // invC11beta <- invC11 %*% beta
 
       arma::mat invC11beta = invC11 * beta;
 
