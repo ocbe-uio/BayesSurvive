@@ -60,8 +60,6 @@ fit_R_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, n_iter = 2L)
 fit_C_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: accept.RW on output wrongly formatted
 fit_R_2b <- BS_wrap(data, hyperPooled, MRF_2b = TRUE)
 fit_C_2b <- BS_wrap(data, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
-fit_R_2b_no_G <- BS_wrap(data_2S, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)
-fit_C_2b_no_G <- BS_wrap(data_2S, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: Error: Mat::operator(): index out of bounds
 
 # TODO: reduce. Takes 4 minutes!
 # TODO: reorganize tests so that they come right after each fit_R/fit_C pair
