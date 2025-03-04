@@ -15,7 +15,6 @@ data_2S <- list(
 # Run a Bayesian Cox model
 
 ## Initial value: null model without covariates
-initial <- list("gamma.ini" = rep(0, ncol(data$X)))
 
 # Prior parameters
 hyperPooled = list(
@@ -33,9 +32,10 @@ hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 # Run a 'Pooled' Bayesian Cox model with graphical learning
 
 set.seed(715074)
-BayesSurvive_wrap <- function(
-  data, initial, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
-  MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE
+BS_wrap <- function(
+  data, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
+  MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE,
+  initial = list("gamma.ini" = rep(0, 200))
   ) {
   if (!MRF_G) {
     if (!is.null(names(data))) {
@@ -52,16 +52,16 @@ BayesSurvive_wrap <- function(
     burnin = floor(n_iter / 2), cpp = use_cpp
   )
 }
-fit_R <- BayesSurvive_wrap(data, initial, hyperPooled)
-fit_C <- BayesSurvive_wrap(data, initial, hyperPooled, use_cpp = TRUE)
-fit_R2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL")
-fit_C2S <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
-fit_R_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, n_iter = 2L)
-fit_C_noMRFG <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: accept.RW on output wrongly formatted
-fit_R_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE)
-fit_C_2b <- BayesSurvive_wrap(data, initial, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
-fit_R_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)
-fit_C_2b_no_G <- BayesSurvive_wrap(data_2S, initial, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: Error: Mat::operator(): index out of bounds
+fit_R <- BS_wrap(data, hyperPooled)
+fit_C <- BS_wrap(data, hyperPooled, use_cpp = TRUE)
+fit_R2S <- BS_wrap(data_2S, hyperPooled_2S, "CoxBVSSL")
+fit_C2S <- BS_wrap(data_2S, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
+fit_R_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, n_iter = 2L)
+fit_C_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: accept.RW on output wrongly formatted
+fit_R_2b <- BS_wrap(data, hyperPooled, MRF_2b = TRUE)
+fit_C_2b <- BS_wrap(data, hyperPooled, MRF_2b = TRUE, use_cpp = TRUE)
+fit_R_2b_no_G <- BS_wrap(data_2S, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, n_iter = 2L)
+fit_C_2b_no_G <- BS_wrap(data_2S, hyperPooled_2S, MRF_2b = TRUE, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: Error: Mat::operator(): index out of bounds
 
 # TODO: reduce. Takes 4 minutes!
 # TODO: reorganize tests so that they come right after each fit_R/fit_C pair
