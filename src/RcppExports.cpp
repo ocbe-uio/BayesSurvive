@@ -12,7 +12,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // UpdateGamma_cpp
-Rcpp::List UpdateGamma_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const uint S, const std::string method, const bool MRF_G, const bool MRF_2b);
+Rcpp::List UpdateGamma_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const unsigned int S, const std::string method, const bool MRF_G, const bool MRF_2b);
 RcppExport SEXP _BayesSurvive_UpdateGamma_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_GSEXP, SEXP MRF_2bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -20,7 +20,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List >::type sobj(sobjSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type hyperpar(hyperparSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type ini(iniSEXP);
-    Rcpp::traits::input_parameter< const uint >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type S(SSEXP);
     Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< const bool >::type MRF_G(MRF_GSEXP);
     Rcpp::traits::input_parameter< const bool >::type MRF_2b(MRF_2bSEXP);
@@ -29,7 +29,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // UpdateRPlee11_cpp
-Rcpp::List UpdateRPlee11_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const uint S, const std::string method, const bool MRF_G);
+Rcpp::List UpdateRPlee11_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const unsigned int S, const std::string method, const bool MRF_G);
 RcppExport SEXP _BayesSurvive_UpdateRPlee11_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_GSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -37,7 +37,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List >::type sobj(sobjSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type hyperpar(hyperparSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type ini(iniSEXP);
-    Rcpp::traits::input_parameter< const uint >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type S(SSEXP);
     Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< const bool >::type MRF_G(MRF_GSEXP);
     rcpp_result_gen = Rcpp::wrap(UpdateRPlee11_cpp(sobj, hyperpar, ini, S, method, MRF_G));
@@ -45,7 +45,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // func_MCMC_graph_cpp
-Rcpp::List func_MCMC_graph_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const uint S, const std::string method, const bool MRF_2b);
+Rcpp::List func_MCMC_graph_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const unsigned int S, const std::string method, const bool MRF_2b);
 RcppExport SEXP _BayesSurvive_func_MCMC_graph_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_2bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -53,7 +53,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Rcpp::List >::type sobj(sobjSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type hyperpar(hyperparSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type ini(iniSEXP);
-    Rcpp::traits::input_parameter< const uint >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type S(SSEXP);
     Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
     Rcpp::traits::input_parameter< const bool >::type MRF_2b(MRF_2bSEXP);
     rcpp_result_gen = Rcpp::wrap(func_MCMC_graph_cpp(sobj, hyperpar, ini, S, method, MRF_2b));

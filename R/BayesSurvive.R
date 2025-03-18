@@ -23,10 +23,10 @@
 #' is the list of \code{t}, \code{di} and \code{X}
 #' @param MRF2b logical value. \code{MRF2b = TRUE} means two different
 #' hyperparameters b in MRF prior (values b01 and b02) and \code{MRF2b = FALSE}
-#' means one hyperparamter b in MRF prior
+#' means one hyperparameter b in MRF prior
 #' @param MRF.G logical value. \code{MRF.G = TRUE} is to fix the MRF graph which
 #' is provided in the argument \code{hyperpar}, and \code{MRF.G = FALSE} is to
-#' use graphical model for leanring the MRF graph
+#' use graphical model for learning the MRF graph
 #' @param g.ini initial values for latent edge inclusion indicators in graph,
 #' should be a value in [0,1]. 0 or 1: set all random edges to 0 or 1; value in
 #' (0,1): rate of indicators randomly set to 1, the remaining indicators are 0
@@ -39,7 +39,7 @@
 #' @param output_graph_para allow (\code{TRUE}) or suppress (\code{FALSE}) the
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF.G = FALSE}
-#' @param verbose logical value to display the progess of MCMC
+#' @param verbose logical value to display the progress of MCMC
 #' @param cpp logical, whether to use C++ code for faster computation
 #'
 #'
@@ -183,7 +183,7 @@ BayesSurvive <- function(survObj,
   # check the formula
   cl <- match.call()
 
-  # set hyperparamters of all piors
+  # set hyperparameters of all piors
 
   if (model.type == "Sub-struct" && S > 1) {
     MRF2b <- TRUE

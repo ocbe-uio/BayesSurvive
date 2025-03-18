@@ -22,7 +22,7 @@ Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
 Suggests: knitr, testthat, Matrix
 LazyData: true
 NeedsCompilation: yes
-Packaged: 2025-03-18 10:13:54 UTC; zhiz
+Packaged: 2025-03-18 13:46:14 UTC; zhiz
 Author: Zhi Zhao [aut, cre],
   Waldir Leoncio [aut],
   Katrin Madjar [aut],

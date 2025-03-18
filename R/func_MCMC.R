@@ -22,11 +22,11 @@
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
 #' @param MRF_G logical value. \code{MRF_G = TRUE} is to fix the MRF graph which
 #' is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
-#' use graphical model for leanring the MRF graph
+#' use graphical model for learning the MRF graph
 #' @param output_graph_para allow (\code{TRUE}) or suppress (\code{FALSE}) the
 #' output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 #' if \code{MRF_G = FALSE}
-#' @param verbose logical value to display the progess of MCMC
+#' @param verbose logical value to display the progress of MCMC
 #' @inheritParams BayesSurvive
 #'
 #' @return A list object saving the MCMC results with components including

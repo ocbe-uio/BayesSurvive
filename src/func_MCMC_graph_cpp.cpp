@@ -1,21 +1,21 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-arma::mat construct_G_MRF(arma::mat G, arma::vec b, uint S, int p, bool MRF_2b) {
+arma::mat construct_G_MRF(arma::mat G, arma::vec b, unsigned int S, int p, bool MRF_2b) {
   arma::mat G_MRF(G.n_rows, G.n_cols);
   if (MRF_2b) {
     // TODO: develop test for this case. Off-by-one minefield!
     // two different values for b in MRF prior for subgraphs G_ss and G_rs
     arma::uvec p_seq = arma::regspace<arma::uvec>(0, p - 1);
-    for (uint g = 0; g < S; g++) {
+    for (unsigned int g = 0; g < S; g++) {
       // b1 * G_ss
       arma::uvec g_seq(p, arma::fill::value(g * p));
       arma::uvec idx = g_seq + p_seq;
       G_MRF.submat(idx, idx) *= b(0);
     }
-    for (uint g = 0; g < S - 1; g++) {
+    for (unsigned int g = 0; g < S - 1; g++) {
       // b2 * G_rs
-      for (uint r = g; r < S - 1; r++) {
+      for (unsigned int r = g; r < S - 1; r++) {
         arma::uvec g_seq(p, arma::fill::value(g * p));
         arma::uvec r_seq(p, arma::fill::value(r * p));
         arma::uvec idx = g_seq + p_seq;
@@ -36,13 +36,13 @@ Rcpp::List func_MCMC_graph_cpp(
   const Rcpp::List sobj,
   const Rcpp::List hyperpar,
   const Rcpp::List ini,
-  const uint S,
+  const unsigned int S,
   const std::string method,
   const bool MRF_2b
 ) {
   // Extracting data
   Rcpp::List n = sobj["n"];
-  uint p = Rcpp::as<uint>(sobj["p"]);
+  unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   Rcpp::List SSig = sobj["SSig"];
 
   double pii = Rcpp::as<double>(hyperpar["pi.G"]);
@@ -71,7 +71,7 @@ Rcpp::List func_MCMC_graph_cpp(
   // Update of precision matrix and graph within each subgroup
   // (analogous to SSSL algorithm for concentration (precision) graph models in
   // function 'BayesGGM_SSVS_FixedV0V1' (Wang, 2015))
-  for (uint g = 0; g < S; g++) { // loop through subgroups
+  for (unsigned int g = 0; g < S; g++) { // loop through subgroups
     arma::mat V_g = V[g];
     arma::mat C_g = C[g];
 
@@ -79,7 +79,7 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::uvec g_seq(p, arma::fill::value(g * p));
     arma::uvec idx = g_seq + p_seq;
     arma::mat G_g = G.submat(idx, idx);
-    uint n_g = Rcpp::as<uint>(n[g]);
+    unsigned int n_g = Rcpp::as<unsigned int>(n[g]);
     arma::mat S_g = SSig[g];
     arma::mat Sig_g = Sig[g];
 

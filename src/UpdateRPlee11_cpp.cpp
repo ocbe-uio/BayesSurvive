@@ -7,11 +7,11 @@ Rcpp::List UpdateRPlee11_cpp(
   const Rcpp::List sobj,
   const Rcpp::List hyperpar,
   const Rcpp::List ini,
-  const uint S,
+  const unsigned int S,
   const std::string method,
   const bool MRF_G
 ){
-  uint p = Rcpp::as<uint>(sobj["p"]);
+  unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
 
@@ -30,13 +30,13 @@ Rcpp::List UpdateRPlee11_cpp(
 
   if (method == "Pooled" && MRF_G) {
     arma::field<arma::vec> h(S);
-    uint n = Rcpp::as<uint>(sobj["n"]);
+    unsigned int n = Rcpp::as<unsigned int>(sobj["n"]);
     arma::cube x(n, p, S, arma::fill::zeros);
     x.slice(0) = Rcpp::as<arma::mat>(sobj["X"]);
     be_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
     ga_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
 
-    J(0) = Rcpp::as<uint>(hyperpar["J"]);
+    J(0) = Rcpp::as<unsigned int>(hyperpar["J"]);
     ind_r(0) = Rcpp::as<arma::mat>(hyperpar["ind.r"]);
     ind_d(0) = Rcpp::as<arma::mat>(hyperpar["ind.d"]);
     ind_r_d(0) = Rcpp::as<arma::mat>(hyperpar["ind.r_d"]);
@@ -67,7 +67,7 @@ Rcpp::List UpdateRPlee11_cpp(
     be_ini = list_to_matrix(ini["beta.ini"]);
     be_prop_sd_scale = list_to_vector(hyperpar["be.prop.sd.scale"]);
     ga_ini = list_to_matrix(ini["gamma.ini"]);
-    for (uint g = 0; g < S; ++g) { // loop through subgroups
+    for (unsigned int g = 0; g < S; ++g) { // loop through subgroups
       double be_prop_sd_scale_value = be_prop_sd_scale(g);
       h(g) = Rcpp::as<arma::vec>(h_list[g]);
       ind_r(g) = Rcpp::as<arma::mat>(ind_r_list[g]);

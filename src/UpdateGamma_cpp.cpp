@@ -34,7 +34,7 @@ Rcpp::List UpdateGamma_cpp(
   const Rcpp::List sobj,
   const Rcpp::List hyperpar,
   const Rcpp::List ini,
-  const uint S,
+  const unsigned int S,
   const std::string method,
   const bool MRF_G,
   const bool MRF_2b
@@ -42,7 +42,7 @@ Rcpp::List UpdateGamma_cpp(
   // Update latent variable selection indicators gamma with either independent
   // Bernoulli prior (standard approaches) or with MRF prior.
 
-  uint p = Rcpp::as<uint>(sobj["p"]);
+  unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
   double pi = Rcpp::as<double>(hyperpar["pi.ga"]);

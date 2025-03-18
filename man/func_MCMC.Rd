@@ -44,13 +44,13 @@ Default is 0}
 
 \item{MRF_G}{logical value. \code{MRF_G = TRUE} is to fix the MRF graph which
 is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
-use graphical model for leanring the MRF graph}
+use graphical model for learning the MRF graph}
 
 \item{output_graph_para}{allow (\code{TRUE}) or suppress (\code{FALSE}) the
 output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF_G = FALSE}}
 
-\item{verbose}{logical value to display the progess of MCMC}
+\item{verbose}{logical value to display the progress of MCMC}
 
 \item{cpp}{logical, whether to use C++ code for faster computation}
 }

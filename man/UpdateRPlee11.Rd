@@ -21,7 +21,7 @@ UpdateRPlee11(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE)
 
 \item{MRF_G}{logical value. \code{MRF_G = TRUE} is to fix the MRF graph which
 is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
-use graphical model for leanring the MRF graph}
+use graphical model for learning the MRF graph}
 
 \item{cpp}{logical, whether to use C++ code for faster computation}
 }

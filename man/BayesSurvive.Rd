@@ -35,11 +35,11 @@ is the list of \code{t}, \code{di} and \code{X}}
 
 \item{MRF2b}{logical value. \code{MRF2b = TRUE} means two different
 hyperparameters b in MRF prior (values b01 and b02) and \code{MRF2b = FALSE}
-means one hyperparamter b in MRF prior}
+means one hyperparameter b in MRF prior}
 
 \item{MRF.G}{logical value. \code{MRF.G = TRUE} is to fix the MRF graph which
 is provided in the argument \code{hyperpar}, and \code{MRF.G = FALSE} is to
-use graphical model for leanring the MRF graph}
+use graphical model for learning the MRF graph}
 
 \item{g.ini}{initial values for latent edge inclusion indicators in graph,
 should be a value in [0,1]. 0 or 1: set all random edges to 0 or 1; value in
@@ -60,7 +60,7 @@ Default is 0}
 output for parameters 'G', 'V', 'C' and 'Sig' in the graphical model
 if \code{MRF.G = FALSE}}
 
-\item{verbose}{logical value to display the progess of MCMC}
+\item{verbose}{logical value to display the progress of MCMC}
 
 \item{cpp}{logical, whether to use C++ code for faster computation}
 }

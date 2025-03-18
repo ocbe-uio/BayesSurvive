@@ -16,7 +16,7 @@
 #' \code{c("Pooled", "CoxBVSSL", "Sub-struct", "Subgroup")}
 #' @param MRF_G logical value. \code{MRF_G = TRUE} is to fix the MRF graph which
 #' is provided in the argument \code{hyperpar}, and \code{MRF_G = FALSE} is to
-#' use graphical model for leanring the MRF graph
+#' use graphical model for learning the MRF graph
 #' @param MRF_2b two different b in MRF prior for subgraphs G_ss and G_rs
 #' @inheritParams func_MCMC
 #'
