@@ -53,7 +53,7 @@ Rcpp::List UpdateGamma_cpp(
   arma::mat gamma_ini = list_to_matrix(ini["gamma.ini"]);
 
   arma::mat G_ini = arma::zeros<arma::mat>(p, p);
-  if (method == "Pooled" && MRF_G) {
+  if (method.compare("Pooled") && MRF_G) {
     // G_ini is not needed if method != "Pooled" and MRF_G
     G_ini = Rcpp::as<arma::mat>(hyperpar["G"]);
   } else if (!MRF_G) {
@@ -80,7 +80,7 @@ Rcpp::List UpdateGamma_cpp(
   }
 
   arma::mat post_gamma(S, p, arma::fill::zeros);
-  if (method == "Pooled" && MRF_G) {
+  if (method.compare("Pooled") && MRF_G) {
     for (arma::uword j = 0; j < p; j++) {
       // FIXME: why are indices flipped here w.r.t. the other cases?
       double beta = beta_ini(0, j);

@@ -142,8 +142,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // calJpost_helper_cpp
-Rcpp::List calJpost_helper_cpp(const arma::vec cbtau, const arma::mat x_, const arma::vec beta_, const arma::vec h_, const arma::vec hPriorSh_, const double c0_, const unsigned int J_, const arma::mat ind_r_d_, const arma::mat ind_d_);
-RcppExport SEXP _BayesSurvive_calJpost_helper_cpp(SEXP cbtauSEXP, SEXP x_SEXP, SEXP beta_SEXP, SEXP h_SEXP, SEXP hPriorSh_SEXP, SEXP c0_SEXP, SEXP J_SEXP, SEXP ind_r_d_SEXP, SEXP ind_d_SEXP) {
+Rcpp::List calJpost_helper_cpp(const arma::vec cbtau, const arma::mat x_, const arma::vec beta_, const arma::vec h_, const arma::vec hPriorSh_, const double c0_, const arma::mat ind_r_d_, const arma::mat ind_d_);
+RcppExport SEXP _BayesSurvive_calJpost_helper_cpp(SEXP cbtauSEXP, SEXP x_SEXP, SEXP beta_SEXP, SEXP h_SEXP, SEXP hPriorSh_SEXP, SEXP c0_SEXP, SEXP ind_r_d_SEXP, SEXP ind_d_SEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -153,10 +153,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const arma::vec >::type h_(h_SEXP);
     Rcpp::traits::input_parameter< const arma::vec >::type hPriorSh_(hPriorSh_SEXP);
     Rcpp::traits::input_parameter< const double >::type c0_(c0_SEXP);
-    Rcpp::traits::input_parameter< const unsigned int >::type J_(J_SEXP);
     Rcpp::traits::input_parameter< const arma::mat >::type ind_r_d_(ind_r_d_SEXP);
     Rcpp::traits::input_parameter< const arma::mat >::type ind_d_(ind_d_SEXP);
-    rcpp_result_gen = Rcpp::wrap(calJpost_helper_cpp(cbtau, x_, beta_, h_, hPriorSh_, c0_, J_, ind_r_d_, ind_d_));
+    rcpp_result_gen = Rcpp::wrap(calJpost_helper_cpp(cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_));
     return rcpp_result_gen;
 END_RCPP
 }

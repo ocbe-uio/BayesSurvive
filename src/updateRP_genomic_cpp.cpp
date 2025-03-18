@@ -43,8 +43,8 @@ arma::vec updateBH_cpp(const arma::mat x_,
     arma::vec h_ = arma::zeros<arma::vec>(J_);
     for (unsigned int j = 0; j < J_; ++j)
         // double h_rate = c0_ + arma::dot( ind_r_d_.col(j), arma::exp( xbeta_ ) );
-        h_(j) = arma::randg(arma::distr_param(hPriorSh_(j) + d_(j), 1. / h_rate(j)));
-    // h_(j) = R::rgamma( shape(j), 1. / h_rate(j) );
+        // h_(j) = arma::randg(arma::distr_param(hPriorSh_(j) + d_(j), 1. / h_rate(j)));
+        h_(j) = R::rgamma( hPriorSh_(j) + d_(j), 1. / h_rate(j) );
 
     return h_;
 }
@@ -94,7 +94,6 @@ Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
                                 const arma::vec h_,
                                 const arma::vec hPriorSh_,
                                 const double c0_,
-                                const unsigned int J_,
                                 const arma::mat ind_r_d_,
                                 const arma::mat ind_d_)
 {
@@ -116,7 +115,8 @@ Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
     double logpriorBeta1 = 0.;
     for (unsigned int j = 0; j < beta_.size(); ++j)
     {
-        logpriorBeta1 += arma::log_normpdf( beta_(j), 0.0, cbtau(j) );
+        // logpriorBeta1 += arma::log_normpdf( beta_(j), 0.0, cbtau(j) );
+        logpriorBeta1 += R::dnorm( beta_(j), 0.0, cbtau(j), true);
     }
 
     double logpriorH1 = 0.;
@@ -239,8 +239,8 @@ Rcpp::List updateRP_genomic_cpp(const unsigned int p,
         be_prop = be_;
 
         // genomic version:
-        // be_prop(j) = R::rnorm( be_prop_me, be_prop_sd );
-        be_prop(j) = arma::randn(arma::distr_param(be_prop_me, be_prop_sd));
+        be_prop(j) = R::rnorm( be_prop_me, be_prop_sd );
+        // be_prop(j) = arma::randn(arma::distr_param(be_prop_me, be_prop_sd));
         xbeta_prop = xbeta_ - x_.col(j) * be_(j) + x_.col(j) * be_prop(j);
         xbeta_prop.elem(arma::find(xbeta_prop > 700)).fill(700.);
         exp_xbeta_prop = arma::exp(xbeta_prop);
@@ -276,18 +276,18 @@ Rcpp::List updateRP_genomic_cpp(const unsigned int p,
         second_sum_prop = arma::sum((arma::log(D1_2nd_den_prop) % ind_d_).t(), 1);
         loglh_prop = arma::accu(-h_ % first_sum_prop + second_sum_prop);
 
-        /*logprior_prop = R::dnorm( be_prop(j), 0.0, sd_be_(j), true);
+        logprior_prop = R::dnorm( be_prop(j), 0.0, sd_be_(j), true);
         logprior_ini = R::dnorm( be_(j), 0.0, sd_be_(j), true);
         logprop_prop = R::dnorm( be_prop(j), be_prop_me_ini, be_prop_sd_ini, true);
-        logprop_ini = R::dnorm( be_(j), be_prop_me, be_prop_sd, true);*/
-        logprior_prop = arma::log_normpdf(be_prop(j), 0.0, sd_be_(j));
+        logprop_ini = R::dnorm( be_(j), be_prop_me, be_prop_sd, true);
+        /*logprior_prop = arma::log_normpdf(be_prop(j), 0.0, sd_be_(j));
         logprior_ini = arma::log_normpdf(be_(j), 0.0, sd_be_(j));
         logprop_prop = arma::log_normpdf(be_prop(j), be_prop_me_ini, be_prop_sd_ini);
-        logprop_ini = arma::log_normpdf(be_(j), be_prop_me, be_prop_sd);
+        logprop_ini = arma::log_normpdf(be_(j), be_prop_me, be_prop_sd);*/
         logR = loglh_prop - loglh_ini + logprior_prop - logprior_ini + logprop_ini - logprop_prop;
 
-        // if( log( R::runif(0., 1.) ) < logR )
-        if (log(arma::randu()) < logR)
+        if( log( R::runif(0., 1.) ) < logR )
+        // if (log(arma::randu()) < logR)
         {
             be_(j) = be_prop(j);
             xbeta_ = xbeta_prop;

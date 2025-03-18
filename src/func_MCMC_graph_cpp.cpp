@@ -1,7 +1,7 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-arma::mat construct_G_MRF(arma::mat G, arma::vec b, unsigned int S, int p, bool MRF_2b) {
+arma::mat construct_G_MRF(arma::mat G, arma::vec b, unsigned int S, unsigned int p, bool MRF_2b) {
   arma::mat G_MRF(G.n_rows, G.n_cols);
   if (MRF_2b) {
     // TODO: develop test for this case. Off-by-one minefield!
@@ -83,7 +83,7 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::mat S_g = SSig[g];
     arma::mat Sig_g = Sig[g];
 
-    for (arma::uword i = 0; i < p; i++) {
+    for (unsigned int i = 0; i < p; i++) {
       arma::uvec ind_noi = arma::regspace<arma::uvec>(0, p - 1);
       ind_noi.shed_row(i);
       arma::vec v_temp = V_g.submat(ind_noi, arma::uvec({i}));
@@ -129,7 +129,7 @@ Rcpp::List func_MCMC_graph_cpp(
         arma::vec beta2(p);
         beta2.elem(ind_noi) = beta;
 
-        for (arma::uword j = i + 1; j < p; j++) {
+        for (unsigned int j = i + 1; j < p; j++) {
           // G where g_ss,ij=1 or 0:
           arma::mat G_prop1 = G_MRF;
           arma::mat G_prop0 = G_MRF;
@@ -153,7 +153,7 @@ Rcpp::List func_MCMC_graph_cpp(
 
           double w = exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max));
 
-          bool z = Rcpp::runif(1)[0] < w;
+          bool z = R::runif(0.0, 1.0) < w;
           double v = z ? v1 : v0;
           V_g(j, i) = v;
           V_g(i, j) = v;

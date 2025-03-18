@@ -28,7 +28,7 @@ Rcpp::List UpdateRPlee11_cpp(
 
   Rcpp::List erg;
 
-  if (method == "Pooled" && MRF_G) {
+  if (method.compare("Pooled") && MRF_G) {
     arma::field<arma::vec> h(S);
     unsigned int n = Rcpp::as<unsigned int>(sobj["n"]);
     arma::cube x(n, p, S, arma::fill::zeros);

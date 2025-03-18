@@ -186,7 +186,7 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
     cbtau <- tau * ifelse(gamma.ini == 1, cb, 1)
 
     # erg <- calJpost.helper(cbtau, X, beta.ini, h, hPriorSh, c0, n, p, J, ind.r_d, ind.d)
-    erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, J, ind.r_d, ind.d)
+    erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, ind.r_d, ind.d)
     loglike <- erg$loglike1
     logpriorBeta <- erg$logpriorBeta1
     logpriorH <- erg$logpriorH1
@@ -211,7 +211,7 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
       cbtau <- tau * ifelse(gamma.ini == 1, cb, 1)
 
       # erg <- calJpost.helper(cbtau, X, beta.ini, h, hPriorSh, c0, n, p, J, ind.r_d, ind.d)
-      erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, J, ind.r_d, ind.d)
+      erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, ind.r_d, ind.d)
       loglike[g] <- erg$loglike1
       logpriorBeta[g] <- erg$logpriorBeta1
       logpriorH[g] <- erg$logpriorH1
