@@ -33,10 +33,9 @@ hyperPooled_2S$G <- Matrix::bdiag(simData$G, simData$G)
 
 set.seed(715074)
 BS_wrap <- function(
-  data, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
-  MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE,
-  initial = list("gamma.ini" = rep(0, 200))
-  ) {
+    data, hyper, model = "Pooled", use_cpp = FALSE, n_iter = 5,
+    MRF_G = TRUE, MRF_2b = FALSE, verbose = FALSE,
+    initial = list("gamma.ini" = rep(0, 200))) {
   if (!MRF_G) {
     if (!is.null(names(data))) {
       data <- list(data)

@@ -28,9 +28,5 @@ bibentry(bibtype = "Misc",
   year = "2025",
   note = "arXiv:2503.13078",
   doi  = "10.48550/arXiv.2503.13078",
-  eprint      = {2503.13078},
-  archivePrefix      = {arXiv},
-  primaryClass       = {stat.ME},
-  url  = {https://arxiv.org/abs/2503.13078}, 
   header      = "To cite BayesSurvive in publications use:"
 )

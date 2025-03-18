@@ -113,7 +113,7 @@ hyperparPooled <- list(
 # run Bayesian Cox with graph-structured priors
 fit <- BayesSurvive(
   survObj = dataset, hyperpar = hyperparPooled,
-  initial = initial, nIter = 100
+  initial = initial, nIter = 50
 )
 
 # show posterior mean of coefficients and 95\% credible intervals

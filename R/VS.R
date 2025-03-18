@@ -12,7 +12,7 @@
 #' or a list consisting of matrices and arrays
 #' @param method variable selection method to choose from
 #' \code{c("CI", "SNC", "MPM", "FDR")}. Default is "FDR"
-#' @param threshold SNC threshold value (default 0.5) or the Bayesian expected 
+#' @param threshold SNC threshold value (default 0.5) or the Bayesian expected
 #' false discovery rate threshold (default 0.05)
 #' @param subgroup index(es) of subgroup(s) for visualizing variable selection
 #'
@@ -59,7 +59,7 @@
 #' # run Bayesian Cox with graph-structured priors
 #' fit <- BayesSurvive(
 #'   survObj = dataset, hyperpar = hyperparPooled,
-#'   initial = initial, nIter = 100, burnin = 50
+#'   initial = initial, nIter = 50, burnin = 30
 #' )
 #' # show variable selection
 #' VS(fit, method = "FDR")
@@ -92,11 +92,11 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     # for an input from "BayesSurvive"
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
-      
+
       for (l in seq_len(length(subgroup))) {
         betas <- coef.BayesSurvive(x,
-                                   type = "mean", CI = 95,
-                                   subgroup = subgroup[l]
+          type = "mean", CI = 95,
+          subgroup = subgroup[l]
         )
         ret[[l]] <- (betas$CI.lower > 0) | (betas$CI.upper < 0)
       }
@@ -127,15 +127,15 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
 
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
-      
+
       for (l in seq_len(length(subgroup))) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           x$output$beta.p <- x$output$beta.p[[subgroup[l]]]
         }
         beta_p <- x$output$beta.p[-(1:(x$input$burnin / x$input$thin + 1)), ]
-        
+
         ret[[l]] <- rep(FALSE, NCOL(beta_p))
-        
+
         for (j in seq_len(NCOL(beta_p))) {
           if (sum(abs(beta_p[, j]) > sd(beta_p[, j])) / NROW(beta_p) > threshold) {
             ret[[l]][j] <- TRUE
@@ -176,7 +176,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
   if (method == "MPM") {
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
-      
+
       for (l in seq_len(length(subgroup))) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           x$output$gamma.margin <- x$output$gamma.margin[[subgroup[l]]]
@@ -233,7 +233,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
         gammas_threshold <- sorted_gammas[thecut.index]
         ret_vec <- (gammas_vec > gammas_threshold)
       }
-      
+
       # reformat the results into a list
       for (l in seq_len(length(subgroup))) {
         if (x$input$S > 1 || !x$input$MRF.G) {
@@ -241,8 +241,8 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
         } else {
           gamma.hat <- x$output$gamma.margin
         }
-        ret[[l]] <- ret_vec[1:length(gamma.hat)]
-        ret_vec <- ret_vec[-c(1:length(gamma.hat))]
+        ret[[l]] <- ret_vec[seq_along(gamma.hat)]
+        ret_vec <- ret_vec[-c(seq_along(gamma.hat))]
       }
     } else {
       ret <- gammas <- rep(list(NULL), length(x))
@@ -289,7 +289,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       }
     }
   }
-  
+
   # unlist an one-component list
   if (length(ret) == 1) {
     ret <- unlist(ret)

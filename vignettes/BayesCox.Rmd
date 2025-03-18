@@ -1,5 +1,5 @@
 ---
-title: "Bayesian Cox Models with graph-structure priors"
+title: "Bayesian Cox models with graph-structured variable selection priors"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}

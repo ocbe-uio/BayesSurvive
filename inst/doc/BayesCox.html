@@ -12,7 +12,7 @@
 
 
 
-<title>Bayesian Cox Models with graph-structure priors</title>
+<title>Bayesian Cox models with graph-structured variable selection priors</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -336,18 +336,47 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 
-<h1 class="title toc-ignore">Bayesian Cox Models with graph-structure
-priors</h1>
+<h1 class="title toc-ignore">Bayesian Cox models with graph-structured
+variable selection priors</h1>
 
 
 
 <p>This is a R/Rcpp package <strong>BayesSurvive</strong> for Bayesian
 survival models with graph-structured selection priors for sparse
-identification of high-dimensional features predictive of survival (<a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z">Madjar
-et al., 2021</a>) and its extensions with the use of a fixed graph via a
-Markov Random Field (MRF) prior for capturing known structure of
-high-dimensional features, e.g. disease-specific pathways from the Kyoto
+identification of high-dimensional features predictive of survival (<a href="https://doi.org/10.48550/arXiv.2503.13078">Hermansen et al.,
+2025</a>; <a href="https://bmcbioinformatics.biomedcentral.com/articles/10.1186/s12859-021-04483-z">Madjar
+et al., 2021</a>) (see the three models of the first column in the table
+below) and its extensions with the use of a fixed graph via a Markov
+Random Field (MRF) prior for capturing known structure of
+high-dimensional features (see the three models of the second column in
+the table below), e.g. disease-specific pathways from the Kyoto
 Encyclopedia of Genes and Genomes (KEGG) database.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Model</th>
+<th>Infer <code>MRF_G</code></th>
+<th>Fix <code>MRF_G</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right"><code>Pooled</code></td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr class="even">
+<td align="right"><code>CoxBVSSL</code></td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr class="odd">
+<td align="right"><code>Sub-struct</code></td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+</tbody>
+</table>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
 <p>Install the latest released version from <a href="https://CRAN.R-project.org/package=BayesSurvive">CRAN</a></p>
@@ -462,6 +491,11 @@ learning</h3>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
+<blockquote>
+<p>Tobias Østmo Hermansen, Manuela Zucknick, Zhi Zhao (2025). Bayesian
+Cox model with graph-structured variable selection priors for
+multi-omics biomarker identification. <em>arXiv</em>. DOI: <a href="https://doi.org/10.48550/arXiv.2503.13078">arXiv.2503.13078</a>.</p>
+</blockquote>
 <blockquote>
 <p>Katrin Madjar, Manuela Zucknick, Katja Ickstadt, Jörg Rahnenführer
 (2021). Combining heterogeneous subgroups with graph‐structured variable
