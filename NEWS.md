@@ -1,20 +1,11 @@
-# BayesSurvive (development version)
+# BayesSurvive 0.1.0
 
-# BayesSurvive 0.0.5
-
-* Allow function `VS()` for an input with a matrix or array or a list consisting of matrices/arrays
-
-# BayesSurvive 0.0.4
-
-* Add units tests
+* Add test code
+* Translate R functions `func_MCMC_graph()`, `updateGamma()` and `UpdateRPlee11()` to C++ functions
+* Add `misc.cpp` including functions to convert `Rcpp::List` to armadillo vector, matrix or cube
+* Update function `VS()` to allow a matrix/array input and allow multiple subgroups
 * Rename the output of MPM coefficients in function `coef.BayesSurvive()`
-* Added `cpp` argument to `BayesSurvive()` to allow for faster computation using `Rcpp`
-* Added validation to some `BayesSurvive()` arguments
-* Allow function `VS()` for an input with a matrix or array or a list consisting of matrices/arrays
-
-# BayesSurvive 0.0.3
-
-* Add IPA in function `predict.BayesSurvive()`
+* Add the index of prediction accuracy (IPA) in function `predict.BayesSurvive()`
 
 # BayesSurvive 0.0.2
 

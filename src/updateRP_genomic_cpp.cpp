@@ -3,56 +3,6 @@
 
 #include "updateRP_genomic_cpp.h"
 
-double be_prop_me_ini = 0.;
-double be_prop_sd_ini = 0.;
-double D1 = 0.;
-double D2 = 0.;
-double D1_prop = 0.;
-double D2_prop = 0.;
-double loglh_ini = 0.;
-double loglh_prop = 0.;
-double logprior_prop = 0.;
-double logprior_ini = 0.;
-double logprop_prop = 0.;
-double logprop_ini = 0.;
-double logR = 0.;
-
-double be_prop_me = 1.;
-double be_prop_sd = 1.;
-
-arma::vec be_prop;
-arma::vec exp_xbeta;
-arma::mat h_exp_xbeta_mat;
-arma::mat h_exp_xbeta_prop_mat;
-arma::mat exp_h_exp_xbeta_mat;
-arma::mat exp_h_exp_xbeta_prop_mat;
-arma::vec first_sum;
-arma::vec second_sum;
-arma::vec first_sum_prop;
-arma::vec second_sum_prop;
-arma::vec x_exp_xbeta;
-arma::vec xbeta_prop;
-arma::vec exp_xbeta_prop;
-arma::vec x_exp_xbeta_prop;
-arma::vec x_sq_exp_xbeta;
-arma::vec x_sq_exp_xbeta_prop;
-arma::vec D1_1st;
-arma::vec D1_2nd;
-arma::vec D1_1st_prop;
-arma::vec D1_2nd_prop;
-arma::vec D2_1st;
-arma::vec D2_2nd;
-arma::vec D2_1st_prop;
-arma::vec D2_2nd_prop;
-arma::mat D1_2nd_den;
-arma::mat D1_2nd_num;
-arma::mat D1_2nd_den_prop;
-arma::mat D1_2nd_num_prop;
-arma::mat D2_2nd_num;
-arma::mat D2_2nd_den;
-arma::mat D2_2nd_den_prop;
-arma::mat D2_2nd_num_prop;
-
 arma::mat matProdVec(const arma::mat x, const arma::vec y)
 {
     // multiply (element-wise) a matrix to a expanded vector
@@ -210,6 +160,57 @@ Rcpp::List updateRP_genomic_cpp(const unsigned int p,
     unsigned int j = 0;
     for (unsigned int j_id = 0; j_id < p; ++j_id)
     {
+        // declare local variables
+        double be_prop_me_ini = 0.;
+        double be_prop_sd_ini = 0.;
+        double D1 = 0.;
+        double D2 = 0.;
+        double D1_prop = 0.;
+        double D2_prop = 0.;
+        double loglh_ini = 0.;
+        double loglh_prop = 0.;
+        double logprior_prop = 0.;
+        double logprior_ini = 0.;
+        double logprop_prop = 0.;
+        double logprop_ini = 0.;
+        double logR = 0.;
+
+        double be_prop_me = 1.;
+        double be_prop_sd = 1.;
+
+        arma::vec be_prop;
+        arma::vec exp_xbeta;
+        arma::mat h_exp_xbeta_mat;
+        arma::mat h_exp_xbeta_prop_mat;
+        arma::mat exp_h_exp_xbeta_mat;
+        arma::mat exp_h_exp_xbeta_prop_mat;
+        arma::vec first_sum;
+        arma::vec second_sum;
+        arma::vec first_sum_prop;
+        arma::vec second_sum_prop;
+        arma::vec x_exp_xbeta;
+        arma::vec xbeta_prop;
+        arma::vec exp_xbeta_prop;
+        arma::vec x_exp_xbeta_prop;
+        arma::vec x_sq_exp_xbeta;
+        arma::vec x_sq_exp_xbeta_prop;
+        arma::vec D1_1st;
+        arma::vec D1_2nd;
+        arma::vec D1_1st_prop;
+        arma::vec D1_2nd_prop;
+        arma::vec D2_1st;
+        arma::vec D2_2nd;
+        arma::vec D2_1st_prop;
+        arma::vec D2_2nd_prop;
+        arma::mat D1_2nd_den;
+        arma::mat D1_2nd_num;
+        arma::mat D1_2nd_den_prop;
+        arma::mat D1_2nd_num_prop;
+        arma::mat D2_2nd_num;
+        arma::mat D2_2nd_den;
+        arma::mat D2_2nd_den_prop;
+        arma::mat D2_2nd_num_prop;
+
         j = updatej(j_id);
         xbeta_.elem(arma::find(xbeta_ > 700)).fill(700.);
         exp_xbeta = arma::exp(xbeta_);
