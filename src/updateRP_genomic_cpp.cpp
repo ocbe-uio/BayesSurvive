@@ -79,7 +79,8 @@ Rcpp::List updateBH_list_cpp(const Rcpp::List x_,
 
         arma::vec h_tmp = arma::zeros<arma::vec>(J_tmp);
         for (unsigned int j = 0; j < J_tmp; ++j)
-            h_tmp(j) = arma::randg(arma::distr_param(hPriorSh_tmp(j) + d_tmp(j), 1. / h_rate(j)));
+            // h_tmp(j) = arma::randg(arma::distr_param(hPriorSh_tmp(j) + d_tmp(j), 1. / h_rate(j)));
+            h_tmp(j) = R::rgamma( hPriorSh_tmp(j) + d_tmp(j), 1. / h_rate(j) );
 
         h_[g] = h_tmp;
     }

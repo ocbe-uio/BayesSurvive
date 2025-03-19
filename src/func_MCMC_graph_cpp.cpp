@@ -95,13 +95,14 @@ Rcpp::List func_MCMC_graph_cpp(
       arma::mat invC11 = Sig11 - Sig12 * Sig12.t() / Sig_g(i, i);
 
       // C^(-1)
-      arma::mat Ci = (S_g(i, i) + lambda) * invC11 + arma::diagmat(1 / v_temp);
+      arma::mat Ci = (S_g(i, i) + lambda) * invC11 + arma::diagmat(1. / v_temp);
 
       Ci = 0.5 * (Ci + Ci.t());
       arma::mat Ci_chol = arma::chol(Ci);
 
       arma::mat mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
-      arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
+      // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
+      arma::mat beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1)));
 
       // Update of last column in Omega_gg
       C_g.submat(ind_noi, arma::uvec({i})) = beta;
@@ -109,7 +110,8 @@ Rcpp::List func_MCMC_graph_cpp(
 
       double a_gam = 0.5 * n_g + 1;
       double b_gam = (S_g(i, i) + lambda) * 0.5;
-      double gam = arma::as_scalar(arma::randg(1, arma::distr_param(a_gam, 1 / b_gam)));
+      // double gam = arma::as_scalar(arma::randg(1, arma::distr_param(a_gam, 1 / b_gam)));
+      double gam = R::rgamma( a_gam, 1. / b_gam );
 
       double c = arma::as_scalar(beta.t() * invC11 * beta);
       C_g(i, i) = gam + c;
