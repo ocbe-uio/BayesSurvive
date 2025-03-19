@@ -42,7 +42,7 @@ Rcpp::List UpdateGamma_cpp(
   // Update latent variable selection indicators gamma with either independent
   // Bernoulli prior (standard approaches) or with MRF prior.
 
-  std::cout << "...debug0\n";
+  // std::cout << "...debug0\n";
   unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
@@ -50,25 +50,25 @@ Rcpp::List UpdateGamma_cpp(
   double a = Rcpp::as<double>(hyperpar["a"]);
   arma::rowvec b = arma::rowvec(p, arma::fill::value(Rcpp::as<double>(hyperpar["b"])));
 
-  std::cout << "...debug2\n";
+  // std::cout << "...debug2\n";
   arma::mat beta_ini = arma::zeros<arma::mat>(p, S);
   arma::mat gamma_ini = arma::zeros<arma::mat>(p, S);
   if (!Rf_isNewList(ini["beta.ini"])) {
   // if (S == 1) {
-    std::cout << "...debug200" << "\n";
+    // // std::cout << "...debug200" << "\n";
     beta_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
     gamma_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
   } else {
-    std::cout << "...debug22" << "\n";
-    Rcpp::List r_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
-    int n_cols = r_list.size();
-    int n_rows = Rcpp::as<arma::vec>(r_list[0]).n_elem;
-    std::cout << "; n_cols=" << n_cols << "; n_rows=" << n_rows << "\n";
+    // // std::cout << "...debug22" << "\n";
+    // Rcpp::List r_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
+    // int n_cols = r_list.size();
+    // int n_rows = Rcpp::as<arma::vec>(r_list[0]).n_elem;
+    // // std::cout << "; n_cols=" << n_cols << "; n_rows=" << n_rows << "\n";
     beta_ini = list_to_matrix(ini["beta.ini"]);
     gamma_ini = list_to_matrix(ini["gamma.ini"]);
   }
 
-  std::cout << "...debug3\n";
+  // std::cout << "...debug3\n";
   arma::mat G_ini = arma::zeros<arma::mat>(p * S, p * S);
   if (method == "Pooled" && MRF_G) {
     // G_ini is not needed if method != "Pooled" and MRF_G
@@ -77,7 +77,7 @@ Rcpp::List UpdateGamma_cpp(
     G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
   }
 
-  std::cout << "...debug4\n";
+  // std::cout << "...debug4\n";
   // two different b in MRF prior for subgraphs G_ss and G_rs
   if (MRF_2b && !MRF_G) {
     // TODO: test this case. Not default!
@@ -97,7 +97,7 @@ Rcpp::List UpdateGamma_cpp(
     G_ini *= b(0);
   }
 
-  std::cout << "...debug5\n";
+  // std::cout << "...debug5\n";
   arma::mat post_gamma = arma::zeros<arma::mat>(p, S);
   arma::mat ga_prop1 = arma::zeros<arma::mat>(p, S);
   arma::mat ga_prop0 = arma::zeros<arma::mat>(p, S);
@@ -124,7 +124,7 @@ Rcpp::List UpdateGamma_cpp(
     return out;
   } else {
 
-    std::cout << "...debug7 end\n";
+    // std::cout << "...debug7 end\n";
     if (MRF_G) {
       for (unsigned int g = 0; g < S; g++) { // loop through subgroups
         for (unsigned int j = 0; j < p; j++) {
@@ -138,7 +138,7 @@ Rcpp::List UpdateGamma_cpp(
       }
     } else { // CoxBVS-SL or Sub-struct model
       
-    std::cout << "...debug71 end\n";
+    // std::cout << "...debug71 end\n";
       for (unsigned int g = 0; g < S; g++) {
         for (unsigned int j = 0; j < p; j++) {
           double beta = beta_ini(j, g);
@@ -154,9 +154,9 @@ Rcpp::List UpdateGamma_cpp(
         }
       }
 
-    std::cout << "...debug72 end\n";
+    // std::cout << "...debug72 end\n";
     }
-    std::cout << "...debug8 end\n";
+    // std::cout << "...debug8 end\n";
     Rcpp::List out = Rcpp::List::create(
       Rcpp::Named("gamma.ini") = gamma_ini,// arma::trans(gamma_ini),
       Rcpp::Named("post.gamma") = post_gamma//arma::trans(post_gamma)
