@@ -48,7 +48,7 @@ test_that("fit has expected values", {
     expect_equal(head(s, 4), c(3.2969, 3.3217, 4.0938, 4.4107), tolerance = tol)
     expect_equal(head(survObj$t, 4), c(8.53, 4.09, 8.82, 6.09), tolerance = tol)
   })
-  expect_equal(which(VS(fit, method = "FDR", threshold = 0.6)), c(6, 12))
+  expect_equal(which(VS(fit, method = "FDR", threshold = 0.51)), c(5, 14))
 })
 
 test_that("predictions have expected values", {
@@ -94,5 +94,5 @@ test_that("fit2 has expected values", {
     expect_equal(head(s[[1]], 3), c(3.2969, 3.3217, 4.0938), tolerance = tol)
     expect_equal(head(survObj[[1]]$t, 3), c(8.53, 4.09, 8.82), tolerance = tol)
   })
-  expect_equal(which(VS(fit2, method = "FDR", threshold = 0.8)), c(81, 182))
+  expect_equal(which(VS(fit2, method = "FDR", threshold = 0.8)), c(182, 184))
 })

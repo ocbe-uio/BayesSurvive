@@ -178,13 +178,22 @@ func_MCMC <- function(survObj, hyperpar, initial,
     # update gamma (latent indicators of variable selection)
     # browser()
     sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
+    
     if (is(sampleGam$gamma.ini, "matrix")) {
-      # TEMP Workaround because C++ outputs list elements as matrices and UpdateRPlee11 expects lists (until it's translated)
-      sampleGam <- lapply(sampleGam, function(x) apply(x, 1, list))
-      if (!(method == "Pooled" && MRF_G)) {
-        sampleGam <- lapply(sampleGam, function(x) lapply(x, unlist))
+      if (S > 1) {
+        # TEMP Workaround because C++ outputs list elements as matrices and UpdateRPlee11 expects lists (until it's translated)
+        # sampleGam <- lapply(sampleGam, function(x) apply(x, 1, list))
+        if (!(method == "Pooled" && MRF_G)) {
+          # sampleGam <- lapply(sampleGam, function(x) lapply(x, unlist))
+          sampleGam <- lapply(sampleGam, function(x) lapply(seq_len(ncol(x)), function(g) x[,g]))
+        } else {
+          sampleGam <- lapply(sampleGam, unlist)
+        }
       } else {
-        sampleGam <- lapply(sampleGam, unlist)
+        if (!MRF_G) {
+          sampleGam$beta.ini <- list(sampleGam$beta.ini)
+          sampleGam$gamma.ini <- list(sampleGam$gamma.ini)
+        }
       }
     }
     gamma.ini <- ini$gamma.ini <- sampleGam$gamma.ini
@@ -244,7 +253,12 @@ func_MCMC <- function(survObj, hyperpar, initial,
         # RW.accept <- rbind(RW.accept, as.vector(beta.tmp$acceptlee))
       } else {
         for (g in 1:S) {
-          RW.accept[[g]] <- rbind(RW.accept[[g]], beta.tmp$acceptlee[[g]])
+          # browser()
+          if (MRF_G) {
+            RW.accept[[g]] <- rbind(RW.accept[[g]], beta.tmp$acceptlee[[g]])
+          } else {
+            RW.accept[[g]] <- rbind(RW.accept[[g]], beta.tmp$acceptlee[, g])
+          }
         }
       }
       mcmcOutcome$accept.RW <- RW.accept
@@ -274,19 +288,19 @@ func_MCMC <- function(survObj, hyperpar, initial,
       }
 
       if (method == "Pooled" && MRF_G) {
-        mcmcOutcome$gamma.p <- rbind(mcmcOutcome$gamma.p, gamma.ini, deparse.level = 0)
-        mcmcOutcome$post.gamma <- rbind(mcmcOutcome$post.gamma, sampleGam$post.gamma, deparse.level = 0)
-        mcmcOutcome$beta.p <- rbind(mcmcOutcome$beta.p, beta.ini, deparse.level = 0)
+        mcmcOutcome$gamma.p <- rbind(mcmcOutcome$gamma.p, as.vector(gamma.ini), deparse.level = 0)
+        mcmcOutcome$post.gamma <- rbind(mcmcOutcome$post.gamma, as.vector(sampleGam$post.gamma), deparse.level = 0)
+        mcmcOutcome$beta.p <- rbind(mcmcOutcome$beta.p, as.vector(beta.ini), deparse.level = 0)
         mcmcOutcome$h.p <- rbind(mcmcOutcome$h.p, h, deparse.level = 0)
       } else {
         for (g in 1:S) {
           # browser()
           mcmcOutcome$gamma.p[[g]] <- rbind(mcmcOutcome$gamma.p[[g]],
-            (gamma.ini)[[g]],
+            as.vector(gamma.ini[[g]]),
             deparse.level = 0
           )
           mcmcOutcome$post.gamma[[g]] <- rbind(mcmcOutcome$post.gamma[[g]],
-            sampleGam$post.gamma[[g]],
+            as.vector(sampleGam$post.gamma[[g]]),
             deparse.level = 0
           )
           mcmcOutcome$beta.p[[g]] <- rbind(mcmcOutcome$beta.p[[g]],

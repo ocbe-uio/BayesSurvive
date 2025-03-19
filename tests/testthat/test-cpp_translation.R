@@ -52,9 +52,9 @@ BS_wrap <- function(
   )
 }
 fit_R <- BS_wrap(data, hyperPooled)
-fit_C <- BS_wrap(data, hyperPooled, use_cpp = TRUE)
+fit_C <- BS_wrap(data, hyperPooled, use_cpp = TRUE) 
 fit_R2S <- BS_wrap(data_2S, hyperPooled_2S, "CoxBVSSL")
-fit_C2S <- BS_wrap(data_2S, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)
+fit_C2S <- BS_wrap(data_2S, hyperPooled_2S, "CoxBVSSL", use_cpp = TRUE)  # not work
 fit_R_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, n_iter = 2L)
 fit_C_noMRFG <- BS_wrap(data, hyperPooled, MRF_G = FALSE, use_cpp = TRUE, n_iter = 2L) # FIXME: accept.RW on output wrongly formatted
 fit_R_2b <- BS_wrap(data, hyperPooled, MRF_2b = TRUE)

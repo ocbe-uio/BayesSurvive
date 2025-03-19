@@ -42,6 +42,7 @@ Rcpp::List UpdateGamma_cpp(
   // Update latent variable selection indicators gamma with either independent
   // Bernoulli prior (standard approaches) or with MRF prior.
 
+  std::cout << "...debug0\n";
   unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
@@ -49,26 +50,43 @@ Rcpp::List UpdateGamma_cpp(
   double a = Rcpp::as<double>(hyperpar["a"]);
   arma::rowvec b = arma::rowvec(p, arma::fill::value(Rcpp::as<double>(hyperpar["b"])));
 
-  arma::mat beta_ini = list_to_matrix(ini["beta.ini"]);
-  arma::mat gamma_ini = list_to_matrix(ini["gamma.ini"]);
+  std::cout << "...debug2\n";
+  arma::mat beta_ini = arma::zeros<arma::mat>(p, S);
+  arma::mat gamma_ini = arma::zeros<arma::mat>(p, S);
+  if (!Rf_isNewList(ini["beta.ini"])) {
+  // if (S == 1) {
+    std::cout << "...debug200" << "\n";
+    beta_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
+    gamma_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
+  } else {
+    std::cout << "...debug22" << "\n";
+    Rcpp::List r_list = Rcpp::as<Rcpp::List>(ini["beta.ini"]);
+    int n_cols = r_list.size();
+    int n_rows = Rcpp::as<arma::vec>(r_list[0]).n_elem;
+    std::cout << "; n_cols=" << n_cols << "; n_rows=" << n_rows << "\n";
+    beta_ini = list_to_matrix(ini["beta.ini"]);
+    gamma_ini = list_to_matrix(ini["gamma.ini"]);
+  }
 
-  arma::mat G_ini = arma::zeros<arma::mat>(p, p);
-  if (method.compare("Pooled") && MRF_G) {
+  std::cout << "...debug3\n";
+  arma::mat G_ini = arma::zeros<arma::mat>(p * S, p * S);
+  if (method == "Pooled" && MRF_G) {
     // G_ini is not needed if method != "Pooled" and MRF_G
     G_ini = Rcpp::as<arma::mat>(hyperpar["G"]);
   } else if (!MRF_G) {
     G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
   }
 
+  std::cout << "...debug4\n";
   // two different b in MRF prior for subgraphs G_ss and G_rs
   if (MRF_2b && !MRF_G) {
     // TODO: test this case. Not default!
-    for (arma::uword g = 0; g < S; g++) {
+    for (unsigned int g = 0; g < S; g++) {
       arma::uvec g_seq = arma::regspace<arma::uvec>(g * p, g * p + p - 1); // equivalent to (g - 1) * p + (1:p)
       G_ini.submat(g_seq, g_seq) *= b(0);
     }
-    for (arma::uword g = 0; g < S - 1; g++) {
-      for (arma::uword r = g; r < S - 1; r++) {
+    for (unsigned int g = 0; g < S - 1; g++) {
+      for (unsigned int r = g; r < S - 1; r++) {
         arma::uvec g_seq = arma::regspace<arma::uvec>(g * p, g * p + p - 1); // equivalent to (g - 1) * p + (1:p)
         arma::uvec r_seq = arma::regspace<arma::uvec>(r * p + p, r * p + 2 * p - 1); // equivalent to r * p + (1:p)
         G_ini.submat(g_seq, r_seq) = b(1) * G_ini.submat(r_seq, g_seq);
@@ -79,21 +97,25 @@ Rcpp::List UpdateGamma_cpp(
     G_ini *= b(0);
   }
 
-  arma::mat post_gamma(S, p, arma::fill::zeros);
-  if (method.compare("Pooled") && MRF_G) {
-    for (arma::uword j = 0; j < p; j++) {
+  std::cout << "...debug5\n";
+  arma::mat post_gamma = arma::zeros<arma::mat>(p, S);
+  arma::mat ga_prop1 = arma::zeros<arma::mat>(p, S);
+  arma::mat ga_prop0 = arma::zeros<arma::mat>(p, S);
+  if (method == "Pooled" && MRF_G) {
+    for (unsigned int j = 0; j < p; j++) {
       // FIXME: why are indices flipped here w.r.t. the other cases?
-      double beta = beta_ini(0, j);
+      // ANS: fixed by George!
+      double beta = beta_ini(j);
 
-      arma::vec ga_prop1 = gamma_ini.t();
-      arma::vec ga_prop0 = gamma_ini.t();
+      ga_prop1.col(0) = gamma_ini;
+      ga_prop0.col(0) = gamma_ini;
       ga_prop1(j) = 1;
       ga_prop0(j) = 0;
 
       double pg = calc_pg(ga_prop1, ga_prop0, G_ini, beta, a, tau, cb);
 
-      gamma_ini(0, j) = R::runif(0, 1) < pg;
-      post_gamma(0, j) = pg;
+      gamma_ini(j) = R::runif(0., 1.) < pg;
+      post_gamma(j) = pg;
     }
     Rcpp::List out = Rcpp::List::create(
       Rcpp::Named("gamma.ini") = gamma_ini,
@@ -101,36 +123,43 @@ Rcpp::List UpdateGamma_cpp(
     );
     return out;
   } else {
+
+    std::cout << "...debug7 end\n";
     if (MRF_G) {
-      for (arma::uword g = 0; g < S; g++) { // loop through subgroups
-        for (arma::uword j = 0; j < p; j++) {
-          double wa = R::dnorm(beta_ini(j, g), 0, tau * cb, true) * pi;
-          double wb = R::dnorm(beta_ini(j, g), 0, tau, true) * (1 - pi);
+      for (unsigned int g = 0; g < S; g++) { // loop through subgroups
+        for (unsigned int j = 0; j < p; j++) {
+          double wa = R::dnorm(beta_ini(j, g), 0.0, tau * cb, true) * pi;
+          double wb = R::dnorm(beta_ini(j, g), 0.0, tau, true) * (1. - pi);
           double pgam = wa / (wa + wb);
-          double u = R::runif(0, 1);
+          double u = R::runif(0., 1.);
           gamma_ini(j, g) = u < pgam;
-          post_gamma(g, j) = pgam;
+          post_gamma(j, g) = pgam;
         }
       }
     } else { // CoxBVS-SL or Sub-struct model
-      for (arma::uword g = 0; g < S; g++) {
-        for (arma::uword j = 0; j < p; j++) {
+      
+    std::cout << "...debug71 end\n";
+      for (unsigned int g = 0; g < S; g++) {
+        for (unsigned int j = 0; j < p; j++) {
           double beta = beta_ini(j, g);
 
-          arma::vec ga_prop1 = gamma_ini;
-          arma::vec ga_prop0 = gamma_ini;
+          ga_prop1 = gamma_ini;
+          ga_prop0 = gamma_ini;
           ga_prop1(j, g) = 1;
           ga_prop0(j, g) = 0;
 
-          double pg = calc_pg(ga_prop1, ga_prop0, G_ini, beta, a, tau, cb);
-          gamma_ini(j, g) = R::runif(0, 1) < pg;
-          post_gamma(g, j) = pg;
+          double pg = calc_pg(arma::vectorise(ga_prop1), arma::vectorise(ga_prop0), G_ini, beta, a, tau, cb);
+          gamma_ini(j, g) = R::runif(0., 1.) < pg;
+          post_gamma(j, g) = pg;
         }
       }
+
+    std::cout << "...debug72 end\n";
     }
+    std::cout << "...debug8 end\n";
     Rcpp::List out = Rcpp::List::create(
-      Rcpp::Named("gamma.ini") = arma::trans(gamma_ini),
-      Rcpp::Named("post.gamma") = arma::trans(post_gamma)
+      Rcpp::Named("gamma.ini") = gamma_ini,// arma::trans(gamma_ini),
+      Rcpp::Named("post.gamma") = post_gamma//arma::trans(post_gamma)
     );
     return out;
   }
