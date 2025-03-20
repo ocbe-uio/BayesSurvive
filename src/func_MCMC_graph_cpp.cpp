@@ -229,7 +229,7 @@ Rcpp::List func_MCMC_graph_cpp(
   }
 
   if (method == "CoxBVSSL") {
-    Rcpp::stop("\nThis is not yet implemented with argument method == 'CoxBVSSL'.");
+    Rcpp::stop("This is not yet implemented with argument method == 'CoxBVSSL'.");
   }
 
   // Assembling output
