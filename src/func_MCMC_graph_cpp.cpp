@@ -34,6 +34,31 @@ arma::mat construct_G_MRF(arma::mat G_MRF, arma::vec b, unsigned int S, unsigned
   return G_MRF;
 }
 
+arma::vec randMvNormal(const arma::vec &m, const arma::mat &Sigma) {
+  unsigned int d = m.n_elem;
+  //check
+  if(Sigma.n_rows != d || Sigma.n_cols != d ) {
+    Rcpp::stop("Dimension not matching in the multivariate normal sampler");
+  }
+
+  arma::mat A;
+  arma::vec eigval;
+  arma::mat eigvec;
+  arma::rowvec res;
+
+  if( arma::chol(A, Sigma) ) {
+    res = Rcpp::as<arma::rowvec>(Rcpp::rnorm(d)) * A ;
+  } else {
+    if( eig_sym(eigval, eigvec, Sigma) ) {
+      res = (eigvec * arma::diagmat(arma::sqrt(eigval)) * Rcpp::as<arma::vec>(Rcpp::rnorm(d))).t();
+    } else {
+      Rcpp::stop("randMvNorm failing because of singular Sigma matrix");
+    }
+  }
+  
+  return res.t() + m;
+}
+
 // [[Rcpp::export]]
 Rcpp::List func_MCMC_graph_cpp(
   const Rcpp::List sobj,
@@ -135,9 +160,12 @@ Rcpp::List func_MCMC_graph_cpp(
       Ci = 0.5 * (Ci + Ci.t());
       arma::mat Ci_chol = arma::chol(Ci);
 
-      arma::vec mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
-      // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
-      arma::vec beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
+      // arma::vec mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
+      // // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
+      // arma::vec beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
+
+      arma::vec mu_i = -arma::inv_sympd(Ci_chol) * S_g.submat(ind_noi, arma::uvec({i})); // using inverse directly instead of chol() & solve() by Madjar
+      arma::vec beta = randMvNormal(mu_i, Ci); 
 
       // Update of last column in Omega_gg
       C_g.submat(ind_noi, arma::uvec({i})) = beta;
