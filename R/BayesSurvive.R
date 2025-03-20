@@ -275,7 +275,7 @@ BayesSurvive <- function(survObj,
     )
   }
 
-  if (MRF.G) {
+  # if (MRF.G) {
     initial$G.ini <- data.matrix(hyperpar$G)
     if (model.type == "Pooled" && any(dim(initial$G.ini) != c(p, p))) {
       stop("Hyperparameter 'hyperpar$G' has incorrect dimensions!")
@@ -283,7 +283,7 @@ BayesSurvive <- function(survObj,
     if (model.type != "Pooled" && any(dim(initial$G.ini) != c(p * S, p * S))) {
       stop("Hyperparameter 'hyperpar$G' has incorrect dimensions!")
     }
-  }
+  # }
 
   ret <- list(input = list(), output = list(), call = cl)
   class(ret) <- "BayesSurvive"
@@ -303,7 +303,7 @@ BayesSurvive <- function(survObj,
   ret$output <- func_MCMC(
     survObj = survObj,
     hyperpar = hyperpar,
-    initial = initial,
+    ini = initial,
     nIter = nIter,
     burnin = burnin,
     thin = thin,

@@ -7,7 +7,7 @@
 func_MCMC(
   survObj,
   hyperpar,
-  initial,
+  ini,
   nIter,
   thin,
   burnin,
@@ -26,7 +26,7 @@ func_MCMC(
 
 \item{hyperpar}{a list containing prior parameter values}
 
-\item{initial}{a list containing prior parameters' initial values}
+\item{ini}{a list containing prior parameters' initial values}
 
 \item{nIter}{the number of iterations of the chain}
 

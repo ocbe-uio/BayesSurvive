@@ -57,8 +57,15 @@ Rcpp::List func_MCMC_graph_cpp(
   Rcpp::List Sig = Rcpp::as<Rcpp::List>(ini["Sig.ini"]);
   Rcpp::List C = Rcpp::as<Rcpp::List>(ini["C.ini"]);
 
-  Rcpp::List gamma_ini_list = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
-  arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // FIXME: use list_to_matrix() and change with S
+  // Rcpp::List gamma_ini_list = Rcpp::as<Rcpp::List>(ini["gamma.ini"]);
+  // arma::vec gamma_ini = Rcpp::as<arma::vec>(gamma_ini_list[0]); // FIXME: use list_to_matrix() and change with S <== Fixed by George as follows
+  arma::vec gamma_ini(p * S); // vectorize/unlist ini["gamma.ini"]
+  std::size_t position = 0;
+  for (unsigned int g = 0; g < S; g++) {
+    arma::vec component = Rcpp::as<arma::vec>(Rcpp::as<Rcpp::List>(ini["gamma.ini"])[g]);
+    gamma_ini.subvec(position, position + component.n_elem - 1) = component;
+    position += component.n_elem;
+  }
 
   if (MRF_2b) {
     // two different values for b in MRF prior for subgraphs G_ss and G_rs

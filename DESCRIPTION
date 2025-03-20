@@ -22,3 +22,11 @@ Imports: Rcpp, ggplot2, GGally, mvtnorm, survival, riskRegression,
 Suggests: knitr, testthat, Matrix
 LazyData: true
 NeedsCompilation: yes
+Packaged: 2025-03-20 01:03:19 UTC; zhiz
+Author: Zhi Zhao [aut, cre],
+  Waldir Leoncio [aut],
+  Katrin Madjar [aut],
+  Tobias Østmo Hermansen [aut],
+  Manuela Zucknick [ctb],
+  Jörg Rahnenführer [ctb]
+Maintainer: Zhi Zhao <zhi.zhao@medisin.uio.no>

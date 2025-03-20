@@ -11,7 +11,7 @@
 #' @param survObj a list containing observed data from \code{n} subjects;
 #' \code{t}, \code{di}, \code{X}. See details for more information
 #' @param hyperpar a list containing prior parameter values
-#' @param initial a list containing prior parameters' initial values
+#' @param ini a list containing prior parameters' initial values
 #' @param nIter the number of iterations of the chain
 #' @param burnin number of iterations to discard at the start of the chain.
 #' Default is 0
@@ -36,7 +36,7 @@
 #'
 #'
 #' @export
-func_MCMC <- function(survObj, hyperpar, initial,
+func_MCMC <- function(survObj, hyperpar, ini,
                       nIter, thin, burnin,
                       S, method, MRF_2b, MRF_G,
                       output_graph_para, verbose, cpp = FALSE) {
@@ -98,7 +98,7 @@ func_MCMC <- function(survObj, hyperpar, initial,
     h <- lapply(hyperpar$J, function(x) rgamma(x, 1, 1))
   }
 
-  ini <- initial
+  #ini <- initial
   ini$h <- h
 
   # for posterior samples

@@ -12,7 +12,7 @@ UpdateRPlee11(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE)
 
 \item{hyperpar}{a list containing prior parameter values}
 
-\item{ini}{a list containing prior parameters' ini values}
+\item{ini}{a list containing prior parameters' initial values}
 
 \item{S}{the number of subgroups}
 
