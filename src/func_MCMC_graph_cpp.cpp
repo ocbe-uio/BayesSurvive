@@ -135,9 +135,9 @@ Rcpp::List func_MCMC_graph_cpp(
       Ci = 0.5 * (Ci + Ci.t());
       arma::mat Ci_chol = arma::chol(Ci);
 
-      arma::mat mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
+      arma::vec mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
       // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
-      arma::mat beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
+      arma::vec beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
 
       // Update of last column in Omega_gg
       C_g.submat(ind_noi, arma::uvec({i})) = beta;
