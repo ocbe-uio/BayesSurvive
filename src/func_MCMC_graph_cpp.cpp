@@ -1,32 +1,35 @@
 #include <RcppArmadillo.h>
 // [[Rcpp::depends(RcppArmadillo)]]
 
-arma::mat construct_G_MRF(arma::mat G, arma::vec b, unsigned int S, unsigned int p, bool MRF_2b) {
-  arma::mat G_MRF(G.n_rows, G.n_cols);
+arma::mat construct_G_MRF(arma::mat G_MRF, arma::vec b, unsigned int S, unsigned int p, bool MRF_2b) {
+  // arma::mat G_MRF = (G.n_rows, G.n_cols);
   if (MRF_2b) {
     // TODO: develop test for this case. Off-by-one minefield!
     // two different values for b in MRF prior for subgraphs G_ss and G_rs
     arma::uvec p_seq = arma::regspace<arma::uvec>(0, p - 1);
     for (unsigned int g = 0; g < S; g++) {
       // b1 * G_ss
-      arma::uvec g_seq(p, arma::fill::value(g * p));
-      arma::uvec idx = g_seq + p_seq;
+      // arma::uvec g_seq(p, arma::fill::value(g * p));
+      // arma::uvec idx = g_seq + p_seq;
+      arma::uvec idx = p_seq + g * p;
       G_MRF.submat(idx, idx) *= b(0);
     }
     for (unsigned int g = 0; g < S - 1; g++) {
       // b2 * G_rs
-      for (unsigned int r = g; r < S - 1; r++) {
-        arma::uvec g_seq(p, arma::fill::value(g * p));
-        arma::uvec r_seq(p, arma::fill::value(r * p));
-        arma::uvec idx = g_seq + p_seq;
-        arma::uvec idx2 = r_seq + p_seq;
+      for (unsigned int r = g + 1; r < S; r++) {
+        // arma::uvec g_seq(p, arma::fill::value(g * p));
+        // arma::uvec r_seq(p, arma::fill::value(r * p));
+        // arma::uvec idx = g_seq + p_seq;
+        // arma::uvec idx2 = r_seq + p_seq;
+        arma::uvec idx = p_seq + g * p;
+        arma::uvec idx2 = p_seq + r * p;
         G_MRF.submat(idx, idx2) *= b(1);
         G_MRF.submat(idx2, idx) *= b(1);
       }
     }
   } else {
     // one value for b in MRF prior for all subgraphs
-    G_MRF = b(0) * G;
+    G_MRF = b(0) * G_MRF;
   }
   return G_MRF;
 }
@@ -40,10 +43,29 @@ Rcpp::List func_MCMC_graph_cpp(
   const std::string method,
   const bool MRF_2b
 ) {
+  // Verify List Contents
+  if (!sobj.containsElementNamed("n") || 
+      !sobj.containsElementNamed("p") || 
+      !sobj.containsElementNamed("SSig")) {
+    Rcpp::stop("The 'sobj' list is missing required elements.");
+  }
+  if (!hyperpar.containsElementNamed("pi.G") || 
+      !hyperpar.containsElementNamed("a") || 
+      !hyperpar.containsElementNamed("lambda") || 
+      !hyperpar.containsElementNamed("V0") || 
+      !hyperpar.containsElementNamed("V1") || 
+      !hyperpar.containsElementNamed("b")) {
+    Rcpp::stop("The 'hyperpar' list is missing required elements.");
+  }
+
   // Extracting data
   Rcpp::List n = sobj["n"];
   unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   Rcpp::List SSig = sobj["SSig"];
+  // Verification
+  if (p == 0 || S == 0 || n.size() < S || SSig.size() < S) {
+    Rcpp::stop("Invalid 'sobj' list structure or size.");
+  }
 
   double pii = Rcpp::as<double>(hyperpar["pi.G"]);
   double a = Rcpp::as<double>(hyperpar["a"]);
@@ -51,7 +73,10 @@ Rcpp::List func_MCMC_graph_cpp(
   double lambda = Rcpp::as<double>(hyperpar["lambda"]);
   arma::mat V0 = Rcpp::as<arma::mat>(hyperpar["V0"]);
   arma::mat V1 = Rcpp::as<arma::mat>(hyperpar["V1"]);
-
+  // Verification
+  if (V0.n_rows != p || V0.n_cols != p || V1.n_rows != p || V1.n_cols != p) {
+    Rcpp::stop("Matrices V0 and V1 must be square and of size " + std::to_string(p) + "x" + std::to_string(p));
+  }
   arma::mat G = Rcpp::as<arma::mat>(ini["G.ini"]);
   Rcpp::List V = Rcpp::as<Rcpp::List>(ini["V.ini"]);
   Rcpp::List Sig = Rcpp::as<Rcpp::List>(ini["Sig.ini"]);
@@ -71,9 +96,11 @@ Rcpp::List func_MCMC_graph_cpp(
     // two different values for b in MRF prior for subgraphs G_ss and G_rs
     b = Rcpp::as<arma::vec>(hyperpar["b"]);
   } else {
-    b = {hyperpar["b"], hyperpar["b"]};
+    double b_val = Rcpp::as<double>(hyperpar["b"]);
+    b.fill(b_val);
   }
-  arma::mat G_MRF = construct_G_MRF(G, b, S, p, MRF_2b);
+  arma::mat G_MRF = G; 
+  G_MRF = construct_G_MRF(G, b, S, p, MRF_2b);
 
   // Update of precision matrix and graph within each subgroup
   // (analogous to SSSL algorithm for concentration (precision) graph models in
@@ -82,9 +109,10 @@ Rcpp::List func_MCMC_graph_cpp(
     arma::mat V_g = V[g];
     arma::mat C_g = C[g];
 
-    arma::uvec p_seq = arma::regspace<arma::uvec>(0, p - 1);
-    arma::uvec g_seq(p, arma::fill::value(g * p));
-    arma::uvec idx = g_seq + p_seq;
+    // arma::uvec p_seq = arma::regspace<arma::uvec>(0, p - 1);
+    // arma::uvec g_seq(p, arma::fill::value(g * p));
+    // arma::uvec idx = g_seq + p_seq;
+    arma::uvec idx = arma::regspace<arma::uvec>(g * p, (g + 1) * p - 1);
     arma::mat G_g = G.submat(idx, idx);
     unsigned int n_g = Rcpp::as<unsigned int>(n[g]);
     arma::mat S_g = SSig[g];
@@ -109,7 +137,7 @@ Rcpp::List func_MCMC_graph_cpp(
 
       arma::mat mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
       // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
-      arma::mat beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1)));
+      arma::mat beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
 
       // Update of last column in Omega_gg
       C_g.submat(ind_noi, arma::uvec({i})) = beta;
@@ -135,7 +163,7 @@ Rcpp::List func_MCMC_graph_cpp(
       // Update of variance matrix V_g and subgraph G_g
 
       if (i < p) {
-        arma::vec beta2(p);
+        arma::vec beta2 = arma::zeros<arma::vec>(p);
         beta2.elem(ind_noi) = beta;
 
         for (unsigned int j = i + 1; j < p; j++) {
@@ -152,15 +180,15 @@ Rcpp::List func_MCMC_graph_cpp(
           double v0 = V0(j, i);
           double v1 = V1(j, i);
 
-          double w1 = -0.5 * log(v1) - 0.5 * std::pow(beta2(j), 2) / v1 + log(pii);
-          double w2 = -0.5 * log(v0) - 0.5 * std::pow(beta2(j), 2) / v0 + log(1 - pii);
+          double w1 = -0.5 * std::log(v1) - 0.5 * std::pow(beta2(j), 2) / v1 + std::log(pii);
+          double w2 = -0.5 * std::log(v0) - 0.5 * std::pow(beta2(j), 2) / v0 + std::log(1 - pii);
 
           double wa = arma::as_scalar(w1 + (a * arma::sum(gamma_ini) + gamma_ini.t() * G_prop1 * gamma_ini));
           double wb = arma::as_scalar(w2 + (a * arma::sum(gamma_ini) + gamma_ini.t() * G_prop0 * gamma_ini));
 
           double w_max = std::max(wa, wb);
 
-          double w = exp(wa - w_max) / (exp(wa - w_max) + exp(wb - w_max));
+          double w = std::exp(wa - w_max) / (std::exp(wa - w_max) + std::exp(wb - w_max));
 
           bool z = R::runif(0.0, 1.0) < w;
           double v = z ? v1 : v0;
@@ -176,6 +204,10 @@ Rcpp::List func_MCMC_graph_cpp(
     C[g] = C_g;
     G.submat(idx, idx) = G_g;
     Sig[g] = Sig_g;
+  }
+
+  if (method == "CoxBVSSL") {
+    Rcpp::stop("This is not yet implemented with argument method == 'CoxBVSSL'.");
   }
 
   // Assembling output
