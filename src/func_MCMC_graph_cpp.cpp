@@ -38,25 +38,26 @@ arma::vec randMvNormal(const arma::vec &m, const arma::mat &Sigma) {
   unsigned int d = m.n_elem;
   //check
   if(Sigma.n_rows != d || Sigma.n_cols != d ) {
-    Rcpp::stop("Dimension not matching in the multivariate normal sampler");
+    Rcpp::stop("Dimension not matching in the multivariate normal sampler.");
   }
 
   arma::mat A;
   arma::vec eigval;
   arma::mat eigvec;
-  arma::rowvec res;
+  arma::vec res(d);
 
   if( arma::chol(A, Sigma) ) {
-    res = Rcpp::as<arma::rowvec>(Rcpp::rnorm(d)) * A ;
+    res =  A.t() * Rcpp::as<arma::vec>(Rcpp::rnorm(d)) ;
   } else {
     if( eig_sym(eigval, eigvec, Sigma) ) {
-      res = (eigvec * arma::diagmat(arma::sqrt(eigval)) * Rcpp::as<arma::vec>(Rcpp::rnorm(d))).t();
+      res = eigvec * arma::diagmat(arma::sqrt(eigval)) * Rcpp::as<arma::vec>(Rcpp::rnorm(d));
     } else {
-      Rcpp::stop("randMvNorm failing because of singular Sigma matrix");
+      // res.fill(0.);
+      Rcpp::stop("randMvNorm failing because of singular Sigma matrix.");
     }
   }
   
-  return res.t() + m;
+  return res + m;
 }
 
 // [[Rcpp::export]]
@@ -68,29 +69,10 @@ Rcpp::List func_MCMC_graph_cpp(
   const std::string method,
   const bool MRF_2b
 ) {
-  // Verify List Contents
-  if (!sobj.containsElementNamed("n") || 
-      !sobj.containsElementNamed("p") || 
-      !sobj.containsElementNamed("SSig")) {
-    Rcpp::stop("The 'sobj' list is missing required elements.");
-  }
-  if (!hyperpar.containsElementNamed("pi.G") || 
-      !hyperpar.containsElementNamed("a") || 
-      !hyperpar.containsElementNamed("lambda") || 
-      !hyperpar.containsElementNamed("V0") || 
-      !hyperpar.containsElementNamed("V1") || 
-      !hyperpar.containsElementNamed("b")) {
-    Rcpp::stop("The 'hyperpar' list is missing required elements.");
-  }
-
   // Extracting data
   Rcpp::List n = sobj["n"];
   unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
   Rcpp::List SSig = sobj["SSig"];
-  // Verification
-  if (p == 0 || S == 0 || n.size() < S || SSig.size() < S) {
-    Rcpp::stop("Invalid 'sobj' list structure or size.");
-  }
 
   double pii = Rcpp::as<double>(hyperpar["pi.G"]);
   double a = Rcpp::as<double>(hyperpar["a"]);
@@ -98,10 +80,7 @@ Rcpp::List func_MCMC_graph_cpp(
   double lambda = Rcpp::as<double>(hyperpar["lambda"]);
   arma::mat V0 = Rcpp::as<arma::mat>(hyperpar["V0"]);
   arma::mat V1 = Rcpp::as<arma::mat>(hyperpar["V1"]);
-  // Verification
-  if (V0.n_rows != p || V0.n_cols != p || V1.n_rows != p || V1.n_cols != p) {
-    Rcpp::stop("Matrices V0 and V1 must be square and of size " + std::to_string(p) + "x" + std::to_string(p));
-  }
+
   arma::mat G = Rcpp::as<arma::mat>(ini["G.ini"]);
   Rcpp::List V = Rcpp::as<Rcpp::List>(ini["V.ini"]);
   Rcpp::List Sig = Rcpp::as<Rcpp::List>(ini["Sig.ini"]);
@@ -147,6 +126,7 @@ Rcpp::List func_MCMC_graph_cpp(
       arma::uvec ind_noi = arma::regspace<arma::uvec>(0, p - 1);
       ind_noi.shed_row(i);
       arma::vec v_temp = V_g.submat(ind_noi, arma::uvec({i}));
+      // v_temp.elem(arma::find(v_temp < 1.0e-10)).fill(1.0e-10);
 
       arma::mat Sig11 = Sig_g.submat(ind_noi, ind_noi);
       arma::vec Sig12 = Sig_g.submat(ind_noi, arma::uvec({i}));
@@ -158,14 +138,28 @@ Rcpp::List func_MCMC_graph_cpp(
       arma::mat Ci = (S_g(i, i) + lambda) * invC11 + arma::diagmat(1. / v_temp);
 
       Ci = 0.5 * (Ci + Ci.t());
-      arma::mat Ci_chol = arma::chol(Ci);
+      // arma::mat Ci_chol = arma::chol(Ci);
 
       // arma::vec mu_i = -arma::solve(Ci_chol, arma::solve(Ci_chol.t(), S_g.submat(ind_noi, arma::uvec({i}))));
       // // arma::mat beta = mu_i + arma::solve(Ci_chol, arma::randn<arma::vec>(p - 1));
-      // arma::vec beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1, 0., 1.)));
+      // arma::vec beta = mu_i + arma::solve(Ci_chol, Rcpp::as<arma::vec>(Rcpp::rnorm(p - 1)));
 
-      arma::vec mu_i = -arma::inv_sympd(Ci_chol) * S_g.submat(ind_noi, arma::uvec({i})); // using inverse directly instead of chol() & solve() by Madjar
-      arma::vec beta = randMvNormal(mu_i, Ci); 
+      // arma::vec mu_i = -arma::inv_sympd(Ci, arma::inv_opts::allow_approx) * S_g.submat(ind_noi, arma::uvec({i})); 
+      // // using inverse directly instead of chol() & solve() by Madjar
+      arma::mat invCi;
+      arma::vec mu_i, beta;
+      if ( arma::inv_sympd(invCi, Ci) ) {
+        mu_i = - invCi * S_g.submat(ind_noi, arma::uvec({i}));
+        beta = randMvNormal(mu_i, Ci); 
+      } else {
+        // arma::inv(invCi, Ci + 0.1 * arma::eye(p - 1, p - 1), arma::inv_opts::allow_approx);
+        // arma::inv(invCi, Ci);
+        arma::inv(invCi, Ci, arma::inv_opts::allow_approx);
+        mu_i = - invCi * S_g.submat(ind_noi, arma::uvec({i}));
+        beta = mu_i;
+        // beta = randMvNormal(mu_i, Ci); 
+        // if (beta.has_nan()) beta = mu_i;
+      }
 
       // Update of last column in Omega_gg
       C_g.submat(ind_noi, arma::uvec({i})) = beta;
@@ -235,7 +229,7 @@ Rcpp::List func_MCMC_graph_cpp(
   }
 
   if (method == "CoxBVSSL") {
-    Rcpp::stop("This is not yet implemented with argument method == 'CoxBVSSL'.");
+    Rcpp::stop("\nThis is not yet implemented with argument method == 'CoxBVSSL'.");
   }
 
   // Assembling output
