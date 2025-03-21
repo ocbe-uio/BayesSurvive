@@ -156,8 +156,8 @@ Rcpp::List func_MCMC_graph_cpp(
         // arma::inv(invCi, Ci);
         arma::inv(invCi, Ci, arma::inv_opts::allow_approx);
         mu_i = - invCi * S_g.submat(ind_noi, arma::uvec({i}));
+        // beta = randMvNormal(mu_i, arma::diagmat(Ci)); // TODO: test this!
         beta = mu_i;
-        // beta = randMvNormal(mu_i, Ci); 
         // if (beta.has_nan()) beta = mu_i;
       }
 
