@@ -165,8 +165,7 @@ Rcpp::List calJpost_cpp(
     // logjpost <- sum(loglike) + sum(logpriorBeta) + sum(logpriorH) + logpriorGamma + sum(logpriorOmega) + sum(logpriorX) + logpriorGraph
   }
   Rcpp::List out = Rcpp::List::create(
-    Rcpp::Named("loglike") = Rcpp::NumericVector::create(),
-    Rcpp::Named("logjpost") = Rcpp::NumericVector::create()
+    Rcpp::Named("loglike") = loglike, Rcpp::Named("logjpost") = logjpost
   );
   return out;
 }
