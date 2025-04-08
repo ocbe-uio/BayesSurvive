@@ -13,6 +13,10 @@ calJpost_helper_cpp <- function(cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, 
     .Call(`_BayesSurvive_calJpost_helper_cpp`, cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_)
 }
 
+calJpost_cpp <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b) {
+    .Call(`_BayesSurvive_calJpost_cpp`, sobj, hyperpar, ini, S, method, MRF_G, MRF_2b)
+}
+
 func_MCMC_graph_cpp <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
     .Call(`_BayesSurvive_func_MCMC_graph_cpp`, sobj, hyperpar, ini, S, method, MRF_2b)
 }

@@ -48,6 +48,7 @@ Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
                               );
 }
 
+// [[Rcpp::export]]
 Rcpp::List calJpost_cpp(
   const Rcpp::List sobj,
   const Rcpp::List hyperpar,

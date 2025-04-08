@@ -62,6 +62,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calJpost_cpp
+Rcpp::List calJpost_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const unsigned int S, const std::string method, const bool MRF_G, const bool MRF_2b);
+RcppExport SEXP _BayesSurvive_calJpost_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_GSEXP, SEXP MRF_2bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::List >::type sobj(sobjSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type hyperpar(hyperparSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type ini(iniSEXP);
+    Rcpp::traits::input_parameter< const unsigned int >::type S(SSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type method(methodSEXP);
+    Rcpp::traits::input_parameter< const bool >::type MRF_G(MRF_GSEXP);
+    Rcpp::traits::input_parameter< const bool >::type MRF_2b(MRF_2bSEXP);
+    rcpp_result_gen = Rcpp::wrap(calJpost_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b));
+    return rcpp_result_gen;
+END_RCPP
+}
 // func_MCMC_graph_cpp
 Rcpp::List func_MCMC_graph_cpp(const Rcpp::List sobj, const Rcpp::List hyperpar, const Rcpp::List ini, const unsigned int S, const std::string method, const bool MRF_2b);
 RcppExport SEXP _BayesSurvive_func_MCMC_graph_cpp(SEXP sobjSEXP, SEXP hyperparSEXP, SEXP iniSEXP, SEXP SSEXP, SEXP methodSEXP, SEXP MRF_2bSEXP) {
