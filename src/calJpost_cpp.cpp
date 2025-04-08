@@ -72,6 +72,7 @@ Rcpp::List calJpost_cpp(
     arma::mat G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
   }
 
+  double loglike, logpriorBeta, logpriorH, logpriorGamma, logjpost, logpriorOmega, logpriorX;
   if (method == "Pooled" && MRF_G) {
     Rcpp::List n = sobj["n"];
     arma::mat x = Rcpp::as<arma::mat>(sobj["X"]);
@@ -88,13 +89,12 @@ Rcpp::List calJpost_cpp(
     }
 
     Rcpp::List erg = calJpost_helper_cpp(cbtau, x, beta_ini, h, hPriorSh, c0, ind_r_d, ind_d);
-    double loglike = erg["loglike1"];
-    double logpriorBeta = erg["logpriorBeta1"];
-    double logpriorH = erg["logpriorH1"];
-    double logpriorGamma = arma::sum(gamma_ini * log(pi_ga)) + arma::sum((1 - gamma_ini) * log(1 - pi_ga));
-    double logjpost = loglike + logpriorGamma + logpriorBeta + logpriorH;
+    loglike = erg["loglike1"];
+    logpriorBeta = erg["logpriorBeta1"];
+    logpriorH = erg["logpriorH1"];
+    logpriorGamma = arma::sum(gamma_ini * log(pi_ga)) + arma::sum((1 - gamma_ini) * log(1 - pi_ga));
+    logjpost = loglike + logpriorGamma + logpriorBeta + logpriorH;
   } else {
-    // loglike <- logpriorBeta <- logpriorH <- logpriorGamma <- logjpost <- logpriorOmega <- logpriorX <- numeric()
     for (uint g = 0; g < S; ++g) {
       // n <- sobj$n[[g]]
       // X <- sobj$X[[g]]
