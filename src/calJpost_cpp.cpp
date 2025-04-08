@@ -11,13 +11,13 @@ Rcpp::List calJpost_cpp(
   const bool MRF_G,
   const bool MRF_2b
 ) {
-  //hyperparameters
-  //p <- sobj$p
-  //c0 <- hyperpar$c0
-  //pi.ga <- hyperpar$pi.ga
-  //tau <- hyperpar$tau
-  //cb <- hyperpar$cb
-  //
+  // hyperparameters
+  unsigned int p = Rcpp::as<unsigned int>(sobj["p"]);
+  double c0 = Rcpp::as<double>(hyperpar["c0"]);
+  double pi_ga = Rcpp::as<double>(hyperpar["pi.ga"]);
+  double tau = Rcpp::as<double>(hyperpar["tau"]);
+  double cb = Rcpp::as<double>(hyperpar["cb"]);
+
   //if (method %in% c("CoxBVSSL", "Sub-struct") ||
   //  (method == "Pooled" && !MRF_G)) {
   //  lambda <- hyperpar$lambda
