@@ -232,7 +232,7 @@ func_MCMC <- function(survObj, hyperpar, ini,
     }
 
     # profile joint posterior probability
-    profJpost <- calJpost(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b)
+    profJpost <- calJpost(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
     log.j <- profJpost$logjpost
     log.lh <- profJpost$loglike
 
