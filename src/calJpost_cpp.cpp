@@ -18,15 +18,14 @@ Rcpp::List calJpost_cpp(
   double tau = Rcpp::as<double>(hyperpar["tau"]);
   double cb = Rcpp::as<double>(hyperpar["cb"]);
 
-  //if (method %in% c("CoxBVSSL", "Sub-struct") ||
-  //  (method == "Pooled" && !MRF_G)) {
-  //  lambda <- hyperpar$lambda
-  //  a <- hyperpar$a
-  //  b <- hyperpar$b
-  //  pi.G <- hyperpar$pi.G
-  //  G.ini <- ini$G.ini
-  //}
-  //
+  if ((method == "CoxBVSSL" || method == "Sub-struct") || (method == "Pooled" && !MRF_G)) {
+    double lambda = Rcpp::as<double>(hyperpar["lambda"]);
+    double a = Rcpp::as<double>(hyperpar["a"]);
+    double b = Rcpp::as<double>(hyperpar["b"]);
+    double pi_G = Rcpp::as<double>(hyperpar["pi.G"]);
+    arma::mat G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
+  }
+
   //if (method == "Pooled" && MRF_G) {
   //  n <- sobj$n
   //  X <- sobj$X
