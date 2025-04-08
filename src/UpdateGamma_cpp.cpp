@@ -52,7 +52,6 @@ Rcpp::List UpdateGamma_cpp(
   arma::mat beta_ini = arma::zeros<arma::mat>(p, S);
   arma::mat gamma_ini = arma::zeros<arma::mat>(p, S);
   if (!Rf_isNewList(ini["beta.ini"])) {
-  // if (S == 1) {
     beta_ini.col(0) = Rcpp::as<arma::vec>(ini["beta.ini"]);
     gamma_ini.col(0) = Rcpp::as<arma::vec>(ini["gamma.ini"]);
   } else {
@@ -92,7 +91,6 @@ Rcpp::List UpdateGamma_cpp(
   arma::mat ga_prop0 = arma::zeros<arma::mat>(p, S);
   if (method == "Pooled" && MRF_G) {
     for (unsigned int j = 0; j < p; j++) {
-      // FIXME: why are indices flipped here w.r.t. the other cases? <== Fixed by George!
       double beta = beta_ini(j);
 
       ga_prop1.col(0) = gamma_ini;
@@ -124,7 +122,7 @@ Rcpp::List UpdateGamma_cpp(
         }
       }
     } else { // CoxBVS-SL or Sub-struct model
-      
+
       for (unsigned int g = 0; g < S; g++) {
         for (unsigned int j = 0; j < p; j++) {
           double beta = beta_ini(j, g);
@@ -143,8 +141,8 @@ Rcpp::List UpdateGamma_cpp(
     }
 
     Rcpp::List out = Rcpp::List::create(
-      Rcpp::Named("gamma.ini") = gamma_ini,// arma::trans(gamma_ini),
-      Rcpp::Named("post.gamma") = post_gamma//arma::trans(post_gamma)
+      Rcpp::Named("gamma.ini") = gamma_ini,
+      Rcpp::Named("post.gamma") = post_gamma
     );
     return out;
   }
