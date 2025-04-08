@@ -84,7 +84,7 @@ Rcpp::List calJpost_cpp(
     arma::vec beta_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
     arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
     arma::vec h = Rcpp::as<arma::vec>(ini["h"]);
-    arma::vec cbtau;
+    arma::vec cbtau(p);
     for (uint i = 0; i < gamma_ini.n_elem; ++i) {
       cbtau(i) = tau * (gamma_ini(i) == 1 ? cb : 1);
     }
