@@ -40,7 +40,6 @@ Rcpp::List calJpost_cpp(
   //  h <- ini$h
   //  cbtau <- tau * ifelse(gamma.ini == 1, cb, 1)
   //
-  //  # erg <- calJpost.helper(cbtau, X, beta.ini, h, hPriorSh, c0, n, p, J, ind.r_d, ind.d)
   //  erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, ind.r_d, ind.d)
   //  loglike <- erg$loglike1
   //  logpriorBeta <- erg$logpriorBeta1
@@ -65,13 +64,11 @@ Rcpp::List calJpost_cpp(
   //    h <- ini$h[[g]]
   //    cbtau <- tau * ifelse(gamma.ini == 1, cb, 1)
   //
-  //    # erg <- calJpost.helper(cbtau, X, beta.ini, h, hPriorSh, c0, n, p, J, ind.r_d, ind.d)
   //    erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, ind.r_d, ind.d)
   //    loglike[g] <- erg$loglike1
   //    logpriorBeta[g] <- erg$logpriorBeta1
   //    logpriorH[g] <- erg$logpriorH1
   //
-  //    # if (method == "Subgroup") {
   //    if (MRF_G) {
   //      logpriorGamma[g] <- sum(gamma.ini * log(pi.ga)) +
   //        sum((1 - gamma.ini) * log(1 - pi.ga))
@@ -99,8 +96,6 @@ Rcpp::List calJpost_cpp(
   //    }
   //  }
   //}
-  //# if (method %in% c("CoxBVSSL", "Sub-struct") ||
-  //#     (method == "Pooled" && !MRF_G)) {
   //if (!MRF_G) {
   //  pii.mat <- matrix(0, p * S, p * S)
   //
