@@ -4,6 +4,9 @@
 .Rhistory
 .DS_Store
 
+src/*.o
+src/*.so
+src/Makevars
 BayesSurvive/src/*.o
 BayesSurvive/src/*.so
 BayesSurvive/src/*.dll
