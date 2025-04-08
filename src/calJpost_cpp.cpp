@@ -1,4 +1,5 @@
 #include <RcppArmadillo.h>
+#include "misc.h"
 #include "updateRP_genomic_cpp.h"
 // [[Rcpp::depends(RcppArmadillo)]]
 
@@ -72,25 +73,26 @@ Rcpp::List calJpost_cpp(
   }
 
   if (method == "Pooled" && MRF_G) {
-    // n <- sobj$n
-    // X <- sobj$X
-    // J <- hyperpar$J
-    // ind.r_d <- hyperpar$ind.r_d
-    // ind.d <- hyperpar$ind.d
-    // hPriorSh <- hyperpar$hPriorSh
+    Rcpp::List n = sobj["n"];
+    arma::mat x = Rcpp::as<arma::mat>(sobj["X"]);
+    arma::uvec J = arma::conv_to<arma::uvec>::from(list_to_vector(hyperpar["J"]));
+    arma::mat ind_r_d = Rcpp::as<arma::mat>(hyperpar["ind.r_d"]);
+    arma::mat ind_d = Rcpp::as<arma::mat>(hyperpar["ind.d"]);
+    arma::vec hPriorSh = Rcpp::as<arma::vec>(hyperpar["hPriorSh"]);
+    arma::vec beta_ini = Rcpp::as<arma::vec>(ini["beta.ini"]);
+    arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
+    arma::vec h = Rcpp::as<arma::vec>(ini["h"]);
+    arma::vec cbtau;
+    for (uint i = 0; i < gamma_ini.n_elem; ++i) {
+      cbtau(i) = tau * (gamma_ini(i) == 1 ? cb : 1);
+    }
 
-    // gamma.ini <- ini$gamma.ini
-    // beta.ini <- ini$beta.ini
-    // h <- ini$h
-    // cbtau <- tau * ifelse(gamma.ini == 1, cb, 1)
-
-    // erg <- calJpost_helper_cpp(cbtau, X, beta.ini, h, hPriorSh, c0, ind.r_d, ind.d)
-    // loglike <- erg$loglike1
-    // logpriorBeta <- erg$logpriorBeta1
-    // logpriorH <- erg$logpriorH1
-
-    // logpriorGamma <- sum(gamma.ini * log(pi.ga)) + sum((1 - gamma.ini) * log(1 - pi.ga))
-    // logjpost <- loglike + logpriorGamma + logpriorBeta + logpriorH
+    Rcpp::List erg = calJpost_helper_cpp(cbtau, x, beta_ini, h, hPriorSh, c0, ind_r_d, ind_d);
+    double loglike = erg["loglike1"];
+    double logpriorBeta = erg["logpriorBeta1"];
+    double logpriorH = erg["logpriorH1"];
+    double logpriorGamma = arma::sum(gamma_ini * log(pi_ga)) + arma::sum((1 - gamma_ini) * log(1 - pi_ga));
+    double logjpost = loglike + logpriorGamma + logpriorBeta + logpriorH;
   } else {
     // loglike <- logpriorBeta <- logpriorH <- logpriorGamma <- logjpost <- logpriorOmega <- logpriorX <- numeric()
     for (uint g = 0; g < S; ++g) {
