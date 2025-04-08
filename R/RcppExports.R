@@ -9,6 +9,10 @@ UpdateRPlee11_cpp <- function(sobj, hyperpar, ini, S, method, MRF_G) {
     .Call(`_BayesSurvive_UpdateRPlee11_cpp`, sobj, hyperpar, ini, S, method, MRF_G)
 }
 
+calJpost_helper_cpp <- function(cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_) {
+    .Call(`_BayesSurvive_calJpost_helper_cpp`, cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_)
+}
+
 func_MCMC_graph_cpp <- function(sobj, hyperpar, ini, S, method, MRF_2b) {
     .Call(`_BayesSurvive_func_MCMC_graph_cpp`, sobj, hyperpar, ini, S, method, MRF_2b)
 }
@@ -35,10 +39,6 @@ updateBH_cpp <- function(x_, beta_, J_, ind_r_d_, hPriorSh_, d_, c0_) {
 
 updateBH_list_cpp <- function(x_, beta_, J_, ind_r_d_, hPriorSh_, d_, c0_) {
     .Call(`_BayesSurvive_updateBH_list_cpp`, x_, beta_, J_, ind_r_d_, hPriorSh_, d_, c0_)
-}
-
-calJpost_helper_cpp <- function(cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_) {
-    .Call(`_BayesSurvive_calJpost_helper_cpp`, cbtau, x_, beta_, h_, hPriorSh_, c0_, ind_r_d_, ind_d_)
 }
 
 updateRP_genomic_cpp <- function(p, x_, J_, ind_r_, ind_d_, ind_r_d_, be_, be_prop_sd_scale, ga_, h_, tau, cb) {

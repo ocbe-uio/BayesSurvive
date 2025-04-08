@@ -1,6 +1,51 @@
 #include <RcppArmadillo.h>
+#include "updateRP_genomic_cpp.h"
 // [[Rcpp::depends(RcppArmadillo)]]
 
+// [[Rcpp::export]]
+Rcpp::List  calJpost_helper_cpp(const arma::vec cbtau,
+                                const arma::mat x_,
+                                const arma::vec beta_,
+                                const arma::vec h_,
+                                const arma::vec hPriorSh_,
+                                const double c0_,
+                                const arma::mat ind_r_d_,
+                                const arma::mat ind_d_)
+{
+    // subfunction to update joint posterior distribution
+
+    arma::vec xbeta_ = x_ * beta_;
+    xbeta_.elem(arma::find(xbeta_ > 700)).fill(700.);
+    arma::vec exp_xbeta = arma::exp(xbeta_);
+
+    double first_sum_ini = arma::accu(-h_ % sumMatProdVec(ind_r_d_, exp_xbeta));
+
+    arma::mat h_exp_xbeta_mat = -arma::kron(exp_xbeta, h_.t());
+    h_exp_xbeta_mat.elem(arma::find(h_exp_xbeta_mat > -1.0e-7)).fill(-1.0e-7);
+    h_exp_xbeta_mat = arma::log(1.0 - arma::exp(h_exp_xbeta_mat));
+    // double second_sum_ini = arma::accu(arma::sum((h_exp_xbeta_mat % ind_d_).t(), 1));
+    double second_sum_ini = arma::accu(h_exp_xbeta_mat % ind_d_);
+    double loglike1 = first_sum_ini + second_sum_ini;
+
+    double logpriorBeta1 = 0.;
+    for (unsigned int j = 0; j < beta_.size(); ++j)
+    {
+        // logpriorBeta1 += arma::log_normpdf( beta_(j), 0.0, cbtau(j) );
+        logpriorBeta1 += R::dnorm( beta_(j), 0.0, cbtau(j), true);
+    }
+
+    double logpriorH1 = 0.;
+    for (unsigned int j = 0; j < h_.size(); ++j)
+    {
+        logpriorH1 += R::dgamma( h_(j), hPriorSh_(j), 1. / c0_, true );
+    }
+
+    return Rcpp::List::create(
+                              Rcpp::Named("loglike1") = loglike1,
+                              Rcpp::Named("logpriorBeta1") = logpriorBeta1,
+                              Rcpp::Named("logpriorH1") = logpriorH1
+                              );
+}
 
 Rcpp::List calJpost_cpp(
   const Rcpp::List sobj,
