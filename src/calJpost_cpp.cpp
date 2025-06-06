@@ -66,10 +66,15 @@ Rcpp::List calJpost_cpp(
   double cb = Rcpp::as<double>(hyperpar["cb"]);
 
   if ((method == "CoxBVSSL" || method == "Sub-struct") || (method == "Pooled" && !MRF_G)) {
-    double lambda = Rcpp::as<double>(hyperpar["lambda"]);
+    if (method == "Pooled" && !MRF_G) {
+      double lambda = Rcpp::as<double>(hyperpar["lambda"]);
+      double pi_G = Rcpp::as<double>(hyperpar["pi.G"]);
+    } else {
+      double lambda = 0.0;
+      double pi_G = 0.0;
+    }
     double a = Rcpp::as<double>(hyperpar["a"]);
     double b = Rcpp::as<double>(hyperpar["b"]);
-    double pi_G = Rcpp::as<double>(hyperpar["pi.G"]);
     arma::mat G_ini = Rcpp::as<arma::mat>(ini["G.ini"]);
   }
 

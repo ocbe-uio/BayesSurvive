@@ -178,7 +178,7 @@ func_MCMC <- function(survObj, hyperpar, ini,
     # update gamma (latent indicators of variable selection)
     # browser()
     sampleGam <- UpdateGamma(survObj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp)
-    
+
     if (is(sampleGam$gamma.ini, "matrix")) {
       if (S > 1) {
         # TEMP Workaround because C++ outputs list elements as matrices and UpdateRPlee11 expects lists (until it's translated)
