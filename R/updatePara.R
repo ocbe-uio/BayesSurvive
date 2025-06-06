@@ -157,7 +157,7 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FAL
 # Update joint posterior distribution
 
 calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp) {
-  if (cpp && method == "Pooled" && MRF_G) { # TODO: keep only cpp once translation is complete
+  if (cpp) {
     return(calJpost_cpp(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b))
   }
   # hyperparameters
