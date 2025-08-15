@@ -268,7 +268,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
         )$Brier$score
 
         BrierScore[is.na(BrierScore)] <- 0
-        Brier <- Brier + BrierScore[-1:-(nrow(BrierScore) / 2), -1:-2]
+        Brier <- Brier + BrierScore[-(1:(nrow(BrierScore) / 2)), -1:-2]
       }
       Brier <- rbind(Brier.null, Brier / nrow(betas))
 
