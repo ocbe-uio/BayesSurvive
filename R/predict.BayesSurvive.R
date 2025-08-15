@@ -187,7 +187,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
         "var.lp", "var.strata"
       )] <- NULL
     }
-    return(fit)
+    fit
   } else {
     if (method == "mean") {
       # beta_m <- colMeans(betas)

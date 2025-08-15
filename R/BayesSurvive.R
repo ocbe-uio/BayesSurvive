@@ -338,6 +338,5 @@ BayesSurvive <- function(survObj,
         survObj$X[[s]] %*% t(ret$output$beta.p[[s]])
     }
   }
-
-  return(ret)
+  ret
 }

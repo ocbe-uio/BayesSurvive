@@ -331,6 +331,5 @@ func_MCMC <- function(survObj, hyperpar, ini,
     mcmcOutcome$gamma.margin <- Map("/", mcmcOutcome$gamma.margin, nIter - burnin)
     mcmcOutcome$beta.margin <- Map("/", mcmcOutcome$beta.margin, nIter - burnin)
   }
-
-  return(mcmcOutcome)
+  mcmcOutcome
 }

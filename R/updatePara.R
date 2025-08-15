@@ -148,7 +148,7 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FAL
     }
   }
 
-  return(list(gamma.ini = gamma.ini, post.gamma = post.gamma))
+  list(gamma.ini = gamma.ini, post.gamma = post.gamma)
 }
 # the end of "UpdateGamma" function
 
@@ -291,5 +291,5 @@ calJpost <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp) {
     logjpost <- sum(loglike) + sum(logpriorBeta) + sum(logpriorH) +
       logpriorGamma + sum(logpriorOmega) + sum(logpriorX) + logpriorGraph
   }
-  return(list(loglike = loglike, logjpost = logjpost))
+  list(loglike = loglike, logjpost = logjpost)
 }
