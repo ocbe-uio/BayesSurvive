@@ -93,7 +93,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
 
-      for (l in seq_len(length(subgroup))) {
+      for (l in seq_along(subgroup)) {
         betas <- coef.BayesSurvive(x,
           type = "mean", CI = 95,
           subgroup = subgroup[l]
@@ -104,7 +104,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       # for an output from a matrix or array or list
       betas <- rep(list(NULL), length(x))
       ret <- rep(list(NULL), length(x))
-      for (l in seq_len(length(x))) {
+      for (l in seq_along(x)) {
         # if (length(dim(x[[l]])) == 2) {
         #   betas[[l]]$CI.lower <- apply(x[[l]], 2, quantile, 0.025)
         #   betas[[l]]$CI.upper <- apply(x[[l]], 2, quantile, 0.975)
@@ -113,8 +113,8 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
         #   betas[[l]]$CI.lower <- apply(x[[l]], c(2,3), quantile, 0.025)
         #   betas[[l]]$CI.upper <- apply(x[[l]], c(2,3), quantile, 0.975)
         # }
-        betas[[l]]$CI.lower <- apply(x[[l]], seq_len(length(dim(x[[l]])))[-1], quantile, 0.025)
-        betas[[l]]$CI.upper <- apply(x[[l]], seq_len(length(dim(x[[l]])))[-1], quantile, 0.975)
+        betas[[l]]$CI.lower <- apply(x[[l]], seq_along(dim(x[[l]]))[-1], quantile, 0.025)
+        betas[[l]]$CI.upper <- apply(x[[l]], seq_along(dim(x[[l]]))[-1], quantile, 0.975)
         ret[[l]] <- (betas[[l]]$CI.lower > 0) | (betas[[l]]$CI.upper < 0)
       }
     }
@@ -128,7 +128,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
 
-      for (l in seq_len(length(subgroup))) {
+      for (l in seq_along(subgroup)) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           x$output$beta.p <- x$output$beta.p[[subgroup[l]]]
         }
@@ -145,12 +145,12 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     } else {
       # # count the total number of parameters in the list
       # total_num <- 0
-      # for (l in seq_len(length(x))) {
+      # for (l in seq_along(x)) {
       #   total_num <- total_num + prod(dim(x[[l]])[-1])
       # }
 
       ret <- rep(list(NULL), length(x))
-      for (l in seq_len(length(x))) {
+      for (l in seq_along(x)) {
         # define the size of each component in the list
         ret[[l]] <- array(FALSE, dim = dim(x[[l]])[-1])
 
@@ -177,7 +177,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     if (inherits(x, "BayesSurvive")) {
       ret <- rep(list(NULL), length(subgroup))
 
-      for (l in seq_len(length(subgroup))) {
+      for (l in seq_along(subgroup)) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           x$output$gamma.margin <- x$output$gamma.margin[[subgroup[l]]]
         }
@@ -186,7 +186,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
     } else {
       ret <- rep(list(NULL), length(x))
 
-      for (l in seq_len(length(x))) {
+      for (l in seq_along(x)) {
         # define the size of each component in the list
         ret[[l]] <- array(FALSE, dim = dim(x[[l]])[-1])
 
@@ -213,7 +213,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       ret <- gammas <- rep(list(NULL), length(subgroup))
       gammas_vec <- NULL
       # save all mPIPs into a vector
-      for (l in seq_len(length(subgroup))) {
+      for (l in seq_along(subgroup)) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           gamma.hat <- x$output$gamma.margin[[subgroup[l]]]
         } else {
@@ -224,7 +224,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
 
       sorted_gammas <- sort(gammas_vec, decreasing = TRUE)
       # computing the fdr
-      fdr <- cumsum((1 - sorted_gammas)) / seq_len(length(sorted_gammas))
+      fdr <- cumsum((1 - sorted_gammas)) / seq_along(sorted_gammas)
       # determine index of the largest fdr less than threshold
       if (min(fdr) >= threshold) {
         ret <- rep(FALSE, length(gammas_vec))
@@ -235,7 +235,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       }
 
       # reformat the results into a list
-      for (l in seq_len(length(subgroup))) {
+      for (l in seq_along(subgroup)) {
         if (x$input$S > 1 || !x$input$MRF.G) {
           gamma.hat <- x$output$gamma.margin[[subgroup[l]]]
         } else {
@@ -249,7 +249,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       gammas_vec <- NULL
 
       # compute mPIPs
-      for (l in seq_len(length(x))) {
+      for (l in seq_along(x)) {
         # define the size of each component in the list
         gammas[[l]] <- array(FALSE, dim = dim(x[[l]])[-1])
 
@@ -270,7 +270,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
 
       sorted_gammas <- sort(gammas_vec, decreasing = TRUE)
       # computing the fdr
-      fdr <- cumsum((1 - sorted_gammas)) / seq_len(length(sorted_gammas))
+      fdr <- cumsum((1 - sorted_gammas)) / seq_along(sorted_gammas)
       # determine index of the largest fdr less than threshold
       if (min(fdr) >= threshold) {
         ret <- rep(FALSE, length(gammas_vec))
@@ -281,7 +281,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
       }
 
       # reformat the results into a list
-      for (l in seq_len(length(x))) {
+      for (l in seq_along(x)) {
         ret[[l]] <- array(FALSE, dim = dim(x[[l]])[-1])
         len <- prod(dim(x[[l]])[-1])
         ret[[l]] <- array(ret_vec[1:len], dim = dim(x[[l]])[-1])
