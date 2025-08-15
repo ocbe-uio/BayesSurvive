@@ -103,7 +103,7 @@ sim.data.fun <- function(n, p, surv.e, surv.c, beta1.p, beta2.p, cov_matrix) {
 
   # Scale covariates using parameters of training data
   sd.X <- lapply(Data, function(xx) apply(xx$X, 2, sd))
-  for (g in seq_along(length(Data))) {
+  for (g in seq_along(Data)) {
     Data[[g]]$X <- scale(Data[[g]]$X, scale = sd.X[[g]])
   }
 
