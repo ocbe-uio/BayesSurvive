@@ -54,7 +54,6 @@ func_MCMC <- function(survObj, hyperpar, ini,
     hyperpar$ind.r <- intv$ind.r
     hyperpar$d <- intv$d
 
-    H.star <- vector(mode = "numeric", length = hyperpar$J)
     H.star <- numeric(hyperpar$J)
     alpha0 <- numeric(hyperpar$J)
     for (j in 1:hyperpar$J) {
