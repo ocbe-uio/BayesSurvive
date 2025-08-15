@@ -42,7 +42,7 @@ UpdateGamma <- function(sobj, hyperpar, ini, S, method, MRF_G, MRF_2b, cpp = FAL
   beta.ini <- ini$beta.ini
   gamma.ini <- ini$gamma.ini
 
-  if (method %in% c("Pooled") && MRF_G) {
+  if (method %in% "Pooled" && MRF_G) {
     G.ini <- hyperpar$G
   }
 

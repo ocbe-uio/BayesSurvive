@@ -285,7 +285,7 @@ VS <- function(x, method = "FDR", threshold = NA, subgroup = 1) {
         ret[[l]] <- array(FALSE, dim = dim(x[[l]])[-1])
         len <- prod(dim(x[[l]])[-1])
         ret[[l]] <- array(ret_vec[1:len], dim = dim(x[[l]])[-1])
-        ret_vec <- ret_vec[-c(1:len)]
+        ret_vec <- ret_vec[-1:-len]
       }
     }
   }
