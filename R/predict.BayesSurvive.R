@@ -250,7 +250,7 @@ predict.BayesSurvive <- function(object, survObj.new, type = "brier",
       BrierScore[is.na(BrierScore)] <- 0
       # Brier scores of NULL.model do not change
       Brier.null <- BrierScore[1:(nrow(BrierScore) / 2), -1:-2]
-      Brier <- BrierScore[-1:-(nrow(BrierScore) / 2), -1:-2]
+      Brier <- BrierScore[-(1:(nrow(BrierScore) / 2)), -1:-2]
 
       # calculate Brier scores based on other MCMC estimates
       for (i in 2:nrow(betas)) {
