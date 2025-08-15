@@ -1,3 +1,10 @@
+# BayesSurvive (development version)
+
+* Fixed code smells (issue #24)
+* Use `calJpost_cpp()` in all `cpp == TRUE` cases (issue #11)
+* Fix `lambda` and `pi_G` assignment for `method == "CovBVSSL"` (issue #11)
+* Translated `calJpost()` for `method == "Pooled" && MRF_G` (issue #28)
+
 # BayesSurvive 0.1.0
 
 * Add test code

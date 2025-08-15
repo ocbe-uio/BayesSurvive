@@ -64,5 +64,5 @@ UpdateRPlee11 <- function(sobj, hyperpar, ini, S, method, MRF_G, cpp = FALSE) {
       acceptlee[[g]] <- erg$acceptl
     }
   }
-  return(list(beta.ini = beta.ini, acceptlee = acceptlee))
+  list(beta.ini = beta.ini, acceptlee = acceptlee)
 }

@@ -109,7 +109,6 @@ Rcpp::List UpdateGamma_cpp(
     );
     return out;
   } else {
-
     if (MRF_G) {
       for (unsigned int g = 0; g < S; g++) { // loop through subgroups
         for (unsigned int j = 0; j < p; j++) {
@@ -122,7 +121,6 @@ Rcpp::List UpdateGamma_cpp(
         }
       }
     } else { // CoxBVS-SL or Sub-struct model
-
       for (unsigned int g = 0; g < S; g++) {
         for (unsigned int j = 0; j < p; j++) {
           double beta = beta_ini(j, g);
@@ -137,7 +135,6 @@ Rcpp::List UpdateGamma_cpp(
           post_gamma(j, g) = pg;
         }
       }
-
     }
 
     Rcpp::List out = Rcpp::List::create(

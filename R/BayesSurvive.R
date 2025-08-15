@@ -135,13 +135,13 @@ BayesSurvive <- function(survObj,
     survObj$n <- length(survObj$t)
     survObj$p <- p <- NCOL(survObj$X)
 
-    fit <- survreg(Surv(survObj$t, survObj$di, type = c("right")) ~ 1,
+    fit <- survreg(Surv(survObj$t, survObj$di, type = "right") ~ 1,
       dist = "weibull", x = TRUE, y = TRUE
     )
     kappa0 <- 1 / exp(fit$icoef["Log(scale)"])
     eta0 <- exp(fit$coefficients)^(-kappa0)
     # Initial value: null model without covariates
-    log.like <- coxph(Surv(survObj$t, survObj$di, type = c("right")) ~ 1)$loglik
+    log.like <- coxph(Surv(survObj$t, survObj$di, type = "right") ~ 1)$loglik
   } else { # for Subgroup or CoxBVS-SL model keep the data of all subgroups separate
 
     S <- length(survObj) # number of subgroups
@@ -152,7 +152,7 @@ BayesSurvive <- function(survObj,
     # estimate shape and scale parameter of Weibull distribution
     # (hyperparameters for prior of H* (mean function in Gamma process prior for baseline hazard))
     fit <- lapply(survObj, function(x) {
-      survreg(Surv(x$t, x$di, type = c("right")) ~ 1, dist = "weibull", x = TRUE, y = TRUE)
+      survreg(Surv(x$t, x$di, type = "right") ~ 1, dist = "weibull", x = TRUE, y = TRUE)
     })
     kappa0 <- lapply(fit, function(x) {
       1 / exp(x$icoef["Log(scale)"])
@@ -165,7 +165,7 @@ BayesSurvive <- function(survObj,
     beta.ini <- rep(list(Beta.ini), S)
     gamma.ini <- rep(list(initial$gamma.ini), S)
     log.like <- lapply(survObj, function(x) {
-      coxph(Surv(x$t, x$di, type = c("right")) ~ 1)$loglik
+      coxph(Surv(x$t, x$di, type = "right") ~ 1)$loglik
     })
 
     # survival object and covariate data
@@ -338,6 +338,5 @@ BayesSurvive <- function(survObj,
         survObj$X[[s]] %*% t(ret$output$beta.p[[s]])
     }
   }
-
-  return(ret)
+  ret
 }

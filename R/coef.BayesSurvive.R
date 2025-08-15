@@ -113,7 +113,7 @@ coef.BayesSurvive <- function(object, MPM = FALSE, type = "mean", CI = 95,
       object$output$gamma.margin <- object$output$gamma.margin[[subgroup]]
     }
     if (is.null(names(object$output$beta.margin))) {
-      x_names <- paste0("x", seq_len(length(object$output$beta.margin)))
+      x_names <- paste0("x", seq_along(object$output$beta.margin))
     } else {
       x_names <- names(object$output$beta.margin)
     }
