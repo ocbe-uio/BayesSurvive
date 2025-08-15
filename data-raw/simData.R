@@ -71,7 +71,7 @@ sim.surv <- function(X, beta, surv.e, surv.c, n) {
   status <- ifelse(dt <= cens, 1, 0)
   time <- pmin(dt, cens)
 
-  return(list(as.numeric(status), as.numeric(time)))
+  list(as.numeric(status), as.numeric(time))
 }
 
 sim.data.fun <- function(n, p, surv.e, surv.c, beta1.p, beta2.p, cov_matrix) {
@@ -103,7 +103,7 @@ sim.data.fun <- function(n, p, surv.e, surv.c, beta1.p, beta2.p, cov_matrix) {
 
   # Scale covariates using parameters of training data
   sd.X <- lapply(Data, function(xx) apply(xx$X, 2, sd))
-  for (g in 1:length(Data)) {
+  for (g in seq_along(Data)) {
     Data[[g]]$X <- scale(Data[[g]]$X, scale = sd.X[[g]])
   }
 
@@ -113,7 +113,7 @@ sim.data.fun <- function(n, p, surv.e, surv.c, beta1.p, beta2.p, cov_matrix) {
   Data[[1]]$trueB <- beta1
   Data[[2]]$trueB <- beta2
 
-  return(Data)
+  Data
 }
 
 Surv.e <- Surv.c <- list(NULL, NULL)

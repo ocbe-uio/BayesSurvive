@@ -54,7 +54,8 @@ func_MCMC <- function(survObj, hyperpar, ini,
     hyperpar$ind.r <- intv$ind.r
     hyperpar$d <- intv$d
 
-    H.star <- alpha0 <- c()
+    H.star <- numeric(hyperpar$J)
+    alpha0 <- numeric(hyperpar$J)
     for (j in 1:hyperpar$J) {
       H.star[j] <- hyperpar$eta0 * hyperpar$s[j]^hyperpar$kappa0
       alpha0[j] <- hyperpar$c0 * H.star[j]
@@ -331,6 +332,5 @@ func_MCMC <- function(survObj, hyperpar, ini,
     mcmcOutcome$gamma.margin <- Map("/", mcmcOutcome$gamma.margin, nIter - burnin)
     mcmcOutcome$beta.margin <- Map("/", mcmcOutcome$beta.margin, nIter - burnin)
   }
-
-  return(mcmcOutcome)
+  mcmcOutcome
 }
