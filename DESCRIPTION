@@ -1,6 +1,6 @@
 Package: BayesSurvive
 Title: Bayesian Survival Models for High-Dimensional Data
-Version: 0.1.0.9002
+Version: 0.1.0.9003
 Date: 2025-03-19
 Authors@R: c(person("Zhi", "Zhao", role=c("aut","cre"), email = "zhi.zhao@medisin.uio.no"),
              person("Waldir", "Leoncio", role=c("aut")),
