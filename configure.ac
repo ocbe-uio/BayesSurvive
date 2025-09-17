@@ -21,9 +21,9 @@ AC_PROG_CXX
 CXXFLAGS="-Werror -std=c++17 -Wno-reorder -fPIC"
 AC_MSG_CHECKING([whether CXX supports -std=c++17])
 AC_COMPILE_IFELSE(
-	[AC_LANG_PROGRAM([])], 
-	[AC_MSG_RESULT([yes]); CPPUTEST_CPP17FLAG="-std=c++17" ], 
-	[AC_MSG_RESULT([no]); 
+	[AC_LANG_PROGRAM([])],
+	[AC_MSG_RESULT([yes]); CPPUTEST_CPP17FLAG="-std=c++17" ],
+	[AC_MSG_RESULT([no]);
 		AC_MSG_RESULT([]);
 		AC_MSG_RESULT([BayesSurvive needs a c++17 compatible compiler!]);
 		AC_MSG_RESULT([Please install a more recent gcc if on Linux, or see]);
@@ -46,8 +46,8 @@ if test -n "${OPENMP_CXXFLAGS}"; then
 	AC_MSG_RESULT([${ac_pkg_openmp}])
 fi
 
-# if test "${ac_pkg_openmp}" = yes all is fine! 
-if test "${ac_pkg_openmp}" = no; then 
+# if test "${ac_pkg_openmp}" = yes all is fine!
+if test "${ac_pkg_openmp}" = no; then
   AC_MSG_WARN([No OpenMP support. If using GCC, upgrade to >= 4.2. If using clang, upgrade to >= 3.8.0]);
 	AC_MSG_RESULT([]);
 	AC_MSG_RESULT([It seems OpenMP is unsupported on your system,]);
@@ -56,7 +56,7 @@ if test "${ac_pkg_openmp}" = no; then
 	AC_MSG_RESULT([https://cran.r-project.org/bin/macosx/tools/ ,]);
 	AC_MSG_RESULT([https://cran.r-project.org/bin/windows/Rtools/]);
 	AC_MSG_RESULT([]);
-fi 
+fi
 
 AC_SUBST(OPENMP_FLAG,"$OPENMP_CXXFLAGS")
 
