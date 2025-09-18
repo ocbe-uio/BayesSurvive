@@ -90,7 +90,7 @@ Rcpp::List calJpost_cpp(
     arma::vec gamma_ini = Rcpp::as<arma::vec>(ini["gamma.ini"]);
     arma::vec h = Rcpp::as<arma::vec>(ini["h"]);
     arma::vec cbtau(p);
-    for (uint i = 0; i < gamma_ini.n_elem; ++i) {
+    for (unsigned int i = 0; i < gamma_ini.n_elem; ++i) {
       cbtau(i) = tau * (gamma_ini(i) == 1 ? cb : 1);
     }
 
@@ -101,7 +101,7 @@ Rcpp::List calJpost_cpp(
     logpriorGamma = arma::sum(gamma_ini * log(pi_ga)) + arma::sum((1 - gamma_ini) * log(1 - pi_ga));
     logjpost = loglike + logpriorGamma + logpriorBeta + logpriorH;
   } else {
-    for (uint g = 0; g < S; ++g) {
+    for (unsigned int g = 0; g < S; ++g) {
       // n <- sobj$n[[g]]
       // X <- sobj$X[[g]]
       // J <- hyperpar$J[[g]]
@@ -126,7 +126,7 @@ Rcpp::List calJpost_cpp(
         // V.ini <- ini$V.ini[[g]]
         // Sig.ini <- ini$Sig.ini[[g]]
         // omega.mat <- matrix(0, p, p)
-        for (uint i = 0; i < p; ++i) {
+        for (unsigned int i = 0; i < p; ++i) {
           // omega.mat[i, ] <- dnorm(C.ini[i, ], mean = rep(0, p), sd = sqrt(V.ini[i, ]), log = TRUE)
         }
         // diag(omega.mat) <- dexp(diag(C.ini), rate = lambda / 2, log = TRUE)
@@ -145,7 +145,7 @@ Rcpp::List calJpost_cpp(
     } else {
       // id.mat <- matrix(0, p * S, p * S)
     }
-    for (uint g = 0; g < S; ++g) {
+    for (unsigned int g = 0; g < S; ++g) {
       // id.mat[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <- matrix(1, p, p)
     }
     // pii.mat[id.mat == 1 & G.ini == 0] <- log(1 - pi.G)
@@ -156,11 +156,11 @@ Rcpp::List calJpost_cpp(
     // gamma.vec <- unlist(ini$gamma.ini)
 
     if (MRF_2b) {
-      for (uint g = 0; g < S; ++g) { // b1 * G_ss
+      for (unsigned int g = 0; g < S; ++g) { // b1 * G_ss
         // G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)] <- b[1] * G.ini[(g - 1) * p + (1:p), (g - 1) * p + (1:p)]
       }
-      for (uint g = 0; g < S - 1; ++g) { // b2 * G_rs
-        for (uint r = g; r < S - 1; ++r) {
+      for (unsigned int g = 0; g < S - 1; ++g) { // b2 * G_rs
+        for (unsigned int r = g; r < S - 1; ++r) {
           // G.ini[(g - 1) * p + (1:p), r * p + (1:p)] <- G.ini[r * p + (1:p), (g - 1) * p + (1:p)] <- b[2] * G.ini[r * p + (1:p), (g - 1) * p + (1:p)]
         }
       }
